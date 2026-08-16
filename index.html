@@ -2,23 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SKILLSHAREJR — Kingdom of Skills</title>
+<title>SkillShareJR — Kingdom of Skills</title>
 
 <style>
+
 *{
-    box-sizing:border-box;
     margin:0;
     padding:0;
+    box-sizing:border-box;
+    user-select:none;
 }
 
-html,body{
-    width:100%;
-    height:100%;
+body{
     overflow:hidden;
-    background:#030916;
+    background:#020817;
     font-family:Arial,Helvetica,sans-serif;
+    color:white;
 }
 
 #game{
@@ -37,365 +38,296 @@ canvas{
 #loading{
     position:fixed;
     inset:0;
-    z-index:1000;
     background:
-        radial-gradient(circle at 50% 45%,#102d52 0%,#050d1b 55%,#020611 100%);
+        radial-gradient(circle at center,#102c52,#020817 70%);
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     flex-direction:column;
-    color:white;
-    transition:opacity 1s;
+    z-index:1000;
 }
 
 .logo{
-    font-size:clamp(42px,7vw,90px);
+    font-size:52px;
     font-weight:900;
-    letter-spacing:5px;
-    color:#57d9ff;
+    letter-spacing:4px;
+    color:#55d8ff;
     text-shadow:
-        0 0 10px #35caff,
-        0 0 35px #1588ff,
-        0 0 70px #1554ff;
+        0 0 15px #1ca8ff,
+        0 0 35px #147dcc;
 }
 
 .subtitle{
-    margin-top:10px;
-    color:#b9dfff;
+    margin-top:12px;
+    color:#b8d9ff;
     font-size:18px;
-    letter-spacing:3px;
 }
 
-.loadbar{
-    margin-top:35px;
-    width:min(430px,70vw);
+.loadingBar{
+    width:360px;
     height:10px;
+    background:#162b45;
     border-radius:20px;
-    background:#13243a;
+    margin-top:30px;
     overflow:hidden;
-    border:1px solid #294766;
+    border:1px solid #3975a8;
 }
 
-.loadfill{
-    width:0%;
+#loadingProgress{
     height:100%;
-    background:linear-gradient(90deg,#35d9ff,#6d5cff,#c45cff);
-    box-shadow:0 0 20px #39caff;
-    transition:width .2s;
-}
-
-.loadingText{
-    margin-top:15px;
-    color:#8db2d8;
+    width:0%;
+    background:linear-gradient(90deg,#20bfff,#8d5cff);
+    box-shadow:0 0 20px #21baff;
 }
 
 /* =========================
-   UI
+   HUD
 ========================= */
 
-#ui{
+#hud{
+    display:none;
     position:fixed;
     inset:0;
     pointer-events:none;
-    z-index:50;
-    color:white;
+    z-index:20;
 }
 
 .panel{
     background:
         linear-gradient(145deg,
-        rgba(4,18,35,.94),
-        rgba(5,12,27,.87));
-    border:1px solid rgba(75,190,255,.65);
+        rgba(5,20,40,.94),
+        rgba(4,10,25,.88));
+    border:1px solid rgba(77,188,255,.55);
     box-shadow:
-        0 0 20px rgba(0,153,255,.15),
-        inset 0 0 30px rgba(0,80,150,.08);
+        0 0 25px rgba(0,145,255,.12),
+        inset 0 0 20px rgba(30,130,220,.08);
+    border-radius:15px;
     backdrop-filter:blur(8px);
 }
 
-/* Logo */
-
 #brand{
     position:absolute;
-    top:25px;
-    left:25px;
-    padding:16px 22px;
-    border-radius:18px;
+    top:20px;
+    left:20px;
+    padding:15px 20px;
+    width:310px;
 }
 
-#brand h1{
-    color:#5ddcff;
-    font-size:26px;
-    letter-spacing:2px;
+.brandTitle{
+    font-size:25px;
+    font-weight:900;
+    color:#56d7ff;
 }
 
-#brand p{
-    margin-top:5px;
-    color:#9dbbd8;
+.brandSub{
+    margin-top:4px;
     font-size:12px;
+    color:#9bbad7;
     letter-spacing:1px;
 }
 
-/* Stats */
+/* STATS */
 
 #stats{
     position:absolute;
-    right:25px;
-    top:25px;
-    width:190px;
-    padding:17px;
-    border-radius:18px;
-    border-color:#d7aa38;
+    top:20px;
+    right:20px;
+    width:220px;
+    padding:16px;
+    border-color:#c59b35;
 }
 
 .stat{
     display:flex;
     justify-content:space-between;
-    padding:6px 0;
-    color:#b8c9db;
+    margin:8px 0;
+    color:#aac4dc;
 }
 
-.stat strong{
+.stat b{
     color:white;
 }
 
-/* Quest */
+/* QUEST */
 
 #quest{
     position:absolute;
-    left:25px;
-    bottom:25px;
-    width:310px;
+    left:20px;
+    bottom:20px;
+    width:340px;
     padding:18px;
-    border-radius:18px;
-    border-color:#a763ff;
+    border-color:#a466ff;
 }
 
 .questTitle{
-    color:#d18aff;
+    color:#d6a9ff;
     font-weight:bold;
     letter-spacing:1px;
-    margin-bottom:8px;
+    font-size:13px;
 }
 
 #questText{
-    color:#e7eff8;
-    line-height:1.5;
+    margin-top:8px;
+    font-size:15px;
+    line-height:1.4;
 }
 
-.progress{
+.progressOuter{
+    height:8px;
+    background:#162b45;
     margin-top:12px;
-    height:7px;
-    background:#16253b;
     border-radius:10px;
     overflow:hidden;
 }
 
-.progress div{
+#questProgress{
+    width:0%;
     height:100%;
-    width:20%;
-    background:linear-gradient(90deg,#8d52ff,#42d8ff);
-    box-shadow:0 0 12px #6d75ff;
+    background:linear-gradient(90deg,#8e58ff,#e06bff);
 }
 
-/* Controls */
+/* CONTROLS */
 
 #controls{
     position:absolute;
-    right:25px;
-    bottom:25px;
-    padding:14px 18px;
-    border-radius:15px;
-    text-align:right;
-    color:#c1d4e9;
+    bottom:20px;
+    right:20px;
+    padding:15px 18px;
+    width:235px;
+    border-color:#3978aa;
     font-size:13px;
+    color:#a8c6df;
 }
 
-#controls b{
-    color:#63dcff;
+.key{
+    display:inline-block;
+    padding:4px 7px;
+    margin:2px;
+    border-radius:5px;
+    background:#102944;
+    border:1px solid #3e6f99;
+    color:white;
 }
 
-/* Location */
+/* LOCATION */
 
 #location{
     position:absolute;
-    top:25px;
+    top:145px;
     left:50%;
     transform:translateX(-50%);
-    padding:11px 20px;
-    border-radius:30px;
-    border-color:#d8ae4b;
-    color:#f5d778;
-    letter-spacing:1px;
-}
-
-/* Message */
-
-#message{
-    position:absolute;
-    left:50%;
-    bottom:28px;
-    transform:translateX(-50%);
-    padding:15px 25px;
-    border-radius:14px;
-    background:rgba(2,12,25,.92);
-    border:1px solid #4edcff;
-    box-shadow:0 0 30px rgba(50,210,255,.25);
+    padding:9px 20px;
     opacity:0;
     transition:.4s;
+    border-color:#e6b84e;
 }
 
-/* Skill menu */
+#location.show{
+    opacity:1;
+}
 
-#skills{
+/* INTERACTION */
+
+#interaction{
     position:absolute;
     left:50%;
-    top:50%;
-    transform:translate(-50%,-50%) scale(.95);
-    width:min(800px,90vw);
-    padding:30px;
-    border-radius:25px;
-    display:none;
-    pointer-events:auto;
-    background:rgba(3,12,27,.96);
-    border:1px solid #57dfff;
-    box-shadow:0 0 60px rgba(0,150,255,.25);
-}
-
-#skills h2{
-    text-align:center;
-    color:#61dcff;
-    margin-bottom:25px;
-}
-
-.skillGrid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:15px;
-}
-
-.skill{
-    padding:20px;
-    min-height:130px;
-    border-radius:15px;
-    background:linear-gradient(145deg,#0d2038,#071120);
-    border:1px solid #294e72;
-    transition:.25s;
-}
-
-.skill:hover{
-    transform:translateY(-5px);
-    border-color:#62ddff;
-    box-shadow:0 0 25px rgba(60,200,255,.2);
-}
-
-.skill .icon{
-    font-size:35px;
-}
-
-.skill h3{
-    margin-top:8px;
-    color:white;
-}
-
-.skill p{
-    margin-top:6px;
-    color:#8ca8c4;
-    font-size:12px;
-}
-
-.close{
-    margin-top:22px;
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:10px;
-    background:#14365b;
-    color:white;
-    cursor:pointer;
-}
-
-.close:hover{
-    background:#205988;
-}
-
-/* =========================
-   MINIMAP
-========================= */
-
-#map{
-    position:absolute;
-    right:235px;
-    top:25px;
-    width:150px;
-    height:150px;
-    border-radius:50%;
-    background:
-        radial-gradient(circle,#174f42,#092b2e 60%,#06111e);
-    border:2px solid rgba(105,210,255,.7);
-    box-shadow:0 0 25px rgba(0,150,255,.25);
-}
-
-#map::before{
-    content:"KINGDOM";
-    position:absolute;
-    left:50%;
-    top:-24px;
+    bottom:90px;
     transform:translateX(-50%);
-    font-size:10px;
-    color:#8bb8d7;
-    letter-spacing:2px;
+    padding:12px 22px;
+    background:rgba(4,16,30,.92);
+    border:1px solid #5bcfff;
+    border-radius:12px;
+    opacity:0;
+    transition:.2s;
 }
 
-#mapPlayer{
+#interaction.show{
+    opacity:1;
+}
+
+#interaction span{
+    color:#60ddff;
+    font-weight:bold;
+}
+
+/* QUEST POPUP */
+
+#popup{
+    display:none;
     position:absolute;
-    width:10px;
-    height:10px;
-    background:#ffdf5c;
-    border-radius:50%;
-    box-shadow:0 0 12px #ffdf5c;
     left:50%;
     top:50%;
+    transform:translate(-50%,-50%);
+    width:440px;
+    padding:28px;
+    text-align:center;
+    border:1px solid #7a5cff;
+    background:rgba(4,12,28,.97);
+    border-radius:20px;
+    box-shadow:0 0 50px rgba(104,63,255,.3);
+    pointer-events:auto;
 }
 
-/* Mobile */
+#popup h2{
+    color:#72dfff;
+    margin-bottom:12px;
+}
 
-@media(max-width:800px){
+#popup p{
+    color:#b9cce0;
+    line-height:1.6;
+}
+
+.gameButton{
+    margin-top:20px;
+    padding:12px 25px;
+    border:0;
+    border-radius:10px;
+    background:linear-gradient(90deg,#237fff,#754cff);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 0 20px rgba(65,126,255,.3);
+}
+
+.gameButton:hover{
+    transform:scale(1.04);
+}
+
+/* MOBILE */
+
+#mobileControls{
+    display:none;
+}
+
+@media(max-width:700px){
+
     #brand{
-        top:10px;
-        left:10px;
+        width:220px;
+        padding:10px;
     }
 
-    #brand h1{
-        font-size:17px;
+    .brandTitle{
+        font-size:18px;
     }
 
     #stats{
-        right:10px;
-        top:10px;
-        width:135px;
-        font-size:11px;
-    }
-
-    #map{
-        display:none;
+        width:145px;
+        padding:9px;
+        font-size:12px;
     }
 
     #quest{
-        left:10px;
+        width:260px;
         bottom:10px;
-        width:240px;
+        left:10px;
     }
 
     #controls{
-        right:10px;
-        bottom:10px;
-    }
-
-    .skillGrid{
-        grid-template-columns:1fr;
+        display:none;
     }
 }
+
 </style>
 </head>
 
@@ -404,1472 +336,1890 @@ canvas{
 <div id="game"></div>
 
 <!-- LOADING -->
+
 <div id="loading">
+
     <div class="logo">SKILLSHAREJR</div>
-    <div class="subtitle">THE KINGDOM OF LIFE SKILLS</div>
 
-    <div class="loadbar">
-        <div class="loadfill" id="loadfill"></div>
+    <div class="subtitle">
+        ENTERING THE KINGDOM OF SKILLS...
     </div>
 
-    <div class="loadingText" id="loadingText">
-        Awakening the kingdom...
+    <div class="loadingBar">
+        <div id="loadingProgress"></div>
     </div>
+
 </div>
 
-<!-- UI -->
-<div id="ui">
+
+<!-- HUD -->
+
+<div id="hud">
 
     <div id="brand" class="panel">
-        <h1>⚔ SKILLSHAREJR</h1>
-        <p>MASTER LIFE SKILLS • BUILD YOUR KINGDOM</p>
+        <div class="brandTitle">⚔ SKILLSHAREJR</div>
+        <div class="brandSub">
+            MASTER LIFE SKILLS • BUILD YOUR KINGDOM
+        </div>
     </div>
 
-    <div id="location" class="panel">
-        ✦ HEARTLAND KINGDOM ✦
-    </div>
 
     <div id="stats" class="panel">
+
         <div class="stat">
             <span>⭐ XP</span>
-            <strong id="xp">0</strong>
+            <b id="xp">0</b>
         </div>
 
         <div class="stat">
             <span>💎 Gems</span>
-            <strong id="gems">10</strong>
+            <b id="gems">10</b>
         </div>
 
         <div class="stat">
             <span>🪙 Coins</span>
-            <strong id="coins">100</strong>
+            <b id="coins">100</b>
         </div>
 
         <div class="stat">
             <span>🏆 Level</span>
-            <strong id="level">1</strong>
+            <b id="level">1</b>
         </div>
+
     </div>
 
-    <div id="map">
-        <div id="mapPlayer"></div>
+
+    <div id="location" class="panel">
+        <span id="locationText">HEARTH VILLAGE</span>
     </div>
+
 
     <div id="quest" class="panel">
-        <div class="questTitle">📜 CURRENT QUEST</div>
+
+        <div class="questTitle">
+            📜 CURRENT QUEST
+        </div>
 
         <div id="questText">
             Explore the kingdom and discover your first life skill.
         </div>
 
-        <div class="progress">
+        <div class="progressOuter">
             <div id="questProgress"></div>
         </div>
+
     </div>
+
 
     <div id="controls" class="panel">
-        🎮 <b>W A S D</b> — Move<br>
-        🖱️ Mouse — Look Around<br>
-        🖱️ Click Building — Learn<br>
-        <b>E</b> — Interact
+
+        <b>🎮 CONTROLS</b>
+
+        <br><br>
+
+        <span class="key">W</span>
+        <span class="key">A</span>
+        <span class="key">S</span>
+        <span class="key">D</span>
+
+        Move
+
+        <br><br>
+
+        🖱 Mouse — Look around
+
+        <br>
+
+        🖱 Click — Interact
+
+        <br>
+
+        <span class="key">E</span>
+        Learn skill
+
     </div>
 
-    <div id="message"></div>
 
-    <div id="skills" class="panel">
-        <h2>✨ SKILLS ACADEMY</h2>
+    <div id="interaction">
+        Press <span>E</span> to interact
+    </div>
 
-        <div class="skillGrid">
 
-            <div class="skill">
-                <div class="icon">🍳</div>
-                <h3>Cooking</h3>
-                <p>Learn planning, safety and healthy food habits.</p>
-            </div>
+    <div id="popup">
 
-            <div class="skill">
-                <div class="icon">🧹</div>
-                <h3>Household</h3>
-                <p>Keep your surroundings clean and organized.</p>
-            </div>
+        <h2 id="popupTitle">
+            Life Skill
+        </h2>
 
-            <div class="skill">
-                <div class="icon">💰</div>
-                <h3>Money Skills</h3>
-                <p>Understand saving, needs, wants and budgeting.</p>
-            </div>
+        <p id="popupText">
+            Learn something useful.
+        </p>
 
-            <div class="skill">
-                <div class="icon">🩹</div>
-                <h3>First Aid</h3>
-                <p>Learn basic emergency awareness and safety.</p>
-            </div>
-
-            <div class="skill">
-                <div class="icon">🛡️</div>
-                <h3>Cyber Safety</h3>
-                <p>Recognize scams, suspicious links and unsafe messages.</p>
-            </div>
-
-            <div class="skill">
-                <div class="icon">🗣️</div>
-                <h3>Communication</h3>
-                <p>Build teamwork, listening and problem-solving skills.</p>
-            </div>
-
-        </div>
-
-        <button class="close" onclick="closeSkills()">
-            RETURN TO KINGDOM
+        <button class="gameButton" id="popupButton">
+            LEARN SKILL
         </button>
+
     </div>
 
 </div>
 
-<script type="importmap">
-{
-    "imports":{
-        "three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
-        "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
-    }
-}
-</script>
 
-<script type="module">
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
-import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-/* ==========================================
-   BASIC SETUP
-========================================== */
+<script>
 
-const scene = new THREE.Scene();
+/* =========================================================
+   SKILLSHAREJR — KINGDOM OF SKILLS
+========================================================= */
 
-scene.background = new THREE.Color(0x071426);
 
-scene.fog = new THREE.FogExp2(
-    0x071426,
-    0.012
-);
+/* =========================
+   GAME VARIABLES
+========================= */
 
-const camera = new THREE.PerspectiveCamera(
-    60,
-    innerWidth / innerHeight,
-    0.1,
-    1000
-);
+let scene;
+let camera;
+let renderer;
 
-camera.position.set(0,10,18);
+let player;
+let playerBody;
 
-const renderer = new THREE.WebGLRenderer({
-    antialias:true,
-    powerPreference:"high-performance"
-});
+let clock;
 
-renderer.setSize(innerWidth,innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.2;
-
-document.getElementById("game").appendChild(renderer.domElement);
-
-
-/* ==========================================
-   LIGHTING
-========================================== */
-
-const hemi = new THREE.HemisphereLight(
-    0x9ddcff,
-    0x17301e,
-    1.7
-);
-
-scene.add(hemi);
-
-const sun = new THREE.DirectionalLight(
-    0xffe5b2,
-    3
-);
-
-sun.position.set(-40,70,20);
-sun.castShadow = true;
-
-sun.shadow.mapSize.width = 2048;
-sun.shadow.mapSize.height = 2048;
-
-sun.shadow.camera.left = -100;
-sun.shadow.camera.right = 100;
-sun.shadow.camera.top = 100;
-sun.shadow.camera.bottom = -100;
-
-scene.add(sun);
-
-
-/* ==========================================
-   SKY
-========================================== */
-
-const skyGeo = new THREE.SphereGeometry(450,32,32);
-
-const skyMat = new THREE.MeshBasicMaterial({
-    color:0x081a35,
-    side:THREE.BackSide
-});
-
-const sky = new THREE.Mesh(
-    skyGeo,
-    skyMat
-);
-
-scene.add(sky);
-
-
-/* ==========================================
-   GROUND
-========================================== */
-
-const groundGeo = new THREE.PlaneGeometry(
-    220,
-    220,
-    80,
-    80
-);
-
-const positions = groundGeo.attributes.position;
-
-for(let i=0;i<positions.count;i++){
-
-    const x = positions.getX(i);
-    const y = positions.getY(i);
-
-    const height =
-        Math.sin(x*.08)*.8 +
-        Math.cos(y*.07)*.6 +
-        Math.sin(x*.18+y*.12)*.25;
-
-    positions.setZ(i,height);
-}
-
-groundGeo.computeVertexNormals();
-
-const groundMat = new THREE.MeshStandardMaterial({
-    color:0x1d5135,
-    roughness:.9
-});
-
-const ground = new THREE.Mesh(
-    groundGeo,
-    groundMat
-);
-
-ground.rotation.x=-Math.PI/2;
-
-ground.receiveShadow=true;
-
-scene.add(ground);
-
-
-/* ==========================================
-   WATER
-========================================== */
-
-const waterGeo = new THREE.PlaneGeometry(
-    220,
-    25,
-    50,
-    10
-);
-
-const waterMat = new THREE.MeshStandardMaterial({
-    color:0x0d6b92,
-    transparent:true,
-    opacity:.8,
-    roughness:.2,
-    metalness:.1
-});
-
-const water = new THREE.Mesh(
-    waterGeo,
-    waterMat
-);
-
-water.rotation.x=-Math.PI/2;
-water.position.set(0,.05,-28);
-
-scene.add(water);
-
-
-/* ==========================================
-   MOUNTAINS
-========================================== */
-
-function mountain(x,z,height,width,color){
-
-    const geo = new THREE.ConeGeometry(
-        width,
-        height,
-        7
-    );
-
-    const mat = new THREE.MeshStandardMaterial({
-        color,
-        roughness:1
-    });
-
-    const m = new THREE.Mesh(geo,mat);
-
-    m.position.set(x,height/2,z);
-
-    m.castShadow=true;
-
-    scene.add(m);
-
-    return m;
-}
-
-for(let i=0;i<20;i++){
-
-    const x = -100 + Math.random()*200;
-
-    const z =
-        -65 +
-        Math.random()*15;
-
-    mountain(
-        x,
-        z,
-        15+Math.random()*30,
-        8+Math.random()*10,
-        0x243b58
-    );
-}
-
-
-/* ==========================================
-   TREES
-========================================== */
-
-function tree(x,z,scale=1){
-
-    const group=new THREE.Group();
-
-    const trunkGeo=new THREE.CylinderGeometry(
-        .25*scale,
-        .4*scale,
-        2.5*scale,
-        7
-    );
-
-    const trunkMat=new THREE.MeshStandardMaterial({
-        color:0x55351f
-    });
-
-    const trunk=new THREE.Mesh(
-        trunkGeo,
-        trunkMat
-    );
-
-    trunk.position.y=1.25*scale;
-
-    trunk.castShadow=true;
-
-    group.add(trunk);
-
-    const leafMat=new THREE.MeshStandardMaterial({
-        color:0x174b2d,
-        roughness:1
-    });
-
-    for(let i=0;i<3;i++){
-
-        const leafGeo=new THREE.ConeGeometry(
-            1.7*scale-i*.3,
-            3*scale,
-            8
-        );
-
-        const leaf=new THREE.Mesh(
-            leafGeo,
-            leafMat
-        );
-
-        leaf.position.y=
-            3*scale+i*1.2*scale;
-
-        leaf.castShadow=true;
-
-        group.add(leaf);
-    }
-
-    group.position.set(x,0,z);
-
-    scene.add(group);
-}
-
-for(let i=0;i<100;i++){
-
-    let x=(Math.random()-.5)*180;
-    let z=(Math.random()-.5)*180;
-
-    if(Math.abs(x)<35 && Math.abs(z)<35)
-        continue;
-
-    tree(
-        x,
-        z,
-        .7+Math.random()*1
-    );
-}
-
-
-/* ==========================================
-   CRYSTALS
-========================================== */
-
-function crystal(x,y,z,color){
-
-    const geo=new THREE.OctahedronGeometry(
-        .8+Math.random()*.5,
-        0
-    );
-
-    const mat=new THREE.MeshStandardMaterial({
-        color,
-        emissive:color,
-        emissiveIntensity:1.8,
-        transparent:true,
-        opacity:.9
-    });
-
-    const c=new THREE.Mesh(geo,mat);
-
-    c.position.set(x,y,z);
-
-    c.rotation.y=Math.random()*Math.PI;
-
-    c.castShadow=true;
-
-    scene.add(c);
-
-    const light=new THREE.PointLight(
-        color,
-        2,
-        8
-    );
-
-    light.position.copy(c.position);
-
-    scene.add(light);
-}
-
-for(let i=0;i<30;i++){
-
-    crystal(
-        (Math.random()-.5)*150,
-        1+Math.random()*2,
-        (Math.random()-.5)*150,
-        [0x33d9ff,0x8c5cff,0xff63dc][
-            Math.floor(Math.random()*3)
-        ]
-    );
-}
-
-
-/* ==========================================
-   CASTLE
-========================================== */
-
-function createCastle(){
-
-    const castle=new THREE.Group();
-
-    const stoneMat=new THREE.MeshStandardMaterial({
-        color:0x71859a,
-        roughness:.75
-    });
-
-    const roofMat=new THREE.MeshStandardMaterial({
-        color:0x263c73,
-        roughness:.7
-    });
-
-    /* main building */
-
-    const body=new THREE.Mesh(
-        new THREE.BoxGeometry(18,12,12),
-        stoneMat
-    );
-
-    body.position.y=6;
-    body.castShadow=true;
-
-    castle.add(body);
-
-    /* towers */
-
-    const towerPositions=[
-        [-11,0,-6],
-        [11,0,-6],
-        [-11,0,6],
-        [11,0,6]
-    ];
-
-    for(const [x,y,z] of towerPositions){
-
-        const tower=new THREE.Mesh(
-            new THREE.CylinderGeometry(
-                3,
-                3,
-                18,
-                12
-            ),
-            stoneMat
-        );
-
-        tower.position.set(x,9,z);
-        tower.castShadow=true;
-
-        castle.add(tower);
-
-        const roof=new THREE.Mesh(
-            new THREE.ConeGeometry(
-                4,
-                7,
-                12
-            ),
-            roofMat
-        );
-
-        roof.position.set(x,21,z);
-
-        roof.castShadow=true;
-
-        castle.add(roof);
-    }
-
-    /* central roof */
-
-    const roof=new THREE.Mesh(
-        new THREE.ConeGeometry(
-            12,
-            8,
-            4
-        ),
-        roofMat
-    );
-
-    roof.position.y=16;
-
-    roof.rotation.y=Math.PI/4;
-
-    castle.add(roof);
-
-    /* gate */
-
-    const gateMat=new THREE.MeshStandardMaterial({
-        color:0x24170e
-    });
-
-    const gate=new THREE.Mesh(
-        new THREE.BoxGeometry(
-            5,
-            7,
-            .7
-        ),
-        gateMat
-    );
-
-    gate.position.set(0,3.5,-6.3);
-
-    castle.add(gate);
-
-    castle.position.set(0,0,-38);
-
-    scene.add(castle);
-
-    return castle;
-}
-
-const castle=createCastle();
-
-
-/* ==========================================
-   BUILDINGS
-========================================== */
-
-const buildings=[];
-
-function building(
-    x,
-    z,
-    color,
-    label,
-    icon
-){
-
-    const group=new THREE.Group();
-
-    const body=new THREE.Mesh(
-        new THREE.BoxGeometry(7,5,7),
-        new THREE.MeshStandardMaterial({
-            color:0x8b6a4d,
-            roughness:.8
-        })
-    );
-
-    body.position.y=2.5;
-    body.castShadow=true;
-
-    group.add(body);
-
-    const roof=new THREE.Mesh(
-        new THREE.ConeGeometry(
-            5.5,
-            4,
-            4
-        ),
-        new THREE.MeshStandardMaterial({
-            color
-        })
-    );
-
-    roof.position.y=7;
-
-    roof.rotation.y=Math.PI/4;
-
-    roof.castShadow=true;
-
-    group.add(roof);
-
-    const light=new THREE.PointLight(
-        color,
-        2,
-        15
-    );
-
-    light.position.y=5;
-
-    group.add(light);
-
-    group.position.set(x,0,z);
-
-    group.userData={
-        label,
-        icon
-    };
-
-    scene.add(group);
-
-    buildings.push(group);
-}
-
-
-/* Skill buildings */
-
-building(
-    -25,
-    5,
-    0xe59a45,
-    "COOKING VILLAGE",
-    "🍳"
-);
-
-building(
-    25,
-    5,
-    0x50c878,
-    "HOUSEHOLD HALL",
-    "🧹"
-);
-
-building(
-    -27,
-    -12,
-    0x49a8ff,
-    "CYBER ACADEMY",
-    "🛡️"
-);
-
-building(
-    27,
-    -12,
-    0x9c65ff,
-    "MONEY TOWER",
-    "💰"
-);
-
-building(
-    0,
-    15,
-    0xff6d75,
-    "HEALTH HOUSE",
-    "🩹"
-);
-
-
-/* ==========================================
-   PLAYER
-========================================== */
-
-const player=new THREE.Group();
-
-const bodyMat=new THREE.MeshStandardMaterial({
-    color:0x245fa8,
-    roughness:.6
-});
-
-const skinMat=new THREE.MeshStandardMaterial({
-    color:0xc98460
-});
-
-const hairMat=new THREE.MeshStandardMaterial({
-    color:0x241a17
-});
-
-/* body */
-
-const body=new THREE.Mesh(
-    new THREE.CapsuleGeometry(
-        .75,
-        1.6,
-        8,
-        16
-    ),
-    bodyMat
-);
-
-body.position.y=1.6;
-
-body.castShadow=true;
-
-player.add(body);
-
-/* head */
-
-const head=new THREE.Mesh(
-    new THREE.SphereGeometry(
-        .65,
-        20,
-        20
-    ),
-    skinMat
-);
-
-head.position.y=3;
-
-head.castShadow=true;
-
-player.add(head);
-
-/* hair */
-
-const hair=new THREE.Mesh(
-    new THREE.SphereGeometry(
-        .68,
-        16,
-        16
-    ),
-    hairMat
-);
-
-hair.scale.y=.55;
-
-hair.position.y=3.35;
-
-hair.castShadow=true;
-
-player.add(hair);
-
-/* cloak */
-
-const cloak=new THREE.Mesh(
-    new THREE.ConeGeometry(
-        1.2,
-        2.5,
-        8
-    ),
-    new THREE.MeshStandardMaterial({
-        color:0x142d62,
-        roughness:.7
-    })
-);
-
-cloak.position.y=1.5;
-cloak.rotation.x=Math.PI;
-
-cloak.castShadow=true;
-
-player.add(cloak);
-
-player.position.set(0,0,20);
-
-scene.add(player);
-
-
-/* ==========================================
-   OWL COMPANION
-========================================== */
-
-const owl=new THREE.Group();
-
-const owlBody=new THREE.Mesh(
-    new THREE.SphereGeometry(
-        .65,
-        16,
-        16
-    ),
-    new THREE.MeshStandardMaterial({
-        color:0x493b65
-    })
-);
-
-owlBody.scale.set(1,.8,.8);
-
-owl.add(owlBody);
-
-const eyeMat=new THREE.MeshBasicMaterial({
-    color:0xffd83d
-});
-
-for(const x of [-.22,.22]){
-
-    const eye=new THREE.Mesh(
-        new THREE.SphereGeometry(
-            .16,
-            12,
-            12
-        ),
-        eyeMat
-    );
-
-    eye.position.set(x,.18,.52);
-
-    owl.add(eye);
-}
-
-owl.position.set(3,3,18);
-
-scene.add(owl);
-
-
-/* ==========================================
-   PARTICLES
-========================================== */
-
-const particleCount=1200;
-
-const particleGeo=new THREE.BufferGeometry();
-
-const particlePositions=new Float32Array(
-    particleCount*3
-);
-
-for(let i=0;i<particleCount;i++){
-
-    particlePositions[i*3]=
-        (Math.random()-.5)*180;
-
-    particlePositions[i*3+1]=
-        Math.random()*35;
-
-    particlePositions[i*3+2]=
-        (Math.random()-.5)*180;
-}
-
-particleGeo.setAttribute(
-    "position",
-    new THREE.BufferAttribute(
-        particlePositions,
-        3
-    )
-);
-
-const particleMat=new THREE.PointsMaterial({
-    color:0x77dfff,
-    size:.08,
-    transparent:true,
-    opacity:.7
-});
-
-const particles=new THREE.Points(
-    particleGeo,
-    particleMat
-);
-
-scene.add(particles);
-
-
-/* ==========================================
-   MOVEMENT
-========================================== */
-
-const keys={};
-
-window.addEventListener(
-    "keydown",
-    e=>{
-        keys[e.key.toLowerCase()]=true;
-
-        if(e.key.toLowerCase()==="e"){
-            interact();
-        }
-
-        if(e.key==="Escape"){
-            closeSkills();
-        }
-    }
-);
-
-window.addEventListener(
-    "keyup",
-    e=>{
-        keys[e.key.toLowerCase()]=false;
-    }
-);
-
-const speed=.16;
-
-let moving=false;
-
-
-/* ==========================================
-   CAMERA
-========================================== */
-
-let cameraYaw=0;
-let cameraPitch=.45;
-
-let mouseDown=false;
-let lastX=0;
-let lastY=0;
-
-renderer.domElement.addEventListener(
-    "pointerdown",
-    e=>{
-        mouseDown=true;
-        lastX=e.clientX;
-        lastY=e.clientY;
-    }
-);
-
-window.addEventListener(
-    "pointerup",
-    ()=>{
-        mouseDown=false;
-    }
-);
-
-window.addEventListener(
-    "pointermove",
-    e=>{
-
-        if(!mouseDown) return;
-
-        const dx=e.clientX-lastX;
-        const dy=e.clientY-lastY;
-
-        cameraYaw-=dx*.004;
-        cameraPitch-=dy*.003;
-
-        cameraPitch=THREE.MathUtils.clamp(
-            cameraPitch,
-            .15,
-            1.2
-        );
-
-        lastX=e.clientX;
-        lastY=e.clientY;
-    }
-);
-
-
-/* ==========================================
-   INTERACTION
-========================================== */
-
-const raycaster=new THREE.Raycaster();
-
-const mouse=new THREE.Vector2();
-
-renderer.domElement.addEventListener(
-    "click",
-    e=>{
-
-        mouse.x=
-            (e.clientX/innerWidth)*2-1;
-
-        mouse.y=
-            -(e.clientY/innerHeight)*2+1;
-
-        raycaster.setFromCamera(
-            mouse,
-            camera
-        );
-
-        const hits=raycaster.intersectObjects(
-            buildings,
-            true
-        );
-
-        if(hits.length){
-
-            let obj=hits[0].object;
-
-            while(
-                obj.parent &&
-                !obj.userData.label
-            ){
-                obj=obj.parent;
-            }
-
-            if(obj.userData.label){
-
-                showMessage(
-                    obj.userData.icon+
-                    " "+obj.userData.label+
-                    " — Press E to learn!"
-                );
-            }
-        }
-    }
-);
-
-
-function interact(){
-
-    let closest=null;
-    let distance=Infinity;
-
-    buildings.forEach(b=>{
-
-        const d=
-            player.position.distanceTo(
-                b.position
-            );
-
-        if(d<distance){
-
-            distance=d;
-            closest=b;
-        }
-    });
-
-    if(
-        closest &&
-        distance<10
-    ){
-
-        showSkills(
-            closest.userData.label
-        );
-
-        gainXP(25);
-    }
-}
-
-
-/* ==========================================
-   SKILLS
-========================================== */
-
-function showSkills(name){
-
-    document.getElementById(
-        "skills"
-    ).style.display="block";
-
-    document.querySelector(
-        "#skills h2"
-    ).textContent=
-        "✨ "+name;
-}
-
-window.closeSkills=function(){
-
-    document.getElementById(
-        "skills"
-    ).style.display="none";
-};
-
-
-/* ==========================================
-   XP SYSTEM
-========================================== */
+let keys={};
 
 let xp=0;
 let gems=10;
 let coins=100;
 let level=1;
 
-function gainXP(amount){
+let currentInteraction=null;
 
-    xp+=amount;
+let questStep=0;
 
-    coins+=10;
+let buildings=[];
 
-    if(
-        xp>=level*100
-    ){
+let particles=[];
 
-        xp-=level*100;
+let cameraYaw=0;
 
-        level++;
+let cameraPitch=.35;
 
-        gems+=5;
+let mouseDown=false;
 
-        showMessage(
-            "🏆 LEVEL UP! You reached Level "+
-            level+"!"
-        );
-    }
+let lastMouseX=0;
 
-    updateStats();
+let lastMouseY=0;
+
+
+/* =========================
+   INITIALIZE
+========================= */
+
+function init(){
+
+    scene=new THREE.Scene();
+
+    scene.background=new THREE.Color(0x07172b);
+
+    scene.fog=new THREE.FogExp2(
+        0x07172b,
+        .008
+    );
+
+
+    camera=new THREE.PerspectiveCamera(
+        65,
+        innerWidth/innerHeight,
+        .1,
+        500
+    );
+
+
+    renderer=new THREE.WebGLRenderer({
+        antialias:true,
+        powerPreference:"high-performance"
+    });
+
+    renderer.setSize(
+        innerWidth,
+        innerHeight
+    );
+
+    renderer.setPixelRatio(
+        Math.min(devicePixelRatio,2)
+    );
+
+    renderer.shadowMap.enabled=true;
+
+    renderer.shadowMap.type=
+        THREE.PCFSoftShadowMap;
+
+    renderer.outputColorSpace=
+        THREE.SRGBColorSpace;
+
+    renderer.toneMapping=
+        THREE.ACESFilmicToneMapping;
+
+    renderer.toneMappingExposure=1.15;
+
+
+    document
+        .getElementById("game")
+        .appendChild(renderer.domElement);
+
+
+    clock=new THREE.Clock();
+
+
+    createLights();
+
+    createWorld();
+
+    createPlayer();
+
+    createNPC();
+
+    createBuildings();
+
+    createParticles();
+
+    setupControls();
+
+    animate();
+
+
+    setTimeout(()=>{
+        document.getElementById("loading").style.display="none";
+        document.getElementById("hud").style.display="block";
+    },1800);
 }
 
-function updateStats(){
+
+/* =========================
+   LIGHTING
+========================= */
+
+function createLights(){
+
+    const hemi=new THREE.HemisphereLight(
+        0x9fdcff,
+        0x162b1b,
+        1.5
+    );
+
+    scene.add(hemi);
+
+
+    const sun=new THREE.DirectionalLight(
+        0xffe9b0,
+        3
+    );
+
+    sun.position.set(
+        -50,
+        80,
+        30
+    );
+
+    sun.castShadow=true;
+
+    sun.shadow.mapSize.width=2048;
+    sun.shadow.mapSize.height=2048;
+
+    sun.shadow.camera.left=-100;
+    sun.shadow.camera.right=100;
+    sun.shadow.camera.top=100;
+    sun.shadow.camera.bottom=-100;
+
+    scene.add(sun);
+
+
+    const moon=new THREE.PointLight(
+        0x468fff,
+        20,
+        80
+    );
+
+    moon.position.set(
+        20,
+        15,
+        -30
+    );
+
+    scene.add(moon);
+
+}
+
+
+/* =========================
+   WORLD
+========================= */
+
+function createWorld(){
+
+    /* GROUND */
+
+    const groundGeo=
+        new THREE.PlaneGeometry(
+            180,
+            180,
+            40,
+            40
+        );
+
+    const groundMat=
+        new THREE.MeshStandardMaterial({
+            color:0x234c32,
+            roughness:.95
+        });
+
+    const ground=
+        new THREE.Mesh(
+            groundGeo,
+            groundMat
+        );
+
+    ground.rotation.x=-Math.PI/2;
+
+    ground.receiveShadow=true;
+
+    scene.add(ground);
+
+
+    /* GRASS PATCHES */
+
+    for(let i=0;i<120;i++){
+
+        const x=
+            (Math.random()-.5)*150;
+
+        const z=
+            (Math.random()-.5)*150;
+
+        if(Math.abs(x)<25 &&
+           Math.abs(z)<25) continue;
+
+        createGrass(x,z);
+
+    }
+
+
+    /* RIVER */
+
+    const riverGeo=
+        new THREE.PlaneGeometry(
+            15,
+            150
+        );
+
+    const riverMat=
+        new THREE.MeshStandardMaterial({
+            color:0x147fb5,
+            transparent:true,
+            opacity:.82,
+            roughness:.18,
+            metalness:.15
+        });
+
+    const river=
+        new THREE.Mesh(
+            riverGeo,
+            riverMat
+        );
+
+    river.rotation.x=-Math.PI/2;
+
+    river.position.set(
+        -38,
+        .05,
+        0
+    );
+
+    scene.add(river);
+
+
+    /* RIVER GLOW */
+
+    const riverGlow=
+        new THREE.PointLight(
+            0x008cff,
+            5,
+            35
+        );
+
+    riverGlow.position.set(
+        -38,
+        3,
+        0
+    );
+
+    scene.add(riverGlow);
+
+
+    /* MOUNTAINS */
+
+    for(let i=0;i<18;i++){
+
+        const angle=
+            (i/18)*Math.PI*2;
+
+        const radius=72;
+
+        const x=
+            Math.cos(angle)*radius;
+
+        const z=
+            Math.sin(angle)*radius;
+
+        createMountain(
+            x,
+            z,
+            8+Math.random()*12
+        );
+
+    }
+
+
+    /* CLOUDS */
+
+    for(let i=0;i<18;i++){
+
+        createCloud(
+            (Math.random()-.5)*150,
+            30+Math.random()*15,
+            (Math.random()-.5)*130
+        );
+
+    }
+
+
+    /* CASTLE */
+
+    createCastle();
+
+
+    /* BRIDGE */
+
+    createBridge();
+
+}
+
+
+/* =========================
+   GRASS
+========================= */
+
+function createGrass(x,z){
+
+    const geo=
+        new THREE.ConeGeometry(
+            .12,
+            .7,
+            4
+        );
+
+    const mat=
+        new THREE.MeshStandardMaterial({
+            color:0x4e9b45
+        });
+
+    const grass=
+        new THREE.Mesh(
+            geo,
+            mat
+        );
+
+    grass.position.set(
+        x,
+        .35,
+        z
+    );
+
+    grass.rotation.y=Math.random()*6;
+
+    grass.castShadow=true;
+
+    scene.add(grass);
+
+}
+
+
+/* =========================
+   MOUNTAIN
+========================= */
+
+function createMountain(x,z,h){
+
+    const geo=
+        new THREE.ConeGeometry(
+            14,
+            h*2,
+            7
+        );
+
+    const mat=
+        new THREE.MeshStandardMaterial({
+            color:0x354b50,
+            roughness:1
+        });
+
+    const mountain=
+        new THREE.Mesh(
+            geo,
+            mat
+        );
+
+    mountain.position.set(
+        x,
+        h,
+        z
+    );
+
+    mountain.rotation.y=
+        Math.random()*Math.PI;
+
+    mountain.castShadow=true;
+
+    scene.add(mountain);
+
+
+    /* SNOW */
+
+    if(h>15){
+
+        const snowGeo=
+            new THREE.ConeGeometry(
+                5,
+                6,
+                7
+            );
+
+        const snowMat=
+            new THREE.MeshStandardMaterial({
+                color:0xe9f4ff
+            });
+
+        const snow=
+            new THREE.Mesh(
+                snowGeo,
+                snowMat
+            );
+
+        snow.position.set(
+            x,
+            h*1.65,
+            z
+        );
+
+        scene.add(snow);
+
+    }
+
+}
+
+
+/* =========================
+   CLOUD
+========================= */
+
+function createCloud(x,y,z){
+
+    const group=
+        new THREE.Group();
+
+    const mat=
+        new THREE.MeshStandardMaterial({
+            color:0xffffff,
+            transparent:true,
+            opacity:.75
+        });
+
+    for(let i=0;i<5;i++){
+
+        const puff=
+            new THREE.Mesh(
+                new THREE.SphereGeometry(
+                    2+Math.random()*2,
+                    12,
+                    12
+                ),
+                mat
+            );
+
+        puff.position.set(
+            i*2-4,
+            Math.random()*1.5,
+            Math.random()*2
+        );
+
+        group.add(puff);
+
+    }
+
+    group.position.set(
+        x,y,z
+    );
+
+    scene.add(group);
+
+}
+
+
+/* =========================
+   CASTLE
+========================= */
+
+function createCastle(){
+
+    const castle=
+        new THREE.Group();
+
+    /* MAIN BUILDING */
+
+    const body=
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                20,
+                15,
+                18
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x687b92,
+                roughness:.7
+            })
+        );
+
+    body.position.y=7.5;
+
+    body.castShadow=true;
+
+    castle.add(body);
+
+
+    /* TOWERS */
+
+    const positions=[
+        [-12,0,-10],
+        [12,0,-10],
+        [-12,0,10],
+        [12,0,10]
+    ];
+
+    positions.forEach(p=>{
+
+        const tower=
+            new THREE.Mesh(
+                new THREE.CylinderGeometry(
+                    3,
+                    3,
+                    20,
+                    10
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:0x7c8fa8
+                })
+            );
+
+        tower.position.set(
+            p[0],
+            10,
+            p[2]
+        );
+
+        tower.castShadow=true;
+
+        castle.add(tower);
+
+
+        const roof=
+            new THREE.Mesh(
+                new THREE.ConeGeometry(
+                    4,
+                    7,
+                    10
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:0x315bc9,
+                    metalness:.25,
+                    roughness:.35
+                })
+            );
+
+        roof.position.set(
+            p[0],
+            23,
+            p[2]
+        );
+
+        roof.castShadow=true;
+
+        castle.add(roof);
+
+    });
+
+
+    /* GATE */
+
+    const gate=
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                6,
+                9,
+                1
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x241b17
+            })
+        );
+
+    gate.position.set(
+        0,
+        4.5,
+        9.2
+    );
+
+    castle.add(gate);
+
+
+    castle.position.set(
+        30,
+        0,
+        -35
+    );
+
+    scene.add(castle);
+
+}
+
+
+/* =========================
+   BRIDGE
+========================= */
+
+function createBridge(){
+
+    const bridge=
+        new THREE.Group();
+
+    const wood=
+        new THREE.MeshStandardMaterial({
+            color:0x704522
+        });
+
+    for(let i=-5;i<=5;i++){
+
+        const plank=
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    12,
+                    .5,
+                    1.2
+                ),
+                wood
+            );
+
+        plank.position.set(
+            -38,
+            .8,
+            i*1.3
+        );
+
+        plank.rotation.y=
+            (Math.random()-.5)*.04;
+
+        plank.castShadow=true;
+
+        bridge.add(plank);
+
+    }
+
+    scene.add(bridge);
+
+}
+
+
+/* =========================
+   PLAYER
+========================= */
+
+function createPlayer(){
+
+    player=
+        new THREE.Group();
+
+    playerBody=
+        new THREE.Group();
+
+
+    /* BODY */
+
+    const body=
+        new THREE.Mesh(
+            new THREE.CapsuleGeometry(
+                .65,
+                1.3,
+                6,
+                12
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x2869b8,
+                roughness:.7
+            })
+        );
+
+    body.position.y=1.45;
+
+    body.castShadow=true;
+
+    playerBody.add(body);
+
+
+    /* HEAD */
+
+    const head=
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                .55,
+                20,
+                20
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0xf0b58d
+            })
+        );
+
+    head.position.y=2.7;
+
+    head.castShadow=true;
+
+    playerBody.add(head);
+
+
+    /* HAIR */
+
+    const hair=
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                .59,
+                16,
+                10
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x2b1a12
+            })
+        );
+
+    hair.scale.y=.6;
+
+    hair.position.set(
+        0,
+        3,
+        -.05
+    );
+
+    playerBody.add(hair);
+
+
+    /* CAPE */
+
+    const cape=
+        new THREE.Mesh(
+            new THREE.ConeGeometry(
+                .9,
+                1.8,
+                5,
+                1,
+                true
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x162c76,
+                side:THREE.DoubleSide
+            })
+        );
+
+    cape.rotation.x=Math.PI;
+
+    cape.position.set(
+        0,
+        1.6,
+        -.65
+    );
+
+    cape.castShadow=true;
+
+    playerBody.add(cape);
+
+
+    player.add(playerBody);
+
+
+    player.position.set(
+        0,
+        0,
+        12
+    );
+
+
+    scene.add(player);
+
+}
+
+
+/* =========================
+   NPC
+========================= */
+
+function createNPC(){
+
+    const npc=
+        new THREE.Group();
+
+
+    const body=
+        new THREE.Mesh(
+            new THREE.CapsuleGeometry(
+                .6,
+                1.2,
+                6,
+                12
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x7d45ba
+            })
+        );
+
+    body.position.y=1.4;
+
+    body.castShadow=true;
+
+    npc.add(body);
+
+
+    const head=
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                .55,
+                20,
+                20
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0xe3a77c
+            })
+        );
+
+    head.position.y=2.6;
+
+    npc.add(head);
+
+
+    /* HAT */
+
+    const hat=
+        new THREE.Mesh(
+            new THREE.ConeGeometry(
+                .75,
+                1.5,
+                8
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x2f1b65
+            })
+        );
+
+    hat.position.y=3.35;
+
+    npc.add(hat);
+
+
+    npc.position.set(
+        8,
+        0,
+        4
+    );
+
+
+    npc.userData={
+        name:"Owlbert",
+        skill:"Decision Making",
+        description:
+        "Every great adventurer must learn to make smart decisions. Choose carefully and think about consequences."
+    };
+
+
+    scene.add(npc);
+
+    buildings.push(npc);
+
+}
+
+
+/* =========================
+   BUILDINGS
+========================= */
+
+function createBuildings(){
+
+    createSkillBuilding(
+        "🍳 COOKING HOUSE",
+        "Cooking",
+        -18,
+        -5,
+        0xe37d32,
+        "Learn how to prepare simple meals and understand healthy food choices."
+    );
+
+
+    createSkillBuilding(
+        "🧺 LAUNDRY HOUSE",
+        "Responsibility",
+        5,
+        -14,
+        0x4e9ee8,
+        "Learn how to organize clothes, keep things clean and take responsibility."
+    );
+
+
+    createSkillBuilding(
+        "🩹 HEALTH CENTER",
+        "First Aid",
+        -12,
+        18,
+        0xdd3d52,
+        "Learn basic first-aid awareness and what to do when someone needs help."
+    );
+
+
+    createSkillBuilding(
+        "💰 TREASURY",
+        "Money Management",
+        22,
+        8,
+        0xc99b32,
+        "Learn the difference between needs and wants, saving, budgeting and smart spending."
+    );
+
+
+    createSkillBuilding(
+        "📚 ACADEMY",
+        "Study Skills",
+        30,
+        22,
+        0x815ce8,
+        "Learn planning, time management, concentration and effective study habits."
+    );
+
+}
+
+
+/* =========================
+   BUILDING CREATOR
+========================= */
+
+function createSkillBuilding(
+    name,
+    skill,
+    x,
+    z,
+    color,
+    description
+){
+
+    const group=
+        new THREE.Group();
+
+
+    /* BUILDING */
+
+    const building=
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                9,
+                7,
+                8
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x687788,
+                roughness:.8
+            })
+        );
+
+    building.position.y=3.5;
+
+    building.castShadow=true;
+
+    building.receiveShadow=true;
+
+    group.add(building);
+
+
+    /* ROOF */
+
+    const roof=
+        new THREE.Mesh(
+            new THREE.ConeGeometry(
+                6.5,
+                5,
+                4
+            ),
+            new THREE.MeshStandardMaterial({
+                color:color,
+                metalness:.15,
+                roughness:.4
+            })
+        );
+
+    roof.rotation.y=Math.PI/4;
+
+    roof.position.y=9;
+
+    roof.castShadow=true;
+
+    group.add(roof);
+
+
+    /* DOOR */
+
+    const door=
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                2,
+                3.5,
+                .4
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x281b18
+            })
+        );
+
+    door.position.set(
+        0,
+        1.75,
+        4.1
+    );
+
+    group.add(door);
+
+
+    /* GLOW CRYSTAL */
+
+    const crystal=
+        new THREE.Mesh(
+            new THREE.OctahedronGeometry(
+                .7,
+                0
+            ),
+            new THREE.MeshStandardMaterial({
+                color:color,
+                emissive:color,
+                emissiveIntensity:1.5,
+                metalness:.5,
+                roughness:.2
+            })
+        );
+
+    crystal.position.set(
+        0,
+        11.5,
+        0
+    );
+
+    group.add(crystal);
+
+
+    group.position.set(
+        x,
+        0,
+        z
+    );
+
+
+    group.userData={
+        name:name,
+        skill:skill,
+        description:description
+    };
+
+
+    scene.add(group);
+
+    buildings.push(group);
+
+}
+
+
+/* =========================
+   PARTICLES
+========================= */
+
+function createParticles(){
+
+    const geo=
+        new THREE.SphereGeometry(
+            .08,
+            6,
+            6
+        );
+
+    const mat=
+        new THREE.MeshBasicMaterial({
+            color:0x4fdcff
+        });
+
+
+    for(let i=0;i<100;i++){
+
+        const p=
+            new THREE.Mesh(
+                geo,
+                mat
+            );
+
+        p.position.set(
+            (Math.random()-.5)*100,
+            Math.random()*20,
+            (Math.random()-.5)*100
+        );
+
+        p.userData.speed=
+            .01+Math.random()*.03;
+
+        scene.add(p);
+
+        particles.push(p);
+
+    }
+
+}
+
+
+/* =========================
+   CONTROLS
+========================= */
+
+function setupControls(){
+
+    window.addEventListener(
+        "keydown",
+        e=>{
+            keys[e.key.toLowerCase()]=true;
+
+            if(e.key.toLowerCase()==="e"){
+                interact();
+            }
+        }
+    );
+
+
+    window.addEventListener(
+        "keyup",
+        e=>{
+            keys[e.key.toLowerCase()]=false;
+        }
+    );
+
+
+    renderer.domElement.addEventListener(
+        "mousedown",
+        e=>{
+            mouseDown=true;
+            lastMouseX=e.clientX;
+            lastMouseY=e.clientY;
+        }
+    );
+
+
+    window.addEventListener(
+        "mouseup",
+        ()=>{
+            mouseDown=false;
+        }
+    );
+
+
+    window.addEventListener(
+        "mousemove",
+        e=>{
+
+            if(!mouseDown) return;
+
+            const dx=
+                e.clientX-lastMouseX;
+
+            const dy=
+                e.clientY-lastMouseY;
+
+            cameraYaw-=dx*.004;
+
+            cameraPitch-=dy*.003;
+
+            cameraPitch=
+                Math.max(
+                    .05,
+                    Math.min(
+                        .9,
+                        cameraPitch
+                    )
+                );
+
+            lastMouseX=e.clientX;
+            lastMouseY=e.clientY;
+
+        }
+    );
+
+
+    renderer.domElement.addEventListener(
+        "click",
+        ()=>{
+            if(currentInteraction){
+                openSkill(currentInteraction);
+            }
+        }
+    );
+
+
+    window.addEventListener(
+        "resize",
+        resize
+    );
+
+}
+
+
+/* =========================
+   PLAYER MOVEMENT
+========================= */
+
+function updatePlayer(){
+
+    if(!player) return;
+
+
+    let dx=0;
+    let dz=0;
+
+
+    if(keys["w"] ||
+       keys["arrowup"]){
+        dz-=1;
+    }
+
+    if(keys["s"] ||
+       keys["arrowdown"]){
+        dz+=1;
+    }
+
+    if(keys["a"] ||
+       keys["arrowleft"]){
+        dx-=1;
+    }
+
+    if(keys["d"] ||
+       keys["arrowright"]){
+        dx+=1;
+    }
+
+
+    const length=
+        Math.sqrt(
+            dx*dx+dz*dz
+        );
+
+
+    if(length>0){
+
+        dx/=length;
+        dz/=length;
+
+
+        const speed=.22;
+
+
+        /* CAMERA RELATIVE MOVEMENT */
+
+        const angle=
+            cameraYaw;
+
+
+        const moveX=
+            dx*Math.cos(angle)
+            -
+            dz*Math.sin(angle);
+
+        const moveZ=
+            dx*Math.sin(angle)
+            +
+            dz*Math.cos(angle);
+
+
+        player.position.x+=
+            moveX*speed;
+
+        player.position.z+=
+            moveZ*speed;
+
+
+        player.rotation.y=
+            Math.atan2(
+                moveX,
+                moveZ
+            );
+
+
+        /* WALK ANIMATION */
+
+        const t=
+            clock.elapsedTime*12;
+
+        playerBody.position.y=
+            Math.abs(Math.sin(t))*.06;
+
+
+    }
+
+
+    /* WORLD LIMIT */
+
+    player.position.x=
+        THREE.MathUtils.clamp(
+            player.position.x,
+            -65,
+            65
+        );
+
+    player.position.z=
+        THREE.MathUtils.clamp(
+            player.position.z,
+            -65,
+            65
+        );
+
+}
+
+
+/* =========================
+   CAMERA
+========================= */
+
+function updateCamera(){
+
+    if(!player) return;
+
+
+    const distance=11;
+
+
+    const target=
+        new THREE.Vector3(
+            player.position.x,
+            player.position.y+2.3,
+            player.position.z
+        );
+
+
+    const offset=
+        new THREE.Vector3(
+            Math.sin(cameraYaw)
+            *Math.cos(cameraPitch)
+            *distance,
+
+            Math.sin(cameraPitch)
+            *distance,
+
+            Math.cos(cameraYaw)
+            *Math.cos(cameraPitch)
+            *distance
+        );
+
+
+    camera.position.lerp(
+        target.clone().add(offset),
+        .08
+    );
+
+
+    camera.lookAt(target);
+
+}
+
+
+/* =========================
+   INTERACTION DETECTION
+========================= */
+
+function checkInteractions(){
+
+    if(!player) return;
+
+
+    let nearest=null;
+
+    let nearestDistance=999;
+
+
+    buildings.forEach(obj=>{
+
+        const d=
+            player.position.distanceTo(
+                obj.position
+            );
+
+
+        if(d<10 && d<nearestDistance){
+
+            nearest=obj;
+            nearestDistance=d;
+
+        }
+
+    });
+
+
+    currentInteraction=nearest;
+
+
+    const interaction=
+        document.getElementById(
+            "interaction"
+        );
+
+
+    if(nearest){
+
+        interaction.classList.add("show");
+
+        interaction.innerHTML=
+            `Press <span>E</span> to learn about <b>${nearest.userData.skill}</b>`;
+
+        showLocation(
+            nearest.userData.name
+        );
+
+    }
+    else{
+
+        interaction.classList.remove("show");
+
+        hideLocation();
+
+    }
+
+}
+
+
+/* =========================
+   OPEN SKILL
+========================= */
+
+function interact(){
+
+    if(currentInteraction){
+
+        openSkill(
+            currentInteraction
+        );
+
+    }
+
+}
+
+
+/* =========================
+   SKILL WINDOW
+========================= */
+
+function openSkill(building){
+
+    const popup=
+        document.getElementById(
+            "popup"
+        );
+
+    document.getElementById(
+        "popupTitle"
+    ).textContent=
+        building.userData.name;
+
+
+    document.getElementById(
+        "popupText"
+    ).textContent=
+        building.userData.description;
+
+
+    popup.style.display="block";
+
+
+    document.getElementById(
+        "popupButton"
+    ).onclick=()=>{
+
+        learnSkill(
+            building
+        );
+
+    };
+
+}
+
+
+/* =========================
+   LEARN SKILL
+========================= */
+
+function learnSkill(building){
+
+    xp+=100;
+
+    gems+=5;
+
+    coins+=25;
+
+
+    level=
+        Math.floor(xp/500)+1;
+
 
     document.getElementById(
         "xp"
     ).textContent=xp;
 
+
     document.getElementById(
         "gems"
     ).textContent=gems;
+
 
     document.getElementById(
         "coins"
     ).textContent=coins;
 
+
     document.getElementById(
         "level"
     ).textContent=level;
 
+
+    questStep++;
+
+
+    const progress=
+        Math.min(
+            questStep*20,
+            100
+        );
+
+
     document.getElementById(
         "questProgress"
     ).style.width=
-        Math.min(
-            100,
-            xp
-        )+"%";
-}
+        progress+"%";
 
 
-/* ==========================================
-   MESSAGE
-========================================== */
+    updateQuest();
 
-let messageTimer;
-
-function showMessage(text){
-
-    const el=document.getElementById(
-        "message"
-    );
-
-    el.textContent=text;
-
-    el.style.opacity="1";
-
-    clearTimeout(messageTimer);
-
-    messageTimer=setTimeout(
-        ()=>{
-            el.style.opacity="0";
-        },
-        3000
-    );
-}
-
-
-/* ==========================================
-   QUEST
-========================================== */
-
-const quests=[
-    "Explore the kingdom and discover your first life skill.",
-    "Visit a skill building and learn something useful.",
-    "Earn 100 XP by completing life-skill challenges.",
-    "Build your knowledge and unlock the next kingdom.",
-    "Become a Master of Life Skills."
-];
-
-let questIndex=0;
-
-function nextQuest(){
-
-    questIndex++;
-
-    if(questIndex>=quests.length)
-        questIndex=quests.length-1;
 
     document.getElementById(
-        "questText"
-    ).textContent=
-        quests[questIndex];
+        "popup"
+    ).style.display="none";
+
+
+    createRewardBurst(
+        building.position
+    );
+
 }
 
 
-/* ==========================================
-   UPDATE PLAYER
-========================================== */
+/* =========================
+   QUEST SYSTEM
+========================= */
 
-function updatePlayer(){
+function updateQuest(){
 
-    moving=false;
-
-    const direction=new THREE.Vector3();
-
-    if(keys["w"]){
-        direction.z-=1;
-        moving=true;
-    }
-
-    if(keys["s"]){
-        direction.z+=1;
-        moving=true;
-    }
-
-    if(keys["a"]){
-        direction.x-=1;
-        moving=true;
-    }
-
-    if(keys["d"]){
-        direction.x+=1;
-        moving=true;
-    }
-
-    if(direction.length()>0){
-
-        direction.normalize();
-
-        const rotated=new THREE.Vector3(
-            direction.x,
-            0,
-            direction.z
+    const text=
+        document.getElementById(
+            "questText"
         );
 
-        rotated.applyAxisAngle(
-            new THREE.Vector3(0,1,0),
-            cameraYaw
-        );
 
-        player.position.add(
-            rotated.multiplyScalar(speed)
-        );
+    if(questStep===0){
 
-        player.rotation.y=
-            Math.atan2(
-                rotated.x,
-                rotated.z
+        text.textContent=
+            "Explore the kingdom and discover your first life skill.";
+
+    }
+
+    else if(questStep===1){
+
+        text.textContent=
+            "Great start! Find another building and learn a second skill.";
+
+    }
+
+    else if(questStep===2){
+
+        text.textContent=
+            "You're becoming a Skill Guardian. Discover three more skills.";
+
+    }
+
+    else if(questStep===3){
+
+        text.textContent=
+            "Your kingdom needs you! Keep exploring and learning.";
+
+    }
+
+    else if(questStep===4){
+
+        text.textContent=
+            "Almost there! One more skill will complete your first mission.";
+
+    }
+
+    else{
+
+        text.textContent=
+            "🏆 QUEST COMPLETE! You are becoming a true Life Skills Guardian.";
+
+    }
+
+}
+
+
+/* =========================
+   REWARD PARTICLES
+========================= */
+
+function createRewardBurst(pos){
+
+    for(let i=0;i<30;i++){
+
+        const geo=
+            new THREE.SphereGeometry(
+                .12,
+                6,
+                6
             );
 
-        if(
-            player.position.distanceTo(
-                new THREE.Vector3(0,0,0)
-            )>85
-        ){
+        const mat=
+            new THREE.MeshBasicMaterial({
+                color:
+                    Math.random()>.5
+                    ?0x55ddff
+                    :0xb46cff
+            });
 
-            player.position.setLength(85);
-        }
+
+        const p=
+            new THREE.Mesh(
+                geo,
+                mat
+            );
+
+
+        p.position.copy(pos);
+
+        p.position.y+=2;
+
+
+        p.userData={
+            vx:(Math.random()-.5)*.15,
+            vy:Math.random()*.2+.05,
+            vz:(Math.random()-.5)*.15,
+            life:80
+        };
+
+
+        scene.add(p);
+
+        particles.push(p);
+
     }
 
-    if(moving){
-
-        body.position.y=
-            1.6+
-            Math.sin(
-                performance.now()*.012
-            )*.08;
-    }
-
-    owl.position.x=
-        player.position.x+
-        Math.sin(
-            performance.now()*.002
-        )*2.5;
-
-    owl.position.z=
-        player.position.z+
-        2.5;
-
-    owl.position.y=
-        3.2+
-        Math.sin(
-            performance.now()*.004
-        )*.35;
-
-    updateMap();
 }
 
 
-/* ==========================================
-   CAMERA FOLLOW
-========================================== */
+/* =========================
+   PARTICLE UPDATE
+========================= */
 
-function updateCamera(){
+function updateParticles(){
 
-    const distance=15;
+    particles.forEach(p=>{
 
-    const offset=new THREE.Vector3(
-        Math.sin(cameraYaw)*
-        Math.cos(cameraPitch)*
-        distance,
+        if(p.userData.life!==undefined){
 
-        Math.sin(cameraPitch)*
-        distance,
+            p.position.x+=
+                p.userData.vx;
 
-        Math.cos(cameraYaw)*
-        Math.cos(cameraPitch)*
-        distance
-    );
+            p.position.y+=
+                p.userData.vy;
 
-    const target=
-        player.position.clone();
+            p.position.z+=
+                p.userData.vz;
 
-    target.y+=2;
+            p.userData.vy-=.004;
 
-    const desired=
-        target.clone().add(offset);
+            p.userData.life--;
 
-    camera.position.lerp(
-        desired,
-        .08
-    );
+            if(p.userData.life<=0){
 
-    camera.lookAt(target);
-}
+                scene.remove(p);
 
-
-/* ==========================================
-   MINIMAP
-========================================== */
-
-function updateMap(){
-
-    const p=document.getElementById(
-        "mapPlayer"
-    );
-
-    const x=
-        50+
-        player.position.x/85*50;
-
-    const y=
-        50+
-        player.position.z/85*50;
-
-    p.style.left=
-        THREE.MathUtils.clamp(
-            x,5,95
-        )+"%";
-
-    p.style.top=
-        THREE.MathUtils.clamp(
-            y,5,95
-        )+"%";
-}
-
-
-/* ==========================================
-   DAY/NIGHT ATMOSPHERE
-========================================== */
-
-let time=0;
-
-function updateWorld(){
-
-    time+=.0003;
-
-    const sunX=
-        Math.sin(time)*70;
-
-    const sunY=
-        55+
-        Math.cos(time)*20;
-
-    sun.position.set(
-        sunX,
-        sunY,
-        30
-    );
-
-    const nightAmount=
-        Math.max(
-            0,
-            Math.sin(time)
-        );
-
-    sun.intensity=
-        2.2-
-        nightAmount*.8;
-
-    particles.rotation.y+=.00015;
-
-    crystalAnimation();
-}
-
-
-/* ==========================================
-   CRYSTAL ANIMATION
-========================================== */
-
-function crystalAnimation(){
-
-    scene.traverse(
-        object=>{
-
-            if(
-                object.isMesh &&
-                object.geometry &&
-                object.geometry.type===
-                "OctahedronGeometry"
-            ){
-
-                object.rotation.y+=.005;
-
-                object.position.y+=
-                    Math.sin(
-                        performance.now()*.002+
-                        object.position.x
-                    )*.001;
             }
+
         }
-    );
+        else{
+
+            p.position.y+=
+                Math.sin(
+                    clock.elapsedTime*2
+                    +p.position.x
+                )*.002;
+
+        }
+
+    });
+
 }
 
 
-/* ==========================================
-   RESIZE
-========================================== */
+/* =========================
+   LOCATION UI
+========================= */
 
-window.addEventListener(
-    "resize",
-    ()=>{
+function showLocation(name){
 
-        camera.aspect=
-            innerWidth/innerHeight;
-
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(
-            innerWidth,
-            innerHeight
+    const box=
+        document.getElementById(
+            "location"
         );
-    }
-);
+
+    document.getElementById(
+        "locationText"
+    ).textContent=name;
+
+    box.classList.add("show");
+
+}
 
 
-/* ==========================================
-   GAME LOOP
-========================================== */
+function hideLocation(){
 
-const clock=new THREE.Clock();
+    document
+        .getElementById("location")
+        .classList.remove("show");
+
+}
+
+
+/* =========================
+   ANIMATION
+========================= */
 
 function animate(){
 
@@ -1877,99 +2227,117 @@ function animate(){
         animate
     );
 
+
+    const delta=
+        clock.getDelta();
+
+
     updatePlayer();
 
     updateCamera();
 
-    updateWorld();
+    checkInteractions();
+
+    updateParticles();
+
+
+    /* FLOATING CRYSTALS */
+
+    buildings.forEach(
+        building=>{
+
+            if(
+                building.children.length>0
+            ){
+
+                const crystal=
+                    building.children[
+                        building.children.length-1
+                    ];
+
+                if(
+                    crystal.geometry &&
+                    crystal.geometry.type===
+                    "OctahedronGeometry"
+                ){
+
+                    crystal.rotation.y+=
+                        delta;
+
+                    crystal.position.y=
+                        11.5+
+                        Math.sin(
+                            clock.elapsedTime*2
+                        )*.3;
+
+                }
+
+            }
+
+        }
+    );
+
 
     renderer.render(
         scene,
         camera
     );
+
 }
 
 
-/* ==========================================
-   LOADING
-========================================== */
+/* =========================
+   RESIZE
+========================= */
 
-let loadingProgress=0;
+function resize(){
 
-const loadInterval=setInterval(
-    ()=>{
+    camera.aspect=
+        innerWidth/innerHeight;
 
-        loadingProgress+=5;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(
+        innerWidth,
+        innerHeight
+    );
+
+}
+
+
+/* =========================
+   LOADING BAR
+========================= */
+
+let load=0;
+
+const loadingTimer=
+    setInterval(()=>{
+
+        load+=4;
 
         document.getElementById(
-            "loadfill"
+            "loadingProgress"
         ).style.width=
-            loadingProgress+"%";
+            Math.min(load,100)+"%";
 
-        const texts=[
-            "Awakening the kingdom...",
-            "Building ancient castles...",
-            "Growing enchanted forests...",
-            "Charging magical crystals...",
-            "Preparing your companion...",
-            "Opening the Skill Academy..."
-        ];
 
-        document.getElementById(
-            "loadingText"
-        ).textContent=
-            texts[
-                Math.min(
-                    Math.floor(
-                        loadingProgress/20
-                    ),
-                    texts.length-1
-                )
-            ];
+        if(load>=100){
 
-        if(
-            loadingProgress>=100
-        ){
-
-            clearInterval(loadInterval);
-
-            setTimeout(
-                ()=>{
-                    const load=
-                        document.getElementById(
-                            "loading"
-                        );
-
-                    load.style.opacity="0";
-
-                    setTimeout(
-                        ()=>{
-                            load.style.display="none";
-
-                            showMessage(
-                                "🦉 Welcome, Guardian! Explore the Kingdom."
-                            );
-                        },
-                        1000
-                    );
-
-                },
-                500
+            clearInterval(
+                loadingTimer
             );
+
         }
 
-    },
-    100
-);
+    },60);
 
 
-/* ==========================================
-   START
-========================================== */
+/* =========================
+   START GAME
+========================= */
 
-updateStats();
-
-animate();
+init();
 
 </script>
 
