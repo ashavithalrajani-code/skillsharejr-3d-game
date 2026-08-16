@@ -2,24 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SkillShareJR | Kingdom of Skills</title>
+<title>SkillShareJR — Kingdom of Skills</title>
 
 <style>
-
 *{
+    box-sizing:border-box;
     margin:0;
     padding:0;
-    box-sizing:border-box;
 }
 
 html,body{
     width:100%;
     height:100%;
     overflow:hidden;
-    background:#020814;
-    font-family:Arial,sans-serif;
+    background:#050b16;
+    font-family:Arial,Helvetica,sans-serif;
+    color:white;
 }
 
 #game{
@@ -31,252 +31,304 @@ canvas{
     display:block;
 }
 
-/* ================= BRAND ================= */
+/* =========================
+   TOP BRAND
+========================= */
 
-#brand{
+.brand{
     position:fixed;
-    top:20px;
-    left:22px;
+    top:24px;
+    left:28px;
     z-index:20;
 
-    padding:14px 20px;
+    padding:18px 28px;
 
-    border:1px solid #35c8ff;
-    border-radius:17px;
+    border:1px solid rgba(71,190,255,.75);
+    border-radius:22px;
 
-    background:rgba(2,13,28,.82);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(4,21,42,.96),
+            rgba(7,14,31,.90)
+        );
+
+    box-shadow:
+        0 0 30px rgba(0,150,255,.18),
+        inset 0 0 25px rgba(0,120,255,.08);
+
     backdrop-filter:blur(12px);
-
-    box-shadow:0 0 30px rgba(0,180,255,.15);
-
-    color:white;
 }
 
-#brand h1{
-    font-size:25px;
-    color:#5bdcff;
+.brand h1{
+    font-size:30px;
     letter-spacing:2px;
+    color:#5bd8ff;
+    text-shadow:0 0 15px rgba(64,200,255,.5);
 }
 
-#brand p{
-    margin-top:5px;
-    font-size:11px;
-    color:#9fc8e2;
+.brand p{
+    margin-top:6px;
+    color:#b8d3e8;
+    font-size:14px;
+    letter-spacing:.8px;
 }
 
-/* ================= STATS ================= */
+/* =========================
+   PLAYER STATS
+========================= */
 
-#stats{
+.stats{
     position:fixed;
-    top:20px;
-    right:22px;
+    top:24px;
+    right:28px;
     z-index:20;
 
-    width:205px;
+    min-width:245px;
 
-    padding:16px;
+    padding:18px 24px;
 
-    border:1px solid #e0b832;
-    border-radius:17px;
+    border:1px solid rgba(255,208,75,.7);
+    border-radius:22px;
 
-    background:rgba(3,13,27,.88);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(8,20,39,.97),
+            rgba(5,11,25,.92)
+        );
 
-    box-shadow:0 0 30px rgba(255,200,50,.12);
+    box-shadow:
+        0 0 30px rgba(255,190,40,.12),
+        inset 0 0 25px rgba(255,190,40,.05);
 
-    color:white;
+    backdrop-filter:blur(12px);
 }
 
 .stat{
     display:flex;
     justify-content:space-between;
-    margin:7px 0;
-}
+    align-items:center;
 
-.stat span{
-    color:#9db6ca;
+    margin:8px 0;
+
+    color:#a9bfd5;
+    font-size:15px;
 }
 
 .stat strong{
     color:white;
+    font-size:18px;
 }
 
-/* ================= QUEST ================= */
+/* =========================
+   QUEST
+========================= */
 
-#quest{
+.quest{
     position:fixed;
-    left:22px;
-    bottom:22px;
+    left:28px;
+    bottom:28px;
     z-index:20;
 
-    width:350px;
+    width:430px;
 
-    padding:18px;
+    padding:20px 24px;
 
-    border:1px solid #8755ff;
-    border-radius:17px;
+    border:1px solid rgba(172,105,255,.75);
+    border-radius:22px;
 
-    background:rgba(4,12,29,.9);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(9,16,36,.96),
+            rgba(7,10,25,.94)
+        );
 
-    box-shadow:0 0 30px rgba(110,60,255,.16);
+    box-shadow:
+        0 0 35px rgba(151,72,255,.16),
+        inset 0 0 30px rgba(130,70,255,.06);
 
+    backdrop-filter:blur(12px);
+}
+
+.quest-title{
+    color:#c9a0ff;
+    font-size:17px;
+    font-weight:bold;
+    letter-spacing:1px;
+    margin-bottom:10px;
+}
+
+.quest-text{
+    font-size:16px;
+    line-height:1.55;
+    color:#eef5ff;
+}
+
+/* =========================
+   CONTROLS
+========================= */
+
+.controls{
+    position:fixed;
+    right:28px;
+    bottom:28px;
+    z-index:20;
+
+    padding:17px 22px;
+
+    border-radius:20px;
+
+    border:1px solid rgba(70,190,255,.5);
+
+    background:rgba(5,17,33,.88);
+
+    color:#c7d9ea;
+
+    box-shadow:0 0 25px rgba(0,130,255,.12);
+
+    backdrop-filter:blur(10px);
+
+    line-height:1.65;
+}
+
+.controls b{
     color:white;
 }
 
-.questTitle{
-    color:#c59cff;
-    font-size:13px;
-    font-weight:bold;
-    letter-spacing:2px;
-    margin-bottom:9px;
-}
+/* =========================
+   LOCATION PANEL
+========================= */
 
-#questText{
-    color:#dce8f4;
-    line-height:1.45;
-}
-
-/* ================= CONTROLS ================= */
-
-#controls{
-    position:fixed;
-    right:22px;
-    bottom:22px;
-    z-index:20;
-
-    padding:14px 17px;
-
-    border:1px solid #24698e;
-    border-radius:15px;
-
-    background:rgba(3,14,29,.88);
-
-    color:#bcd9ed;
-
-    font-size:12px;
-    line-height:1.8;
-}
-
-/* ================= POPUP ================= */
-
-#popup{
+.locationPanel{
     position:fixed;
 
     left:50%;
     top:50%;
 
-    transform:translate(-50%,-50%) scale(.8);
+    transform:translate(-50%,-50%) scale(.92);
 
-    width:430px;
-    max-width:90vw;
+    width:min(500px,90vw);
 
-    padding:28px;
+    z-index:50;
 
-    z-index:100;
+    padding:30px;
 
-    display:none;
-
-    border:1px solid #42d7ff;
-    border-radius:22px;
+    border-radius:25px;
 
     background:
-    linear-gradient(
-        145deg,
-        rgba(8,32,62,.98),
-        rgba(2,9,22,.98)
-    );
+        linear-gradient(
+            145deg,
+            rgba(9,24,48,.98),
+            rgba(7,10,26,.98)
+        );
+
+    border:1px solid rgba(83,202,255,.7);
 
     box-shadow:
-    0 0 70px rgba(0,190,255,.3),
-    inset 0 0 30px rgba(0,150,255,.06);
+        0 0 70px rgba(0,160,255,.25),
+        inset 0 0 35px rgba(70,150,255,.08);
 
-    color:white;
+    opacity:0;
+    pointer-events:none;
+
+    transition:.25s ease;
 }
 
-#popup.show{
-    display:block;
+.locationPanel.show{
+    opacity:1;
+    pointer-events:auto;
     transform:translate(-50%,-50%) scale(1);
 }
 
-#popupIcon{
-    font-size:48px;
+.locationPanel h2{
+    color:#61dcff;
+    font-size:27px;
+    margin-bottom:10px;
 }
 
-#popup h2{
-    margin-top:8px;
-    color:#5bdcff;
-}
-
-#popup p{
-    margin-top:12px;
-    color:#c3d6e7;
+.locationPanel p{
+    color:#c7d8e8;
     line-height:1.6;
+    margin-bottom:20px;
 }
 
-.popupButton{
-    width:100%;
-    margin-top:20px;
+.skill{
+    display:inline-block;
 
-    padding:13px;
+    padding:8px 14px;
+
+    border-radius:20px;
+
+    background:rgba(87,153,255,.12);
+
+    border:1px solid rgba(87,153,255,.45);
+
+    color:#8bdcff;
+
+    margin-bottom:20px;
+}
+
+.startBtn{
+    width:100%;
 
     border:0;
-    border-radius:11px;
+    border-radius:14px;
 
-    background:linear-gradient(
-        90deg,
-        #087ee0,
-        #7655ff
-    );
+    padding:14px;
+
+    font-size:16px;
+    font-weight:bold;
 
     color:white;
-    font-weight:bold;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            90deg,
+            #247cff,
+            #7447ff
+        );
+
+    box-shadow:
+        0 0 25px rgba(62,113,255,.35);
+
+    transition:.2s;
+}
+
+.startBtn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 0 35px rgba(80,130,255,.55);
+}
+
+.closeBtn{
+    position:absolute;
+
+    right:15px;
+    top:13px;
+
+    border:0;
+
+    background:none;
+
+    color:#8ea8bf;
+
+    font-size:25px;
 
     cursor:pointer;
 }
 
-.popupButton:hover{
-    filter:brightness(1.2);
-}
+/* =========================
+   LOADING
+========================= */
 
-/* ================= NOTIFICATION ================= */
-
-#notification{
-    position:fixed;
-
-    top:100px;
-    left:50%;
-
-    transform:translateX(-50%) translateY(-30px);
-
-    z-index:150;
-
-    padding:12px 25px;
-
-    border:1px solid #4cdcff;
-    border-radius:30px;
-
-    background:rgba(2,16,32,.94);
-
-    box-shadow:0 0 30px rgba(0,200,255,.25);
-
-    color:white;
-
-    opacity:0;
-
-    transition:.35s;
-}
-
-#notification.show{
-    opacity:1;
-    transform:translateX(-50%) translateY(0);
-}
-
-/* ================= LOADING ================= */
-
-#loading{
+.loading{
     position:fixed;
     inset:0;
 
-    z-index:500;
+    z-index:100;
 
     display:flex;
     align-items:center;
@@ -284,103 +336,80 @@ canvas{
     flex-direction:column;
 
     background:
-    radial-gradient(
-        circle,
-        #102d4d,
-        #030814 65%
-    );
+        radial-gradient(
+            circle at center,
+            #102b4d,
+            #040916 70%
+        );
 
-    color:white;
-
-    transition:opacity 1s;
+    transition:opacity .8s;
 }
 
-#loadingTitle{
-    font-size:50px;
-    font-weight:900;
+.loading.hidden{
+    opacity:0;
+    pointer-events:none;
+}
+
+.loading h1{
+    color:#5edbff;
+    font-size:48px;
     letter-spacing:4px;
-    color:#5bdcff;
 
     text-shadow:
-    0 0 15px #16bfff,
-    0 0 40px #087bd1;
+        0 0 25px rgba(65,210,255,.6);
 }
 
-#loadingText{
-    margin-top:12px;
-    color:#a7c7df;
+.loading p{
+    margin-top:15px;
+    color:#a9c6dc;
 }
 
-#loadingBar{
-    width:350px;
-    max-width:70vw;
+.loadingBar{
+    width:400px;
+    max-width:75vw;
 
-    height:8px;
+    height:7px;
 
     margin-top:25px;
 
-    background:#14263c;
+    background:#16283e;
 
     border-radius:20px;
 
     overflow:hidden;
 }
 
-#loadingFill{
+.loadingFill{
     width:0%;
     height:100%;
 
-    background:linear-gradient(
-        90deg,
-        #087fff,
-        #58e9ff,
-        #9d65ff
-    );
+    background:
+        linear-gradient(
+            90deg,
+            #23aaff,
+            #9c58ff
+        );
 
-    transition:.2s;
+    box-shadow:0 0 15px #46c9ff;
+
+    transition:width .3s;
 }
 
-/* ================= VIGNETTE ================= */
+/* =========================
+   VIGNETTE
+========================= */
 
-#vignette{
+.vignette{
     position:fixed;
     inset:0;
-    z-index:10;
+
     pointer-events:none;
 
+    z-index:10;
+
     box-shadow:
-    inset 0 0 170px rgba(0,0,0,.7);
+        inset 0 0 180px rgba(0,0,0,.75);
 }
-
-@media(max-width:700px){
-
-    #brand{
-        top:10px;
-        left:10px;
-    }
-
-    #brand h1{
-        font-size:17px;
-    }
-
-    #stats{
-        top:10px;
-        right:10px;
-        width:150px;
-        font-size:10px;
-    }
-
-    #quest{
-        left:10px;
-        bottom:10px;
-        width:270px;
-    }
-
-    #controls{
-        display:none;
-    }
-}
-
 </style>
 </head>
 
@@ -388,16 +417,17 @@ canvas{
 
 <div id="game"></div>
 
-<div id="brand">
+<!-- BRAND -->
+<div class="brand">
     <h1>⚔ SKILLSHAREJR</h1>
-    <p>THE KINGDOM OF LIFE SKILLS</p>
+    <p>MASTER LIFE SKILLS • BUILD YOUR KINGDOM</p>
 </div>
 
-<div id="stats">
-
+<!-- STATS -->
+<div class="stats">
     <div class="stat">
-        <span>⭐ XP</span>
-        <strong id="xp">0</strong>
+        <span>⭐ EXPERIENCE</span>
+        <strong id="xp">0 XP</strong>
     </div>
 
     <div class="stat">
@@ -409,178 +439,102 @@ canvas{
         <span>🏆 LEVEL</span>
         <strong id="level">1</strong>
     </div>
-
 </div>
 
-<div id="quest">
-
-    <div class="questTitle">
+<!-- QUEST -->
+<div class="quest">
+    <div class="quest-title">
         📜 CURRENT QUEST
     </div>
 
-    <div id="questText">
-        Find a Life Skill Guardian and learn your first skill.
+    <div class="quest-text" id="questText">
+        Explore the kingdom and discover your first life skill.
     </div>
-
 </div>
 
-<div id="controls">
-
-    🎮 <b>W A S D</b> — Move<br>
-    🖱️ <b>Click</b> — Interact<br>
-    🧙 Find the Guardians<br>
-    ✨ Walk near glowing locations
-
+<!-- CONTROLS -->
+<div class="controls">
+    🎮 <b>WASD</b> — Move<br>
+    🖱️ <b>Mouse</b> — Rotate camera<br>
+    🏛️ <b>Click a location</b> — Learn
 </div>
 
-<div id="popup">
+<!-- LOCATION WINDOW -->
+<div class="locationPanel" id="locationPanel">
 
-    <div id="popupIcon">🧙</div>
+    <button class="closeBtn" onclick="closeLocation()">×</button>
 
-    <h2 id="popupTitle">
-        Guardian
-    </h2>
+    <h2 id="locationTitle">Location</h2>
 
-    <p id="popupText">
-        Welcome to SkillShareJR.
+    <p id="locationDescription">
+        Discover a new life skill.
     </p>
 
-    <button
-        class="popupButton"
-        id="popupButton">
-        ✨ LEARN SKILL
-    </button>
+    <div class="skill" id="locationSkill">
+        Life Skill
+    </div>
 
-    <button
-        class="popupButton"
-        onclick="closePopup()"
-        style="background:#18283c">
-        CLOSE
+    <button class="startBtn" onclick="startChallenge()">
+        ✨ START LIFE-SKILL CHALLENGE
     </button>
 
 </div>
 
-<div id="notification">
-    ✨ Quest updated!
-</div>
+<!-- LOADING -->
+<div class="loading" id="loading">
 
-<div id="vignette"></div>
+    <h1>SKILLSHAREJR</h1>
 
+    <p>Entering the Kingdom of Skills...</p>
 
-<div id="loading">
-
-    <div id="loadingTitle">
-        SKILLSHAREJR
-    </div>
-
-    <div id="loadingText">
-        Building the Kingdom...
-    </div>
-
-    <div id="loadingBar">
-        <div id="loadingFill"></div>
+    <div class="loadingBar">
+        <div class="loadingFill" id="loadingFill"></div>
     </div>
 
 </div>
 
+<div class="vignette"></div>
 
+
+<!-- THREE.JS -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
 
 <script>
 
 /* ============================================================
-   SKILLSHAREJR
-   STEP 3
-   3D KINGDOM + BUILDINGS + NPCs + TREES
+   BASIC THREE.JS SETUP
 ============================================================ */
 
+const scene = new THREE.Scene();
 
-/* ================= VARIABLES ================= */
+scene.background = new THREE.Color(0x071426);
 
-let scene;
-let camera;
-let renderer;
-
-let player;
-
-let keys = {};
-
-let xp = 0;
-let gems = 10;
-let level = 1;
-
-let currentGuardian = null;
-
-let popupOpen = false;
-
-const guardians = [];
+scene.fog = new THREE.FogExp2(
+    0x071426,
+    0.012
+);
 
 
-/* ================= LOADING ================= */
+/* CAMERA */
 
-let loadingProgress = 0;
-
-const fill =
-document.getElementById("loadingFill");
-
-const loading =
-document.getElementById("loading");
-
-const loadingTimer =
-setInterval(function(){
-
-    loadingProgress += 5;
-
-    fill.style.width =
-    loadingProgress + "%";
-
-    if(loadingProgress >= 100){
-
-        clearInterval(loadingTimer);
-
-        setTimeout(function(){
-
-            loading.style.opacity = "0";
-
-            setTimeout(function(){
-                loading.style.display = "none";
-            },1000);
-
-        },400);
-    }
-
-},100);
-
-
-/* ================= SCENE ================= */
-
-scene = new THREE.Scene();
-
-scene.background =
-new THREE.Color(0x071424);
-
-
-/* ================= CAMERA ================= */
-
-camera =
-new THREE.PerspectiveCamera(
+const camera = new THREE.PerspectiveCamera(
     55,
-    window.innerWidth/window.innerHeight,
-    .1,
+    window.innerWidth / window.innerHeight,
+    0.1,
     1000
 );
 
 camera.position.set(
     0,
-    15,
-    25
+    34,
+    27
 );
 
 
-/* ================= RENDERER ================= */
+/* RENDERER */
 
-renderer =
-new THREE.WebGLRenderer({
+const renderer = new THREE.WebGLRenderer({
     antialias:true,
     powerPreference:"high-performance"
 });
@@ -597,650 +551,808 @@ renderer.setPixelRatio(
 renderer.shadowMap.enabled = true;
 
 renderer.shadowMap.type =
-THREE.PCFSoftShadowMap;
+    THREE.PCFSoftShadowMap;
 
 renderer.outputColorSpace =
-THREE.SRGBColorSpace;
+    THREE.SRGBColorSpace;
 
 document
-.getElementById("game")
-.appendChild(renderer.domElement);
+    .getElementById("game")
+    .appendChild(renderer.domElement);
 
 
 /* ============================================================
    LIGHTING
 ============================================================ */
 
-const skyLight =
-new THREE.HemisphereLight(
-    0x9edcff,
-    0x14230e,
+const ambient = new THREE.HemisphereLight(
+    0x9ad9ff,
+    0x17200d,
     2.2
 );
 
-scene.add(skyLight);
+scene.add(ambient);
 
 
-const sun =
-new THREE.DirectionalLight(
-    0xffe3aa,
-    3.5
+const moonLight = new THREE.DirectionalLight(
+    0xa9d9ff,
+    2.5
 );
 
-sun.position.set(
+moonLight.position.set(
     -30,
     50,
     25
 );
 
-sun.castShadow = true;
+moonLight.castShadow = true;
 
-sun.shadow.mapSize.width = 2048;
-sun.shadow.mapSize.height = 2048;
+moonLight.shadow.mapSize.width = 2048;
+moonLight.shadow.mapSize.height = 2048;
 
-scene.add(sun);
+moonLight.shadow.camera.left = -70;
+moonLight.shadow.camera.right = 70;
+moonLight.shadow.camera.top = 70;
+moonLight.shadow.camera.bottom = -70;
 
-
-/* blue magical light */
-
-const worldGlow =
-new THREE.PointLight(
-    0x168cff,
-    20,
-    100
-);
-
-worldGlow.position.set(
-    0,
-    12,
-    0
-);
-
-scene.add(worldGlow);
+scene.add(moonLight);
 
 
 /* ============================================================
    MAP
 ============================================================ */
 
-const loader =
-new THREE.TextureLoader();
+const textureLoader = new THREE.TextureLoader();
 
-loader.load(
-    "map.png",
-    function(texture){
+const mapTexture =
+    textureLoader.load(
+        "map.png",
+        () => {
 
-        texture.colorSpace =
-        THREE.SRGBColorSpace;
+            mapTexture.colorSpace =
+                THREE.SRGBColorSpace;
 
-        const geometry =
-        new THREE.PlaneGeometry(
-            100,
-            70
-        );
+            loadingProgress(45);
 
-        const material =
-        new THREE.MeshStandardMaterial({
-            map:texture,
-            roughness:.9
-        });
+        }
+    );
 
-        const map =
-        new THREE.Mesh(
-            geometry,
-            material
-        );
 
-        map.rotation.x =
-        -Math.PI/2;
+/*
+   IMPORTANT:
 
-        map.position.y =
-        -.3;
+   Instead of stretching the image into a giant square,
+   we calculate its real aspect ratio.
+*/
 
-        map.receiveShadow = true;
+const MAP_WIDTH = 70;
+const MAP_HEIGHT = 47;
 
-        scene.add(map);
 
-    }
-);
+/* MAP BASE */
+
+const mapGeometry =
+    new THREE.PlaneGeometry(
+        MAP_WIDTH,
+        MAP_HEIGHT
+    );
+
+
+const mapMaterial =
+    new THREE.MeshStandardMaterial({
+        map:mapTexture,
+        roughness:.92,
+        metalness:.02
+    });
+
+
+const map =
+    new THREE.Mesh(
+        mapGeometry,
+        mapMaterial
+    );
+
+map.rotation.x =
+    -Math.PI / 2;
+
+map.position.y = 0;
+
+map.receiveShadow = true;
+
+scene.add(map);
+
+
+/* ============================================================
+   MAP BORDER
+============================================================ */
+
+const borderGeometry =
+    new THREE.BoxGeometry(
+        MAP_WIDTH + 2,
+        .7,
+        MAP_HEIGHT + 2
+    );
+
+const borderMaterial =
+    new THREE.MeshStandardMaterial({
+        color:0x111b2c,
+        roughness:.7
+    });
+
+const border =
+    new THREE.Mesh(
+        borderGeometry,
+        borderMaterial
+    );
+
+border.position.y = -.55;
+
+border.receiveShadow = true;
+
+scene.add(border);
+
+
+/* ============================================================
+   WATER EFFECT
+============================================================ */
+
+const waterGeometry =
+    new THREE.PlaneGeometry(
+        120,
+        120
+    );
+
+const waterMaterial =
+    new THREE.MeshStandardMaterial({
+        color:0x07385c,
+        transparent:true,
+        opacity:.55,
+        roughness:.2,
+        metalness:.3
+    });
+
+const water =
+    new THREE.Mesh(
+        waterGeometry,
+        waterMaterial
+    );
+
+water.rotation.x =
+    -Math.PI/2;
+
+water.position.y = -.8;
+
+scene.add(water);
 
 
 /* ============================================================
    PLAYER
 ============================================================ */
 
-function createPlayer(){
-
-    player =
+const player =
     new THREE.Group();
 
-    scene.add(player);
+scene.add(player);
+
+player.position.set(
+    0,
+    1,
+    13
+);
 
 
-    /* body */
+/* BODY */
 
-    const body =
-    new THREE.Mesh(
-
-        new THREE.CapsuleGeometry(
-            .65,
-            1.3,
-            8,
-            16
-        ),
-
-        new THREE.MeshStandardMaterial({
-            color:0x176ac0,
-            roughness:.55,
-            metalness:.15
-        })
-
+const bodyGeometry =
+    new THREE.CapsuleGeometry(
+        .55,
+        1.25,
+        8,
+        16
     );
 
-    body.position.y =
-    1.4;
+const bodyMaterial =
+    new THREE.MeshStandardMaterial({
+        color:0x1763b7,
+        roughness:.6,
+        metalness:.15
+    });
 
-    body.castShadow = true;
-
-    player.add(body);
-
-
-    /* head */
-
-    const head =
+const body =
     new THREE.Mesh(
-
-        new THREE.SphereGeometry(
-            .58,
-            24,
-            24
-        ),
-
-        new THREE.MeshStandardMaterial({
-            color:0xffc39a,
-            roughness:.8
-        })
-
+        bodyGeometry,
+        bodyMaterial
     );
 
-    head.position.y =
-    2.55;
+body.position.y = 1.25;
 
-    head.castShadow = true;
+body.castShadow = true;
 
-    player.add(head);
+player.add(body);
 
 
-    /* hair */
+/* HEAD */
 
-    const hair =
-    new THREE.Mesh(
-
-        new THREE.SphereGeometry(
-            .61,
-            20,
-            20
-        ),
-
-        new THREE.MeshStandardMaterial({
-            color:0x21140c
-        })
-
+const headGeometry =
+    new THREE.SphereGeometry(
+        .43,
+        20,
+        20
     );
 
-    hair.scale.y = .55;
+const headMaterial =
+    new THREE.MeshStandardMaterial({
+        color:0xffc58d,
+        roughness:.8
+    });
 
-    hair.position.y =
-    2.85;
-
-    player.add(hair);
-
-
-    /* cape */
-
-    const cape =
+const head =
     new THREE.Mesh(
-
-        new THREE.ConeGeometry(
-            1,
-            1.8,
-            8
-        ),
-
-        new THREE.MeshStandardMaterial({
-            color:0x4823a5,
-            roughness:.5
-        })
-
+        headGeometry,
+        headMaterial
     );
 
-    cape.position.y =
-    1.1;
+head.position.y = 2.45;
 
-    cape.rotation.x =
+head.castShadow = true;
+
+player.add(head);
+
+
+/* HAIR */
+
+const hairGeometry =
+    new THREE.SphereGeometry(
+        .46,
+        16,
+        10,
+        0,
+        Math.PI*2,
+        0,
+        Math.PI*.55
+    );
+
+const hairMaterial =
+    new THREE.MeshStandardMaterial({
+        color:0x24170f,
+        roughness:.9
+    });
+
+const hair =
+    new THREE.Mesh(
+        hairGeometry,
+        hairMaterial
+    );
+
+hair.position.y = 2.61;
+
+player.add(hair);
+
+
+/* CAPE */
+
+const capeGeometry =
+    new THREE.ConeGeometry(
+        .8,
+        1.8,
+        4
+    );
+
+const capeMaterial =
+    new THREE.MeshStandardMaterial({
+        color:0x24126d,
+        roughness:.75
+    });
+
+const cape =
+    new THREE.Mesh(
+        capeGeometry,
+        capeMaterial
+    );
+
+cape.rotation.x =
     Math.PI;
 
-    cape.castShadow = true;
+cape.position.set(
+    0,
+    1.3,
+    .45
+);
 
-    player.add(cape);
+cape.castShadow = true;
 
-
-    /* chest crystal */
-
-    const crystal =
-    new THREE.Mesh(
-
-        new THREE.OctahedronGeometry(
-            .18
-        ),
-
-        new THREE.MeshStandardMaterial({
-
-            color:0x5de7ff,
-
-            emissive:0x00aaff,
-
-            emissiveIntensity:4
-
-        })
-
-    );
-
-    crystal.position.set(
-        0,
-        1.75,
-        -.63
-    );
-
-    player.add(crystal);
+player.add(cape);
 
 
-    player.position.set(
-        0,
-        0,
+/* PLAYER GLOW */
+
+const playerLight =
+    new THREE.PointLight(
+        0x48caff,
+        2.5,
         8
     );
 
-}
+playerLight.position.y = 2;
 
-createPlayer();
+player.add(playerLight);
 
 
 /* ============================================================
-   BUILDINGS
+   LOCATIONS
 ============================================================ */
 
-function createBuilding(
-    x,
-    z,
-    mainColor,
-    roofColor,
-    scale
-){
+const locations = [
 
-    const building =
-    new THREE.Group();
+    {
+        name:"Honey Plateau",
+        skill:"Money Management",
+        description:
+        "Learn how to earn, save and spend your money wisely.",
+        color:0xffd84a,
+        x:-24,
+        z:-10
+    },
 
-    building.position.set(
-        x,
-        0,
-        z
-    );
+    {
+        name:"Nexus Academy",
+        skill:"Study & Learning",
+        description:
+        "Build better study habits and learn how to manage your time.",
+        color:0x55d9ff,
+        x:0,
+        z:-18
+    },
 
-    building.scale.setScalar(
-        scale || 1
-    );
+    {
+        name:"Hearth Village",
+        skill:"Household Skills",
+        description:
+        "Master everyday responsibilities such as cleaning, cooking and organization.",
+        color:0x9d6bff,
+        x:-5,
+        z:-2
+    },
 
-    scene.add(building);
+    {
+        name:"Stormcaller Peaks",
+        skill:"Health & Fitness",
+        description:
+        "Learn healthy routines, rest, hydration and personal wellbeing.",
+        color:0x45e4b0,
+        x:19,
+        z:-13
+    },
 
+    {
+        name:"Tech Haven",
+        skill:"Digital Safety",
+        description:
+        "Learn passwords, privacy, scams and responsible technology use.",
+        color:0x48b8ff,
+        x:18,
+        z:2
+    },
 
-    /* foundation */
+    {
+        name:"Disaster Island",
+        skill:"Emergency Preparedness",
+        description:
+        "Learn how to stay calm and make smart decisions during emergencies.",
+        color:0xff694d,
+        x:29,
+        z:11
+    },
 
-    const foundation =
-    new THREE.Mesh(
-
-        new THREE.BoxGeometry(
-            5,
-            .5,
-            4
-        ),
-
-        new THREE.MeshStandardMaterial({
-            color:0x26374a,
-            roughness:.8
-        })
-
-    );
-
-    foundation.position.y =
-    .25;
-
-    foundation.castShadow = true;
-
-    foundation.receiveShadow = true;
-
-    building.add(foundation);
-
-
-    /* walls */
-
-    const walls =
-    new THREE.Mesh(
-
-        new THREE.BoxGeometry(
-            4.5,
-            3.5,
-            3.5
-        ),
-
-        new THREE.MeshStandardMaterial({
-            color:mainColor,
-            roughness:.75
-        })
-
-    );
-
-    walls.position.y =
-    2;
-
-    walls.castShadow = true;
-
-    building.add(walls);
-
-
-    /* roof */
-
-    const roof =
-    new THREE.Mesh(
-
-        new THREE.ConeGeometry(
-            3.5,
-            2.5,
-            4
-        ),
-
-        new THREE.MeshStandardMaterial({
-            color:roofColor,
-            roughness:.6
-        })
-
-    );
-
-    roof.position.y =
-    5;
-
-    roof.rotation.y =
-    Math.PI/4;
-
-    roof.castShadow = true;
-
-    building.add(roof);
-
-
-    /* door */
-
-    const door =
-    new THREE.Mesh(
-
-        new THREE.BoxGeometry(
-            .9,
-            1.7,
-            .15
-        ),
-
-        new THREE.MeshStandardMaterial({
-            color:0x24150c
-        })
-
-    );
-
-    door.position.set(
-        0,
-        1.15,
-        -1.8
-    );
-
-    building.add(door);
-
-
-    /* windows */
-
-    for(
-        let side=-1;
-        side<=1;
-        side+=2
-    ){
-
-        const windowMesh =
-        new THREE.Mesh(
-
-            new THREE.BoxGeometry(
-                .7,
-                .7,
-                .1
-            ),
-
-            new THREE.MeshStandardMaterial({
-
-                color:0x6ee8ff,
-
-                emissive:0x2acbff,
-
-                emissiveIntensity:2
-
-            })
-
-        );
-
-        windowMesh.position.set(
-            side*1.25,
-            2.2,
-            -1.8
-        );
-
-        building.add(windowMesh);
-
+    {
+        name:"Celestial Throne",
+        skill:"Leadership",
+        description:
+        "Develop communication, teamwork and responsible leadership skills.",
+        color:0xc87cff,
+        x:5,
+        z:14
     }
 
+];
 
-    /* chimney */
 
-    const chimney =
-    new THREE.Mesh(
+/* ============================================================
+   CREATE LOCATION PORTALS
+============================================================ */
 
-        new THREE.BoxGeometry(
-            .55,
-            1.5,
-            .55
-        ),
+const portalObjects = [];
 
+
+function createPortal(location){
+
+    const group =
+        new THREE.Group();
+
+    group.position.set(
+        location.x,
+        .15,
+        location.z
+    );
+
+    /* platform */
+
+    const platformGeometry =
+        new THREE.CylinderGeometry(
+            2.1,
+            2.4,
+            .35,
+            32
+        );
+
+    const platformMaterial =
         new THREE.MeshStandardMaterial({
-            color:0x633f38
-        })
+            color:0x101d30,
+            metalness:.65,
+            roughness:.25,
+            emissive:location.color,
+            emissiveIntensity:.08
+        });
 
+    const platform =
+        new THREE.Mesh(
+            platformGeometry,
+            platformMaterial
+        );
+
+    platform.castShadow = true;
+
+    group.add(platform);
+
+
+    /* glowing ring */
+
+    const ringGeometry =
+        new THREE.TorusGeometry(
+            1.7,
+            .10,
+            12,
+            48
+        );
+
+    const ringMaterial =
+        new THREE.MeshBasicMaterial({
+            color:location.color
+        });
+
+    const ring =
+        new THREE.Mesh(
+            ringGeometry,
+            ringMaterial
+        );
+
+    ring.rotation.x =
+        Math.PI/2;
+
+    ring.position.y = .3;
+
+    group.add(ring);
+
+
+    /* crystal */
+
+    const crystalGeometry =
+        new THREE.OctahedronGeometry(
+            .65,
+            0
+        );
+
+    const crystalMaterial =
+        new THREE.MeshStandardMaterial({
+            color:location.color,
+            emissive:location.color,
+            emissiveIntensity:.8,
+            roughness:.15,
+            metalness:.2
+        });
+
+    const crystal =
+        new THREE.Mesh(
+            crystalGeometry,
+            crystalMaterial
+        );
+
+    crystal.position.y = 2;
+
+    crystal.castShadow = true;
+
+    group.add(crystal);
+
+
+    /* point light */
+
+    const light =
+        new THREE.PointLight(
+            location.color,
+            5,
+            10
+        );
+
+    light.position.y = 2;
+
+    group.add(light);
+
+
+    /* label */
+
+    const label =
+        makeLabel(
+            location.name,
+            location.color
+        );
+
+    label.position.y = 3.2;
+
+    group.add(label);
+
+
+    group.userData.location =
+        location;
+
+    scene.add(group);
+
+    portalObjects.push({
+        group,
+        ring,
+        crystal,
+        light
+    });
+}
+
+
+locations.forEach(createPortal);
+
+
+/* ============================================================
+   LABELS
+============================================================ */
+
+function makeLabel(text,color){
+
+    const canvas =
+        document.createElement("canvas");
+
+    canvas.width = 512;
+    canvas.height = 128;
+
+    const ctx =
+        canvas.getContext("2d");
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
     );
 
-    chimney.position.set(
-        1.2,
-        5.3,
-        .5
+    ctx.fillStyle =
+        "rgba(5,12,25,.85)";
+
+    roundRect(
+        ctx,
+        20,
+        20,
+        472,
+        88,
+        22
     );
 
-    building.add(chimney);
+    ctx.fill();
+
+    ctx.strokeStyle =
+        "#" + color.toString(16).padStart(6,"0");
+
+    ctx.lineWidth = 4;
+
+    roundRect(
+        ctx,
+        20,
+        20,
+        472,
+        88,
+        22
+    );
+
+    ctx.stroke();
+
+    ctx.font =
+        "bold 30px Arial";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.textBaseline =
+        "middle";
+
+    ctx.fillStyle =
+        "white";
+
+    ctx.fillText(
+        text,
+        256,
+        64
+    );
+
+    const texture =
+        new THREE.CanvasTexture(canvas);
+
+    texture.colorSpace =
+        THREE.SRGBColorSpace;
+
+    const material =
+        new THREE.SpriteMaterial({
+            map:texture,
+            transparent:true,
+            depthTest:false
+        });
+
+    const sprite =
+        new THREE.Sprite(material);
+
+    sprite.scale.set(
+        6,
+        1.5,
+        1
+    );
+
+    return sprite;
+}
 
 
-    return building;
+function roundRect(
+    ctx,
+    x,
+    y,
+    w,
+    h,
+    r
+){
 
+    ctx.beginPath();
+
+    ctx.moveTo(x+r,y);
+
+    ctx.arcTo(
+        x+w,
+        y,
+        x+w,
+        y+h,
+        r
+    );
+
+    ctx.arcTo(
+        x+w,
+        y+h,
+        x,
+        y+h,
+        r
+    );
+
+    ctx.arcTo(
+        x,
+        y+h,
+        x,
+        y,
+        r
+    );
+
+    ctx.arcTo(
+        x,
+        y,
+        x+w,
+        y,
+        r
+    );
+
+    ctx.closePath();
 }
 
 
 /* ============================================================
-   KINGDOM BUILDINGS
+   DECORATION
 ============================================================ */
 
-createBuilding(
-    -28,
-    -15,
-    0x7b542f,
-    0xd89b3c,
-    1
-);
+function createTree(x,z,scale=1){
 
-createBuilding(
-    22,
-    -20,
-    0x49677a,
-    0x55bce7,
-    1.15
-);
+    const group =
+        new THREE.Group();
 
-createBuilding(
-    -5,
-    -5,
-    0x52784d,
-    0x83c95e,
-    .9
-);
-
-createBuilding(
-    20,
-    4,
-    0x383e79,
-    0x775aff,
-    1
-);
-
-createBuilding(
-    -25,
-    18,
-    0x71453b,
-    0xff7545,
-    1.15
-);
-
-createBuilding(
-    3,
-    24,
-    0x5d467e,
-    0xc875ff,
-    1.25
-);
-
-
-/* ============================================================
-   TREES
-============================================================ */
-
-function createTree(x,z,size){
-
-    const tree =
-    new THREE.Group();
-
-    tree.position.set(
+    group.position.set(
         x,
         0,
         z
     );
-
-    tree.scale.setScalar(
-        size || 1
-    );
-
-    scene.add(tree);
-
 
     /* trunk */
 
     const trunk =
-    new THREE.Mesh(
-
-        new THREE.CylinderGeometry(
-            .25,
-            .35,
-            2,
-            8
-        ),
-
-        new THREE.MeshStandardMaterial({
-            color:0x69452c
-        })
-
-    );
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                .25*scale,
+                .38*scale,
+                2*scale,
+                8
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x5b351f
+            })
+        );
 
     trunk.position.y =
-    1;
+        scale;
 
     trunk.castShadow = true;
 
-    tree.add(trunk);
+    group.add(trunk);
 
 
     /* leaves */
 
     const leaves =
-    new THREE.Mesh(
-
-        new THREE.ConeGeometry(
-            1.5,
-            3.5,
-            8
-        ),
-
-        new THREE.MeshStandardMaterial({
-            color:0x216b3b,
-            roughness:.9
-        })
-
-    );
+        new THREE.Mesh(
+            new THREE.ConeGeometry(
+                1.3*scale,
+                3*scale,
+                9
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x1c713e,
+                roughness:.95
+            })
+        );
 
     leaves.position.y =
-    3;
+        3*scale;
 
     leaves.castShadow = true;
 
-    tree.add(leaves);
+    group.add(leaves);
 
-
-    return tree;
-
+    scene.add(group);
 }
 
 
-/* forest areas */
+/* TREE CLUSTERS */
 
 const treePositions = [
 
-    [-40,-24,1.2],
-    [-34,-25,.9],
-    [-27,-27,1.1],
-    [-20,-25,.8],
+    [-31,-18,1],
+    [-28,-15,.8],
+    [-32,-10,1.2],
+    [-27,-5,.9],
 
-    [31,-27,1.2],
-    [38,-23,.9],
-    [41,-17,1.1],
+    [-16,-20,.8],
+    [-10,-21,1],
+    [7,-20,.9],
 
-    [-40,24,1.2],
-    [-34,27,.8],
-    [-27,26,1],
+    [-30,5,1],
+    [-28,10,.9],
+    [-25,16,1.1],
 
-    [31,22,1],
-    [38,25,1.2],
-    [41,18,.9],
+    [10,19,1],
+    [16,18,.8],
+    [22,16,1],
 
-    [-12,18,.8],
-    [-10,22,1],
-    [13,23,1.1]
+    [25,-4,.8],
+    [27,-1,1],
 
+    [-13,8,.8],
+    [-16,12,1],
+    [-11,15,.8]
 ];
 
+
 treePositions.forEach(
-    p=>{
-        createTree(
-            p[0],
-            p[1],
-            p[2]
-        );
-    }
+    p => createTree(
+        p[0],
+        p[1],
+        p[2]
+    )
 );
 
 
@@ -1248,643 +1360,479 @@ treePositions.forEach(
    ROCKS
 ============================================================ */
 
-function createRock(x,z,size){
+function createRock(x,z,s=1){
 
     const rock =
-    new THREE.Mesh(
-
-        new THREE.DodecahedronGeometry(
-            size || .8
-        ),
-
-        new THREE.MeshStandardMaterial({
-            color:0x586875,
-            roughness:1
-        })
-
-    );
+        new THREE.Mesh(
+            new THREE.DodecahedronGeometry(
+                .8*s,
+                0
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x536274,
+                roughness:1
+            })
+        );
 
     rock.position.set(
         x,
-        size*.55,
+        .5*s,
         z
     );
 
-    rock.rotation.set(
-        Math.random(),
-        Math.random(),
-        Math.random()
-    );
+    rock.rotation.y =
+        Math.random()*Math.PI;
 
     rock.castShadow = true;
 
     scene.add(rock);
-
 }
 
 
-for(let i=0;i<30;i++){
+for(let i=0;i<28;i++){
 
     const x =
-    (Math.random()-.5)*85;
+        (Math.random()-.5)*60;
 
     const z =
-    (Math.random()-.5)*55;
+        (Math.random()-.5)*38;
 
-    createRock(
-        x,
-        z,
-        .4+Math.random()*.8
-    );
-
+    createRock(x,z,.4+Math.random()*.7);
 }
 
 
 /* ============================================================
-   GUARDIANS / NPCs
+   FLOATING MAGIC PARTICLES
 ============================================================ */
 
-function createGuardian(
-    name,
-    skill,
-    icon,
-    x,
-    z,
-    color
-){
+const particles = [];
 
-    const npc =
-    new THREE.Group();
-
-    npc.position.set(
-        x,
-        0,
-        z
+const particleGeometry =
+    new THREE.SphereGeometry(
+        .06,
+        6,
+        6
     );
 
-    scene.add(npc);
+for(let i=0;i<100;i++){
 
+    const material =
+        new THREE.MeshBasicMaterial({
+            color:
+                i%2
+                ? 0x54dfff
+                : 0xb979ff
+        });
 
-    /* body */
+    const particle =
+        new THREE.Mesh(
+            particleGeometry,
+            material
+        );
 
-    const body =
-    new THREE.Mesh(
-
-        new THREE.CapsuleGeometry(
-            .45,
-            1,
-            8,
-            12
-        ),
-
-        new THREE.MeshStandardMaterial({
-            color:color,
-            roughness:.6
-        })
-
+    particle.position.set(
+        (Math.random()-.5)*70,
+        1+Math.random()*8,
+        (Math.random()-.5)*47
     );
 
-    body.position.y =
-    1.1;
+    scene.add(particle);
 
-    body.castShadow = true;
-
-    npc.add(body);
-
-
-    /* head */
-
-    const head =
-    new THREE.Mesh(
-
-        new THREE.SphereGeometry(
-            .43,
-            16,
-            16
-        ),
-
-        new THREE.MeshStandardMaterial({
-            color:0xffc39a
-        })
-
-    );
-
-    head.position.y =
-    2;
-
-    head.castShadow = true;
-
-    npc.add(head);
-
-
-    /* floating crystal */
-
-    const crystal =
-    new THREE.Mesh(
-
-        new THREE.OctahedronGeometry(
-            .25
-        ),
-
-        new THREE.MeshStandardMaterial({
-
-            color:0x5ee9ff,
-
-            emissive:0x00bfff,
-
-            emissiveIntensity:4
-
-        })
-
-    );
-
-    crystal.position.y =
-    3;
-
-    npc.add(crystal);
-
-
-    /* glow */
-
-    const light =
-    new THREE.PointLight(
-        0x31d8ff,
-        3,
-        7
-    );
-
-    light.position.y =
-    2.5;
-
-    npc.add(light);
-
-
-    guardians.push({
-
-        name:name,
-        skill:skill,
-        icon:icon,
-
-        object:npc,
-
-        x:x,
-        z:z,
-
-        crystal:crystal,
-
-        learned:false
-
+    particles.push({
+        mesh:particle,
+        speed:.2+Math.random()*.5,
+        offset:Math.random()*Math.PI*2
     });
-
 }
-
-
-/* ============================================================
-   GUARDIANS
-============================================================ */
-
-createGuardian(
-    "Finn the Financier",
-    "Money Management",
-    "💰",
-    -28,
-    -11,
-    0x3159a8
-);
-
-createGuardian(
-    "Mira the Mentor",
-    "Health & Fitness",
-    "❤️",
-    22,
-    -15,
-    0x3b9f83
-);
-
-createGuardian(
-    "Chef Leo",
-    "Household Skills",
-    "🍳",
-    -5,
-    -1,
-    0x9d6538
-);
-
-createGuardian(
-    "Byte",
-    "Digital Safety",
-    "💻",
-    20,
-    8,
-    0x693db5
-);
-
-createGuardian(
-    "Captain Nova",
-    "Emergency Preparedness",
-    "🛡️",
-    -25,
-    23,
-    0xb34a36
-);
-
-createGuardian(
-    "Forge",
-    "Problem Solving",
-    "⚒️",
-    3,
-    28,
-    0x8e522b
-);
 
 
 /* ============================================================
    MOVEMENT
 ============================================================ */
 
+const keys = {};
+
 window.addEventListener(
     "keydown",
-    function(e){
+    e => {
 
-        keys[
-            e.key.toLowerCase()
-        ] = true;
+        keys[e.key.toLowerCase()] = true;
 
     }
 );
 
 window.addEventListener(
     "keyup",
-    function(e){
+    e => {
 
-        keys[
-            e.key.toLowerCase()
-        ] = false;
+        keys[e.key.toLowerCase()] = false;
 
     }
 );
 
 
-function movePlayer(){
-
-    const speed =
-    .16;
-
-
-    if(
-        keys["w"] ||
-        keys["arrowup"]
-    ){
-
-        player.position.z -=
-        speed;
-
-    }
-
-
-    if(
-        keys["s"] ||
-        keys["arrowdown"]
-    ){
-
-        player.position.z +=
-        speed;
-
-    }
-
-
-    if(
-        keys["a"] ||
-        keys["arrowleft"]
-    ){
-
-        player.position.x -=
-        speed;
-
-    }
-
-
-    if(
-        keys["d"] ||
-        keys["arrowright"]
-    ){
-
-        player.position.x +=
-        speed;
-
-    }
-
-
-    /* boundaries */
-
-    player.position.x =
-    THREE.MathUtils.clamp(
-        player.position.x,
-        -45,
-        45
-    );
-
-    player.position.z =
-    THREE.MathUtils.clamp(
-        player.position.z,
-        -30,
-        30
-    );
-
-}
-
-
-/* ============================================================
-   GUARDIAN DETECTION
-============================================================ */
-
-function checkGuardians(){
-
-    if(popupOpen)
-        return;
-
-
-    let nearest = null;
-    let nearestDistance = 999;
-
-
-    guardians.forEach(
-        guardian=>{
-
-            const dx =
-            player.position.x -
-            guardian.x;
-
-            const dz =
-            player.position.z -
-            guardian.z;
-
-            const distance =
-            Math.sqrt(
-                dx*dx + dz*dz
-            );
-
-
-            if(
-                distance < nearestDistance
-            ){
-
-                nearestDistance =
-                distance;
-
-                nearest =
-                guardian;
-
-            }
-
-
-            /* floating */
-
-            guardian.crystal.position.y =
-            3 +
-            Math.sin(
-                Date.now()*.003
-            )*.2;
-
-            guardian.crystal.rotation.y +=
-            .015;
-
-        }
-    );
-
-
-    if(
-        nearest &&
-        nearestDistance < 3.5
-    ){
-
-        openGuardian(
-            nearest
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   GUARDIAN POPUP
-============================================================ */
-
-function openGuardian(guardian){
-
-    popupOpen = true;
-
-    currentGuardian =
-    guardian;
-
-
-    document.getElementById(
-        "popupIcon"
-    ).textContent =
-    guardian.icon;
-
-
-    document.getElementById(
-        "popupTitle"
-    ).textContent =
-    guardian.name;
-
-
-    document.getElementById(
-        "popupText"
-    ).textContent =
-    "I am your Life Skill Guardian. I can teach you " +
-    guardian.skill +
-    ". Complete my challenge to earn XP and Gems.";
-
-
-    document.getElementById(
-        "popupButton"
-    ).textContent =
-    guardian.learned
-    ?
-    "✓ SKILL MASTERED"
-    :
-    "✨ START LEARNING";
-
-
-    document.getElementById(
-        "popup"
-    ).classList.add(
-        "show"
-    );
-
-}
-
-
-/* ============================================================
-   LEARN BUTTON
-============================================================ */
-
-document.getElementById(
-    "popupButton"
-).addEventListener(
-    "click",
-    function(){
-
-        if(!currentGuardian)
-            return;
-
-
-        if(currentGuardian.learned){
-
-            closePopup();
-
-            return;
-
-        }
-
-
-        currentGuardian.learned =
-        true;
-
-
-        xp += 100;
-
-        gems += 5;
-
-
-        if(
-            xp >= level*300
-        ){
-
-            xp -=
-            level*300;
-
-            level++;
-
-            notify(
-                "🏆 LEVEL UP! You reached Level "
-                + level
-            );
-
-        }else{
-
-            notify(
-                "✨ "
-                + currentGuardian.skill
-                + " unlocked! +100 XP +5 Gems"
-            );
-
-        }
-
-
-        document.getElementById(
-            "xp"
-        ).textContent =
-        xp;
-
-
-        document.getElementById(
-            "gems"
-        ).textContent =
-        gems;
-
-
-        document.getElementById(
-            "level"
-        ).textContent =
-        level;
-
-
-        document.getElementById(
-            "questText"
-        ).textContent =
-        "Great job! You mastered "
-        + currentGuardian.skill
-        + ". Find another Guardian to continue your journey.";
-
-
-        closePopup();
-
-    }
-);
-
-
-/* ============================================================
-   CLOSE POPUP
-============================================================ */
-
-function closePopup(){
-
-    popupOpen =
-    false;
-
-    document.getElementById(
-        "popup"
-    ).classList.remove(
-        "show"
-    );
-
-}
-
-
-/* ============================================================
-   NOTIFICATION
-============================================================ */
-
-function notify(text){
-
-    const notification =
-    document.getElementById(
-        "notification"
-    );
-
-    notification.textContent =
-    text;
-
-    notification.classList.add(
-        "show"
-    );
-
-
-    setTimeout(
-        function(){
-
-            notification.classList.remove(
-                "show"
-            );
-
-        },
-        3000
-    );
-
-}
+const playerSpeed = .13;
 
 
 /* ============================================================
    CAMERA
 ============================================================ */
 
+let cameraAngle = 0;
+
+let cameraDistance = 27;
+
+let cameraHeight = 25;
+
+let dragging = false;
+
+let previousMouseX = 0;
+
+
+renderer.domElement.addEventListener(
+    "mousedown",
+    e => {
+
+        dragging = true;
+
+        previousMouseX =
+            e.clientX;
+
+    }
+);
+
+
+window.addEventListener(
+    "mouseup",
+    () => {
+
+        dragging = false;
+
+    }
+);
+
+
+window.addEventListener(
+    "mousemove",
+    e => {
+
+        if(!dragging) return;
+
+        const delta =
+            e.clientX -
+            previousMouseX;
+
+        previousMouseX =
+            e.clientX;
+
+        cameraAngle -=
+            delta*.008;
+
+    }
+);
+
+
+/* ============================================================
+   RAYCASTER
+============================================================ */
+
+const raycaster =
+    new THREE.Raycaster();
+
+const mouse =
+    new THREE.Vector2();
+
+
+renderer.domElement.addEventListener(
+    "click",
+    e => {
+
+        mouse.x =
+            (e.clientX /
+            window.innerWidth)*2-1;
+
+        mouse.y =
+            -(e.clientY /
+            window.innerHeight)*2+1;
+
+        raycaster.setFromCamera(
+            mouse,
+            camera
+        );
+
+        const objects =
+            portalObjects.map(
+                p => p.group
+            );
+
+        const hits =
+            raycaster.intersectObjects(
+                objects,
+                true
+            );
+
+        if(hits.length){
+
+            let obj =
+                hits[0].object;
+
+            while(
+                obj.parent &&
+                !obj.userData.location
+            ){
+                obj =
+                    obj.parent;
+            }
+
+            if(obj.userData.location){
+
+                openLocation(
+                    obj.userData.location
+                );
+
+            }
+        }
+
+    }
+);
+
+
+/* ============================================================
+   LOCATION UI
+============================================================ */
+
+let selectedLocation = null;
+
+
+function openLocation(location){
+
+    selectedLocation =
+        location;
+
+    document.getElementById(
+        "locationTitle"
+    ).textContent =
+        location.name;
+
+    document.getElementById(
+        "locationDescription"
+    ).textContent =
+        location.description;
+
+    document.getElementById(
+        "locationSkill"
+    ).textContent =
+        "✨ " + location.skill;
+
+    document.getElementById(
+        "locationPanel"
+    ).classList.add("show");
+
+}
+
+
+function closeLocation(){
+
+    document.getElementById(
+        "locationPanel"
+    ).classList.remove("show");
+
+}
+
+
+function startChallenge(){
+
+    if(!selectedLocation)
+        return;
+
+    xp += 50;
+    gems += 5;
+
+    updateStats();
+
+    document.getElementById(
+        "questText"
+    ).textContent =
+        "Excellent! You discovered " +
+        selectedLocation.skill +
+        ". Explore the kingdom to find your next skill.";
+
+    closeLocation();
+
+}
+
+
+/* ============================================================
+   STATS
+============================================================ */
+
+let xp = 0;
+let gems = 10;
+let level = 1;
+
+
+function updateStats(){
+
+    level =
+        Math.floor(xp/200)+1;
+
+    document.getElementById(
+        "xp"
+    ).textContent =
+        xp + " XP";
+
+    document.getElementById(
+        "gems"
+    ).textContent =
+        gems;
+
+    document.getElementById(
+        "level"
+    ).textContent =
+        level;
+
+}
+
+
+/* ============================================================
+   MOVEMENT UPDATE
+============================================================ */
+
+function updatePlayer(){
+
+    let moving = false;
+
+    const direction =
+        new THREE.Vector3();
+
+    if(keys["w"]){
+
+        direction.z -= 1;
+
+        moving = true;
+
+    }
+
+    if(keys["s"]){
+
+        direction.z += 1;
+
+        moving = true;
+
+    }
+
+    if(keys["a"]){
+
+        direction.x -= 1;
+
+        moving = true;
+
+    }
+
+    if(keys["d"]){
+
+        direction.x += 1;
+
+        moving = true;
+
+    }
+
+
+    if(direction.length()>0){
+
+        direction.normalize();
+
+        /*
+           Movement follows camera angle.
+        */
+
+        direction.applyAxisAngle(
+            new THREE.Vector3(0,1,0),
+            cameraAngle
+        );
+
+        player.position.addScaledVector(
+            direction,
+            playerSpeed
+        );
+
+        player.rotation.y =
+            Math.atan2(
+                direction.x,
+                direction.z
+            );
+
+    }
+
+
+    /* keep player on map */
+
+    player.position.x =
+        THREE.MathUtils.clamp(
+            player.position.x,
+            -32,
+            32
+        );
+
+    player.position.z =
+        THREE.MathUtils.clamp(
+            player.position.z,
+            -20,
+            20
+        );
+
+
+    /* walking animation */
+
+    if(moving){
+
+        body.position.y =
+            1.25 +
+            Math.sin(
+                performance.now()*.012
+            )*.08;
+
+        cape.rotation.z =
+            Math.sin(
+                performance.now()*.01
+            )*.08;
+
+    }
+
+}
+
+
+/* ============================================================
+   CAMERA FOLLOW
+============================================================ */
+
 function updateCamera(){
 
-    const desired =
-    new THREE.Vector3(
+    const targetX =
+        player.position.x -
+        Math.sin(cameraAngle) *
+        cameraDistance;
 
-        player.position.x,
+    const targetZ =
+        player.position.z -
+        Math.cos(cameraAngle) *
+        cameraDistance;
 
-        13,
-
-        player.position.z + 15
-
-    );
-
+    const target =
+        new THREE.Vector3(
+            targetX,
+            cameraHeight,
+            targetZ
+        );
 
     camera.position.lerp(
-        desired,
+        target,
         .08
     );
 
-
     camera.lookAt(
         player.position.x,
-        1,
+        0,
         player.position.z
     );
 
@@ -1892,31 +1840,12 @@ function updateCamera(){
 
 
 /* ============================================================
-   WINDOW RESIZE
-============================================================ */
-
-window.addEventListener(
-    "resize",
-    function(){
-
-        camera.aspect =
-        window.innerWidth/
-        window.innerHeight;
-
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(
-            window.innerWidth,
-            window.innerHeight
-        );
-
-    }
-);
-
-
-/* ============================================================
    ANIMATION
 ============================================================ */
+
+const clock =
+    new THREE.Clock();
+
 
 function animate(){
 
@@ -1924,31 +1853,60 @@ function animate(){
         animate
     );
 
+    const time =
+        clock.getElapsedTime();
 
-    movePlayer();
+
+    updatePlayer();
 
     updateCamera();
 
-    checkGuardians();
+
+    /* portals */
+
+    portalObjects.forEach(
+        (p,i) => {
+
+            p.ring.rotation.z =
+                time*.8;
+
+            p.crystal.rotation.y =
+                time*1.4;
+
+            p.crystal.rotation.x =
+                Math.sin(time*1.5+i)*.15;
+
+            p.crystal.position.y =
+                2 +
+                Math.sin(
+                    time*2+i
+                )*.25;
+
+            p.light.intensity =
+                4 +
+                Math.sin(
+                    time*3+i
+                )*1.5;
+
+        }
+    );
 
 
-    /* player floating crystal */
+    /* particles */
 
-    if(player.children[4]){
+    particles.forEach(
+        p => {
 
-        player.children[4].rotation.y +=
-        .03;
+            p.mesh.position.y +=
+                Math.sin(
+                    time*p.speed+
+                    p.offset
+                )*.003;
 
-    }
+            p.mesh.rotation.y += .01;
 
-
-    /* magical world pulse */
-
-    worldGlow.intensity =
-    20 +
-    Math.sin(
-        Date.now()*.002
-    )*5;
+        }
+    );
 
 
     renderer.render(
@@ -1963,18 +1921,87 @@ animate();
 
 
 /* ============================================================
-   ESCAPE
+   LOADING
+============================================================ */
+
+let loadValue = 0;
+
+
+function loadingProgress(value){
+
+    loadValue =
+        Math.max(
+            loadValue,
+            value
+        );
+
+    document.getElementById(
+        "loadingFill"
+    ).style.width =
+        loadValue+"%";
+}
+
+
+loadingProgress(15);
+
+setTimeout(
+    () => loadingProgress(35),
+    400
+);
+
+setTimeout(
+    () => loadingProgress(65),
+    900
+);
+
+setTimeout(
+    () => loadingProgress(85),
+    1400
+);
+
+setTimeout(
+    () => {
+
+        loadingProgress(100);
+
+        setTimeout(
+            () => {
+
+                document
+                    .getElementById(
+                        "loading"
+                    )
+                    .classList.add(
+                        "hidden"
+                    );
+
+            },
+            500
+        );
+
+    },
+    1900
+);
+
+
+/* ============================================================
+   RESIZE
 ============================================================ */
 
 window.addEventListener(
-    "keydown",
-    function(e){
+    "resize",
+    () => {
 
-        if(e.key === "Escape"){
+        camera.aspect =
+            window.innerWidth /
+            window.innerHeight;
 
-            closePopup();
+        camera.updateProjectionMatrix();
 
-        }
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
 
     }
 );
