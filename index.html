@@ -1,541 +1,228 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+// =========================
+// PLAYER
+// =========================
 
-    <title>SkillShareJR - Life Skills Adventure</title>
+const player = new THREE.Group();
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+scene.add(player);
 
-        body {
-            overflow: hidden;
-            background: #050b18;
-            font-family: Arial, sans-serif;
-        }
+// Player body
 
-        #game {
-            width: 100vw;
-            height: 100vh;
-        }
+const bodyGeometry = new THREE.CapsuleGeometry(
+    0.45,
+    1.2,
+    8,
+    16
+);
 
-        #loading {
-            position: fixed;
-            inset: 0;
-            background: #050b18;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            z-index: 10;
-        }
-
-        #loading h1 {
-            font-size: 48px;
-            color: #65d9ff;
-            text-shadow: 0 0 25px #168cff;
-        }
-
-        #loading p {
-            margin-top: 15px;
-            color: #c9d8ff;
-        }
-
-        #ui {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 5;
-            color: white;
-        }
-
-        .panel {
-            width: 260px;
-            padding: 18px;
-            border-radius: 16px;
-
-            background: rgba(5, 15, 35, 0.85);
-            border: 2px solid rgba(90, 190, 255, 0.7);
-
-            box-shadow:
-                0 0 20px rgba(0, 150, 255, 0.4),
-                inset 0 0 20px rgba(0, 80, 150, 0.15);
-
-            backdrop-filter: blur(10px);
-        }
-
-        .panel h2 {
-            color: #67ddff;
-            margin-bottom: 10px;
-        }
-
-        .stat {
-            margin: 8px 0;
-            color: #dce9ff;
-        }
-
-        .bar {
-            width: 100%;
-            height: 8px;
-            background: #17243d;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 5px;
-        }
-
-        .bar span {
-            display: block;
-            width: 35%;
-            height: 100%;
-            background: linear-gradient(90deg, #35ff91, #00bfff);
-            box-shadow: 0 0 10px #00bfff;
-        }
-
-        #title {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            text-align: center;
-            z-index: 5;
-            text-shadow: 0 2px 10px black;
-        }
-
-        #title h1 {
-            font-size: 36px;
-            color: #ffffff;
-        }
-
-        #title p {
-            margin-top: 8px;
-            color: #b9d7ff;
-        }
-    </style>
-</head>
-
-<body>
-
-<div id="loading">
-    <h1>SKILLSHAREJR</h1>
-    <p>Entering the Life Skills Kingdom...</p>
-</div>
-
-<div id="game"></div>
-
-<div id="ui">
-    <div class="panel">
-        <h2>⚔️ SkillShareJR</h2>
-
-        <div class="stat">⭐ XP: 0</div>
-        <div class="stat">💎 Gems: 25</div>
-        <div class="stat">🏆 Level: 1</div>
-
-        <br>
-
-        <div class="stat">Life Skills Progress</div>
-
-        <div class="bar">
-            <span></span>
-        </div>
-
-        <br>
-
-        <div class="stat">🧠 Critical Thinking</div>
-        <div class="stat">💰 Money Skills</div>
-        <div class="stat">🍳 Home Skills</div>
-        <div class="stat">🛡️ Digital Safety</div>
-    </div>
-</div>
-
-<div id="title">
-    <h1>Master Life Skills. Save the Kingdom.</h1>
-    <p>Explore the world and complete challenges to become a Life Skills Master.</p>
-</div>
-
-<script type="module">
-
-    import * as THREE from
-        "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
-
-    // =========================
-    // SCENE
-    // =========================
-
-    const scene = new THREE.Scene();
-
-    scene.background = new THREE.Color(0x071326);
-
-    // =========================
-    // CAMERA
-    // =========================
-
-    const camera = new THREE.PerspectiveCamera(
-        60,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
-    );
-
-    camera.position.set(0, 8, 15);
-
-    // =========================
-    // RENDERER
-    // =========================
-
-    const renderer = new THREE.WebGLRenderer({
-        antialias: true
+const bodyMaterial =
+    new THREE.MeshStandardMaterial({
+        color: 0x2468c9
     });
 
-    renderer.setSize(
-        window.innerWidth,
-        window.innerHeight
+const body =
+    new THREE.Mesh(
+        bodyGeometry,
+        bodyMaterial
     );
 
-    renderer.setPixelRatio(
-        Math.min(window.devicePixelRatio, 2)
+body.position.y = 1.1;
+body.castShadow = true;
+
+player.add(body);
+
+
+// Player head
+
+const headGeometry =
+    new THREE.SphereGeometry(
+        0.38,
+        16,
+        16
     );
 
-    renderer.shadowMap.enabled = true;
+const headMaterial =
+    new THREE.MeshStandardMaterial({
+        color: 0xffc49b
+    });
 
-    document
-        .getElementById("game")
-        .appendChild(renderer.domElement);
-
-    // =========================
-    // LIGHTING
-    // =========================
-
-    const ambientLight = new THREE.AmbientLight(
-        0x9fc9ff,
-        2
+const head =
+    new THREE.Mesh(
+        headGeometry,
+        headMaterial
     );
 
-    scene.add(ambientLight);
+head.position.y = 2.1;
+head.castShadow = true;
 
-    const sun = new THREE.DirectionalLight(
-        0xffffff,
-        3
+player.add(head);
+
+
+// Player cloak
+
+const cloakGeometry =
+    new THREE.ConeGeometry(
+        0.7,
+        1.5,
+        8
     );
 
-    sun.position.set(
-        10,
-        20,
-        10
+const cloakMaterial =
+    new THREE.MeshStandardMaterial({
+        color: 0x172d68
+    });
+
+const cloak =
+    new THREE.Mesh(
+        cloakGeometry,
+        cloakMaterial
     );
 
-    sun.castShadow = true;
+cloak.rotation.x = Math.PI;
 
-    scene.add(sun);
+cloak.position.set(
+    0,
+    1.1,
+    0.25
+);
 
-    // =========================
-    // GROUND
-    // =========================
+cloak.castShadow = true;
 
-    const groundGeometry =
-        new THREE.PlaneGeometry(100, 100);
+player.add(cloak);
 
-    const groundMaterial =
-        new THREE.MeshStandardMaterial({
-            color: 0x173b32
-        });
 
-    const ground =
-        new THREE.Mesh(
-            groundGeometry,
-            groundMaterial
-        );
+// Player position
 
-    ground.rotation.x = -Math.PI / 2;
+player.position.set(
+    0,
+    0,
+    10
+);
 
-    ground.receiveShadow = true;
 
-    scene.add(ground);
+// =========================
+// MOVEMENT
+// =========================
 
-    // =========================
-    // CASTLE
-    // =========================
+const keys = {};
 
-    function createTower(x, z) {
+window.addEventListener(
+    "keydown",
+    (event) => {
 
-        const geometry =
-            new THREE.CylinderGeometry(
-                1.2,
-                1.4,
-                5,
-                8
-            );
+        keys[event.key.toLowerCase()] = true;
 
-        const material =
-            new THREE.MeshStandardMaterial({
-                color: 0x7185a8
-            });
+    }
+);
 
-        const tower =
-            new THREE.Mesh(
-                geometry,
-                material
-            );
+window.addEventListener(
+    "keyup",
+    (event) => {
 
-        tower.position.set(
-            x,
-            2.5,
-            z
-        );
+        keys[event.key.toLowerCase()] = false;
 
-        tower.castShadow = true;
+    }
+);
 
-        scene.add(tower);
 
-        // Roof
+// Movement speed
 
-        const roofGeometry =
-            new THREE.ConeGeometry(
-                1.5,
-                2,
-                8
-            );
+const playerSpeed = 0.12;
 
-        const roofMaterial =
-            new THREE.MeshStandardMaterial({
-                color: 0x304fa5
-            });
 
-        const roof =
-            new THREE.Mesh(
-                roofGeometry,
-                roofMaterial
-            );
+// =========================
+// UPDATE PLAYER
+// =========================
 
-        roof.position.set(
-            x,
-            6,
-            z
-        );
+function updatePlayer() {
 
-        roof.castShadow = true;
+    let moving = false;
 
-        scene.add(roof);
+    if (keys["w"]) {
+
+        player.position.z -= playerSpeed;
+
+        moving = true;
     }
 
-    createTower(-5, -5);
-    createTower(5, -5);
-    createTower(-5, 5);
-    createTower(5, 5);
+    if (keys["s"]) {
 
-    // Castle center
+        player.position.z += playerSpeed;
 
-    const castleGeometry =
-        new THREE.BoxGeometry(
-            7,
-            5,
-            7
+        moving = true;
+    }
+
+    if (keys["a"]) {
+
+        player.position.x -= playerSpeed;
+
+        moving = true;
+    }
+
+    if (keys["d"]) {
+
+        player.position.x += playerSpeed;
+
+        moving = true;
+    }
+
+
+    // Keep player inside the world
+
+    player.position.x =
+        THREE.MathUtils.clamp(
+            player.position.x,
+            -45,
+            45
         );
 
-    const castleMaterial =
-        new THREE.MeshStandardMaterial({
-            color: 0x596b91
-        });
-
-    const castle =
-        new THREE.Mesh(
-            castleGeometry,
-            castleMaterial
+    player.position.z =
+        THREE.MathUtils.clamp(
+            player.position.z,
+            -45,
+            45
         );
 
-    castle.position.y = 2.5;
 
-    castle.castShadow = true;
+    // Small walking animation
 
-    scene.add(castle);
+    if (moving) {
 
-    // =========================
-    // CRYSTAL
-    // =========================
+        body.rotation.z =
+            Math.sin(
+                Date.now() * 0.015
+            ) * 0.08;
 
-    const crystalGeometry =
-        new THREE.OctahedronGeometry(1.2);
+    } else {
 
-    const crystalMaterial =
-        new THREE.MeshStandardMaterial({
-            color: 0x35cfff,
-            emissive: 0x0878ff,
-            emissiveIntensity: 2
-        });
+        body.rotation.z = 0;
 
-    const crystal =
-        new THREE.Mesh(
-            crystalGeometry,
-            crystalMaterial
+    }
+}
+
+
+// =========================
+// CAMERA FOLLOW
+// =========================
+
+function updateCamera() {
+
+    const targetPosition =
+        new THREE.Vector3(
+            player.position.x,
+            player.position.y + 7,
+            player.position.z + 12
         );
 
-    crystal.position.set(
-        0,
-        2,
-        0
+    camera.position.lerp(
+        targetPosition,
+        0.08
     );
 
-    scene.add(crystal);
-
-    // =========================
-    // PATH
-    // =========================
-
-    const pathGeometry =
-        new THREE.PlaneGeometry(
-            5,
-            100
-        );
-
-    const pathMaterial =
-        new THREE.MeshStandardMaterial({
-            color: 0x8a7657
-        });
-
-    const path =
-        new THREE.Mesh(
-            pathGeometry,
-            pathMaterial
-        );
-
-    path.rotation.x = -Math.PI / 2;
-
-    path.position.y = 0.02;
-
-    scene.add(path);
-
-    // =========================
-    // TREES
-    // =========================
-
-    function createTree(x, z) {
-
-        const trunk =
-            new THREE.Mesh(
-                new THREE.CylinderGeometry(
-                    0.3,
-                    0.4,
-                    2
-                ),
-                new THREE.MeshStandardMaterial({
-                    color: 0x5b3520
-                })
-            );
-
-        trunk.position.set(
-            x,
-            1,
-            z
-        );
-
-        trunk.castShadow = true;
-
-        scene.add(trunk);
-
-        const leaves =
-            new THREE.Mesh(
-                new THREE.SphereGeometry(
-                    1.5,
-                    12,
-                    12
-                ),
-                new THREE.MeshStandardMaterial({
-                    color: 0x16734b
-                })
-            );
-
-        leaves.position.set(
-            x,
-            2.8,
-            z
-        );
-
-        leaves.castShadow = true;
-
-        scene.add(leaves);
-    }
-
-    for (let i = 0; i < 25; i++) {
-
-        const x =
-            (Math.random() - 0.5) * 70;
-
-        const z =
-            (Math.random() - 0.5) * 70;
-
-        if (Math.abs(x) > 8) {
-            createTree(x, z);
-        }
-    }
-
-    // =========================
-    // ANIMATION
-    // =========================
-
-    function animate() {
-
-        requestAnimationFrame(animate);
-
-        crystal.rotation.y += 0.02;
-
-        crystal.position.y =
-            2 + Math.sin(
-                Date.now() * 0.002
-            ) * 0.25;
-
-        camera.lookAt(
-            0,
-            2,
-            0
-        );
-
-        renderer.render(
-            scene,
-            camera
-        );
-    }
-
-    animate();
-
-    // =========================
-    // RESIZE
-    // =========================
-
-    window.addEventListener(
-        "resize",
-        () => {
-
-            camera.aspect =
-                window.innerWidth /
-                window.innerHeight;
-
-            camera.updateProjectionMatrix();
-
-            renderer.setSize(
-                window.innerWidth,
-                window.innerHeight
-            );
-
-        }
+    camera.lookAt(
+        player.position.x,
+        player.position.y + 1,
+        player.position.z
     );
-
-    // Remove loading screen
-
-    setTimeout(() => {
-
-        document
-            .getElementById("loading")
-            .style.display = "none";
-
-    }, 1800);
-
-</script>
-
-</body>
-</html>
+}
