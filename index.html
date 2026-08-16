@@ -1,16 +1,1629 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>SkillShareJR Test</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SkillShareJR — Life Skills Kingdom</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #071426;
+}
+
+#game {
+    position: fixed;
+    inset: 0;
+}
+
+canvas {
+    display: block;
+}
+
+/* TOP LEFT */
+
+#logo {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 10;
+
+    padding: 14px 18px;
+
+    color: white;
+
+    background: rgba(5, 15, 35, 0.86);
+
+    border: 1px solid rgba(95, 190, 255, 0.7);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 0 25px rgba(50, 150, 255, 0.25),
+        inset 0 0 20px rgba(50, 150, 255, 0.08);
+
+    backdrop-filter: blur(10px);
+}
+
+#logoTitle {
+    font-size: 23px;
+    font-weight: 800;
+    color: #70cfff;
+}
+
+#logoSub {
+    margin-top: 3px;
+    font-size: 11px;
+    color: #b9d7ee;
+}
+
+/* PLAYER STATS */
+
+#stats {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 10;
+
+    min-width: 190px;
+
+    padding: 15px;
+
+    color: white;
+
+    background: rgba(5, 15, 35, 0.86);
+
+    border: 1px solid rgba(255, 205, 75, 0.65);
+
+    border-radius: 16px;
+
+    box-shadow: 0 0 25px rgba(255, 180, 50, 0.18);
+
+    backdrop-filter: blur(10px);
+}
+
+.stat {
+    margin-bottom: 9px;
+}
+
+.stat:last-child {
+    margin-bottom: 0;
+}
+
+.statLabel {
+    font-size: 11px;
+    color: #9db5ca;
+}
+
+.statValue {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+/* MISSION */
+
+#mission {
+    position: fixed;
+    left: 18px;
+    bottom: 18px;
+    z-index: 10;
+
+    width: 310px;
+
+    padding: 17px;
+
+    color: white;
+
+    background: rgba(5, 15, 35, 0.9);
+
+    border: 1px solid rgba(157, 124, 255, 0.7);
+
+    border-radius: 17px;
+
+    box-shadow: 0 0 30px rgba(100, 70, 255, 0.2);
+
+    backdrop-filter: blur(10px);
+}
+
+#missionTitle {
+    color: #c6a7ff;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 7px;
+}
+
+#missionText {
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+/* CONTROLS */
+
+#controls {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 10;
+
+    padding: 12px 15px;
+
+    color: #c7d9e9;
+
+    background: rgba(5, 15, 35, 0.78);
+
+    border-radius: 13px;
+
+    font-size: 12px;
+
+    border: 1px solid rgba(100, 170, 220, 0.35);
+}
+
+/* MESSAGE */
+
+#message {
+    position: fixed;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    z-index: 30;
+
+    width: min(420px, 85vw);
+
+    padding: 25px;
+
+    text-align: center;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10, 25, 55, 0.97),
+            rgba(17, 11, 45, 0.97)
+        );
+
+    border: 2px solid #6acbff;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 0 50px rgba(60, 180, 255, 0.35);
+
+    display: none;
+}
+
+#message h2 {
+    color: #75d3ff;
+    margin-bottom: 10px;
+}
+
+#message p {
+    color: #d9e8f5;
+    line-height: 1.5;
+}
+
+#closeMessage {
+    margin-top: 18px;
+
+    padding: 10px 20px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #347eff;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+/* CROSSHAIR */
+
+#crosshair {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 8px;
+    height: 8px;
+
+    border: 1px solid rgba(255,255,255,0.8);
+
+    border-radius: 50%;
+
+    z-index: 5;
+
+    pointer-events: none;
+}
+
+/* MOBILE CONTROLS */
+
+#mobileControls {
+    position: fixed;
+    right: 20px;
+    bottom: 90px;
+
+    display: none;
+
+    z-index: 20;
+}
+
+.pad {
+    display: grid;
+
+    grid-template-columns: 48px 48px 48px;
+    grid-template-rows: 48px 48px;
+
+    gap: 5px;
+}
+
+.pad button {
+    border: 1px solid rgba(255,255,255,0.3);
+
+    border-radius: 10px;
+
+    background: rgba(10,30,60,0.8);
+
+    color: white;
+
+    font-size: 18px;
+}
+
+@media(max-width:700px) {
+
+    #controls {
+        display: none;
+    }
+
+    #mobileControls {
+        display: block;
+    }
+
+    #mission {
+        width: 250px;
+        font-size: 12px;
+    }
+}
+</style>
 </head>
 
-<body style="background:#07152e;color:white;text-align:center;font-family:Arial;">
+<body>
 
-    <h1 style="font-size:50px;">🎮 SKILLSHAREJR</h1>
+<div id="game"></div>
 
-    <h2>THE GAME IS WORKING!</h2>
+<div id="crosshair"></div>
 
-    <p>If you can see this, GitHub Pages is loading your HTML correctly.</p>
+<div id="logo">
+    <div id="logoTitle">⚔️ SKILLSHAREJR</div>
+    <div id="logoSub">MASTER LIFE SKILLS • BUILD YOUR KINGDOM</div>
+</div>
+
+<div id="stats">
+
+    <div class="stat">
+        <div class="statLabel">⭐ EXPERIENCE</div>
+        <div class="statValue" id="xp">0 XP</div>
+    </div>
+
+    <div class="stat">
+        <div class="statLabel">💎 GEMS</div>
+        <div class="statValue" id="gems">10</div>
+    </div>
+
+    <div class="stat">
+        <div class="statLabel">🏆 LEVEL</div>
+        <div class="statValue" id="level">1</div>
+    </div>
+
+</div>
+
+<div id="mission">
+
+    <div id="missionTitle">📜 CURRENT QUEST</div>
+
+    <div id="missionText">
+        Explore the kingdom and discover your first life skill.
+    </div>
+
+</div>
+
+<div id="controls">
+    🎮 <b>W A S D</b> — Move<br>
+    🖱️ Click a building — Learn
+</div>
+
+<div id="mobileControls">
+
+    <div class="pad">
+
+        <div></div>
+        <button data-key="w">▲</button>
+        <div></div>
+
+        <button data-key="a">◀</button>
+        <button data-key="s">▼</button>
+        <button data-key="d">▶</button>
+
+    </div>
+
+</div>
+
+<div id="message">
+
+    <h2 id="messageTitle">Skill</h2>
+
+    <p id="messageText">
+        Welcome!
+    </p>
+
+    <button id="closeMessage">
+        Continue Adventure
+    </button>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
+
+<script>
+
+/* =====================================================
+   SKILLSHAREJR 3D LIFE SKILLS KINGDOM
+===================================================== */
+
+
+/* =====================================================
+   GAME DATA
+===================================================== */
+
+let xp = 0;
+let gems = 10;
+let level = 1;
+
+const skillBuildings = [];
+
+
+/* =====================================================
+   SCENE
+===================================================== */
+
+const scene = new THREE.Scene();
+
+scene.background =
+    new THREE.Color(0x82c9ff);
+
+scene.fog =
+    new THREE.Fog(
+        0x82c9ff,
+        45,
+        150
+    );
+
+
+/* =====================================================
+   CAMERA
+===================================================== */
+
+const camera =
+    new THREE.PerspectiveCamera(
+        60,
+        window.innerWidth /
+        window.innerHeight,
+        0.1,
+        500
+    );
+
+
+/* =====================================================
+   RENDERER
+===================================================== */
+
+const renderer =
+    new THREE.WebGLRenderer({
+        antialias: true
+    });
+
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+renderer.setPixelRatio(
+    Math.min(
+        window.devicePixelRatio,
+        2
+    )
+);
+
+renderer.shadowMap.enabled = true;
+
+renderer.shadowMap.type =
+    THREE.PCFSoftShadowMap;
+
+document
+    .getElementById("game")
+    .appendChild(renderer.domElement);
+
+
+/* =====================================================
+   LIGHTS
+===================================================== */
+
+const sun =
+    new THREE.DirectionalLight(
+        0xffffff,
+        2.8
+    );
+
+sun.position.set(
+    30,
+    55,
+    25
+);
+
+sun.castShadow = true;
+
+sun.shadow.mapSize.width = 2048;
+sun.shadow.mapSize.height = 2048;
+
+scene.add(sun);
+
+
+const ambient =
+    new THREE.HemisphereLight(
+        0xc9ecff,
+        0x254326,
+        1.7
+    );
+
+scene.add(ambient);
+
+
+/* =====================================================
+   GROUND
+===================================================== */
+
+const ground =
+    new THREE.Mesh(
+        new THREE.PlaneGeometry(
+            130,
+            130
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x39784a,
+            roughness: 0.9
+        })
+    );
+
+ground.rotation.x =
+    -Math.PI / 2;
+
+ground.receiveShadow = true;
+
+scene.add(ground);
+
+
+/* =====================================================
+   PATHS
+===================================================== */
+
+function createPath(
+    x,
+    z,
+    width,
+    depth
+) {
+
+    const path =
+        new THREE.Mesh(
+            new THREE.PlaneGeometry(
+                width,
+                depth
+            ),
+            new THREE.MeshStandardMaterial({
+                color: 0xb99b70
+            })
+        );
+
+    path.rotation.x =
+        -Math.PI / 2;
+
+    path.position.set(
+        x,
+        0.025,
+        z
+    );
+
+    scene.add(path);
+}
+
+
+createPath(
+    0,
+    0,
+    8,
+    120
+);
+
+createPath(
+    0,
+    -3,
+    100,
+    7
+);
+
+
+/* =====================================================
+   TREES
+===================================================== */
+
+function createTree(
+    x,
+    z,
+    scale = 1
+) {
+
+    const tree =
+        new THREE.Group();
+
+
+    const trunk =
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                0.35,
+                0.5,
+                3,
+                8
+            ),
+            new THREE.MeshStandardMaterial({
+                color: 0x694329
+            })
+        );
+
+    trunk.position.y =
+        1.5;
+
+    trunk.castShadow = true;
+
+    tree.add(trunk);
+
+
+    const leaves =
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                1.8,
+                12,
+                12
+            ),
+            new THREE.MeshStandardMaterial({
+                color: 0x165b35
+            })
+        );
+
+    leaves.position.y =
+        3.5;
+
+    leaves.castShadow = true;
+
+    tree.add(leaves);
+
+
+    tree.scale.setScalar(scale);
+
+    tree.position.set(
+        x,
+        0,
+        z
+    );
+
+    scene.add(tree);
+}
+
+
+for(let i = 0; i < 55; i++) {
+
+    let x =
+        (Math.random() - 0.5) * 110;
+
+    let z =
+        (Math.random() - 0.5) * 110;
+
+
+    /* Keep central kingdom area clear */
+
+    if(
+        Math.abs(x) < 24 &&
+        Math.abs(z) < 25
+    ) {
+
+        continue;
+
+    }
+
+
+    createTree(
+        x,
+        z,
+        0.75 +
+        Math.random() * 0.6
+    );
+}
+
+
+/* =====================================================
+   CASTLE
+===================================================== */
+
+function createCastle() {
+
+    const castle =
+        new THREE.Group();
+
+
+    const stone =
+        new THREE.MeshStandardMaterial({
+            color: 0xdad8d0,
+            roughness: 0.8
+        });
+
+
+    const blue =
+        new THREE.MeshStandardMaterial({
+            color: 0x304ea5
+        });
+
+
+    const main =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                16,
+                10,
+                10
+            ),
+            stone
+        );
+
+    main.position.y = 5;
+
+    main.castShadow = true;
+
+    castle.add(main);
+
+
+    const towers = [
+        [-9,-5],
+        [9,-5],
+        [-9,5],
+        [9,5]
+    ];
+
+
+    towers.forEach(
+        position => {
+
+            const tower =
+                new THREE.Mesh(
+                    new THREE.CylinderGeometry(
+                        2.2,
+                        2.2,
+                        13,
+                        10
+                    ),
+                    stone
+                );
+
+            tower.position.set(
+                position[0],
+                6.5,
+                position[1]
+            );
+
+            tower.castShadow = true;
+
+            castle.add(tower);
+
+
+            const roof =
+                new THREE.Mesh(
+                    new THREE.ConeGeometry(
+                        3,
+                        4.5,
+                        10
+                    ),
+                    blue
+                );
+
+            roof.position.set(
+                position[0],
+                15,
+                position[1]
+            );
+
+            roof.castShadow = true;
+
+            castle.add(roof);
+
+        }
+    );
+
+
+    /* Castle entrance */
+
+    const door =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                3,
+                5,
+                0.5
+            ),
+            new THREE.MeshStandardMaterial({
+                color: 0x291a38
+            })
+        );
+
+    door.position.set(
+        0,
+        2.5,
+        5.1
+    );
+
+    castle.add(door);
+
+
+    castle.position.set(
+        0,
+        0,
+        -42
+    );
+
+    scene.add(castle);
+}
+
+
+createCastle();
+
+
+/* =====================================================
+   CRYSTALS
+===================================================== */
+
+function createCrystal(
+    x,
+    z,
+    color
+) {
+
+    const crystal =
+        new THREE.Mesh(
+            new THREE.OctahedronGeometry(
+                0.7,
+                0
+            ),
+            new THREE.MeshStandardMaterial({
+                color: color,
+                emissive: color,
+                emissiveIntensity: 0.65
+            })
+        );
+
+    crystal.position.set(
+        x,
+        1,
+        z
+    );
+
+    crystal.castShadow = true;
+
+    scene.add(crystal);
+
+    return crystal;
+}
+
+
+const crystals = [];
+
+crystals.push(
+    createCrystal(
+        -25,
+        -20,
+        0x4fc3ff
+    )
+);
+
+crystals.push(
+    createCrystal(
+        25,
+        -20,
+        0xffc94d
+    )
+);
+
+crystals.push(
+    createCrystal(
+        -25,
+        20,
+        0x6e7cff
+    )
+);
+
+crystals.push(
+    createCrystal(
+        25,
+        20,
+        0xc47cff
+    )
+);
+
+
+/* =====================================================
+   SKILL BUILDINGS
+===================================================== */
+
+function createSkillBuilding(
+    name,
+    emoji,
+    x,
+    z,
+    color,
+    description
+) {
+
+    const building =
+        new THREE.Group();
+
+
+    /* Base */
+
+    const base =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                8,
+                5,
+                8
+            ),
+            new THREE.MeshStandardMaterial({
+                color: color,
+                roughness: 0.7
+            })
+        );
+
+    base.position.y =
+        2.5;
+
+    base.castShadow = true;
+
+    building.add(base);
+
+
+    /* Roof */
+
+    const roof =
+        new THREE.Mesh(
+            new THREE.ConeGeometry(
+                5.8,
+                4.5,
+                4
+            ),
+            new THREE.MeshStandardMaterial({
+                color: 0x202d62
+            })
+        );
+
+    roof.position.y =
+        7;
+
+    roof.rotation.y =
+        Math.PI / 4;
+
+    roof.castShadow = true;
+
+    building.add(roof);
+
+
+    /* Door */
+
+    const door =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                1.8,
+                3,
+                0.5
+            ),
+            new THREE.MeshStandardMaterial({
+                color: 0x321e31
+            })
+        );
+
+    door.position.set(
+        0,
+        1.5,
+        4.05
+    );
+
+    building.add(door);
+
+
+    /* Floating crystal */
+
+    const crystal =
+        new THREE.Mesh(
+            new THREE.OctahedronGeometry(
+                0.65
+            ),
+            new THREE.MeshStandardMaterial({
+                color: color,
+                emissive: color,
+                emissiveIntensity: 0.8
+            })
+        );
+
+    crystal.position.set(
+        0,
+        9.2,
+        0
+    );
+
+    building.add(crystal);
+
+
+    building.position.set(
+        x,
+        0,
+        z
+    );
+
+
+    scene.add(building);
+
+
+    building.userData = {
+        name: name,
+        emoji: emoji,
+        description: description,
+        crystal: crystal
+    };
+
+
+    skillBuildings.push(
+        building
+    );
+
+
+    return building;
+}
+
+
+createSkillBuilding(
+    "Life Skills Village",
+    "🏠",
+    -20,
+    -5,
+    0xc8783e,
+    "Learn practical skills such as cooking, cleaning, laundry, organization and personal responsibility."
+);
+
+
+createSkillBuilding(
+    "Money Kingdom",
+    "💰",
+    20,
+    -5,
+    0xc9a52c,
+    "Learn how to make smart choices with money: save, spend, plan and understand needs versus wants."
+);
+
+
+createSkillBuilding(
+    "Cyber Safety Castle",
+    "🛡️",
+    -20,
+    17,
+    0x416de0,
+    "Learn to recognize suspicious messages, protect your accounts and think before you click."
+);
+
+
+createSkillBuilding(
+    "Wisdom Tower",
+    "🧠",
+    20,
+    17,
+    0x874dca,
+    "Practice decision-making, communication, critical thinking and problem-solving."
+);
+
+
+/* =====================================================
+   PLAYER
+===================================================== */
+
+const player =
+    new THREE.Group();
+
+scene.add(player);
+
+
+/* Body */
+
+const playerBody =
+    new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.1,
+            1.8,
+            0.75
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x2769c7
+        })
+    );
+
+playerBody.position.y =
+    1.5;
+
+playerBody.castShadow = true;
+
+player.add(playerBody);
+
+
+/* Head */
+
+const playerHead =
+    new THREE.Mesh(
+        new THREE.SphereGeometry(
+            0.52,
+            20,
+            20
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xffc59d
+        })
+    );
+
+playerHead.position.y =
+    2.85;
+
+playerHead.castShadow = true;
+
+player.add(playerHead);
+
+
+/* Hair */
+
+const playerHair =
+    new THREE.Mesh(
+        new THREE.SphereGeometry(
+            0.54,
+            16,
+            16
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x24160e
+        })
+    );
+
+playerHair.position.set(
+    0,
+    3.15,
+    -0.05
+);
+
+playerHair.scale.y =
+    0.65;
+
+player.add(playerHair);
+
+
+/* Cloak */
+
+const playerCloak =
+    new THREE.Mesh(
+        new THREE.ConeGeometry(
+            0.9,
+            2.5,
+            6
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x182e6d
+        })
+    );
+
+playerCloak.rotation.x =
+    Math.PI;
+
+playerCloak.position.set(
+    0,
+    1.5,
+    0.35
+);
+
+playerCloak.castShadow = true;
+
+player.add(playerCloak);
+
+
+/* Player glow */
+
+const playerRing =
+    new THREE.Mesh(
+        new THREE.TorusGeometry(
+            0.9,
+            0.06,
+            8,
+            32
+        ),
+        new THREE.MeshBasicMaterial({
+            color: 0x55cfff
+        })
+    );
+
+playerRing.rotation.x =
+    Math.PI / 2;
+
+playerRing.position.y =
+    0.08;
+
+player.add(playerRing);
+
+
+/* Starting position */
+
+player.position.set(
+    0,
+    0,
+    28
+);
+
+
+/* =====================================================
+   MOVEMENT
+===================================================== */
+
+const keys = {};
+
+window.addEventListener(
+    "keydown",
+    function(event) {
+
+        keys[
+            event.key.toLowerCase()
+        ] = true;
+
+    }
+);
+
+window.addEventListener(
+    "keyup",
+    function(event) {
+
+        keys[
+            event.key.toLowerCase()
+        ] = false;
+
+    }
+);
+
+
+let speed = 0.18;
+
+
+function updatePlayer() {
+
+    let moving = false;
+
+
+    if(keys["w"]) {
+
+        player.position.z -= speed;
+
+        moving = true;
+
+    }
+
+
+    if(keys["s"]) {
+
+        player.position.z += speed;
+
+        moving = true;
+
+    }
+
+
+    if(keys["a"]) {
+
+        player.position.x -= speed;
+
+        moving = true;
+
+    }
+
+
+    if(keys["d"]) {
+
+        player.position.x += speed;
+
+        moving = true;
+
+    }
+
+
+    player.position.x =
+        THREE.MathUtils.clamp(
+            player.position.x,
+            -52,
+            52
+        );
+
+
+    player.position.z =
+        THREE.MathUtils.clamp(
+            player.position.z,
+            -52,
+            52
+        );
+
+
+    if(moving) {
+
+        playerBody.rotation.z =
+            Math.sin(
+                Date.now() * 0.02
+            ) * 0.07;
+
+        playerRing.rotation.z += 0.05;
+
+    }
+}
+
+
+/* =====================================================
+   CAMERA
+===================================================== */
+
+camera.position.set(
+    0,
+    8,
+    40
+);
+
+
+function updateCamera() {
+
+    const desired =
+        new THREE.Vector3(
+            player.position.x,
+            player.position.y + 7,
+            player.position.z + 11
+        );
+
+
+    camera.position.lerp(
+        desired,
+        0.08
+    );
+
+
+    camera.lookAt(
+        player.position.x,
+        player.position.y + 1.4,
+        player.position.z
+    );
+
+}
+
+
+/* =====================================================
+   QUEST / UI
+===================================================== */
+
+function updateStats() {
+
+    document.getElementById(
+        "xp"
+    ).textContent =
+        xp + " XP";
+
+
+    document.getElementById(
+        "gems"
+    ).textContent =
+        gems;
+
+
+    level =
+        Math.floor(xp / 100) + 1;
+
+
+    document.getElementById(
+        "level"
+    ).textContent =
+        level;
+}
+
+
+function showMessage(
+    title,
+    text
+) {
+
+    document.getElementById(
+        "messageTitle"
+    ).textContent =
+        title;
+
+
+    document.getElementById(
+        "messageText"
+    ).textContent =
+        text;
+
+
+    document.getElementById(
+        "message"
+    ).style.display =
+        "block";
+
+}
+
+
+document.getElementById(
+    "closeMessage"
+).onclick = function() {
+
+    document.getElementById(
+        "message"
+    ).style.display =
+        "none";
+
+};
+
+
+/* =====================================================
+   MOUSE INTERACTION
+===================================================== */
+
+const raycaster =
+    new THREE.Raycaster();
+
+const mouse =
+    new THREE.Vector2();
+
+
+window.addEventListener(
+    "click",
+    function(event) {
+
+        mouse.x =
+            (event.clientX /
+            window.innerWidth) * 2 - 1;
+
+        mouse.y =
+            -(event.clientY /
+            window.innerHeight) * 2 + 1;
+
+
+        raycaster.setFromCamera(
+            mouse,
+            camera
+        );
+
+
+        const hits =
+            raycaster.intersectObjects(
+                skillBuildings,
+                true
+            );
+
+
+        if(hits.length > 0) {
+
+            let object =
+                hits[0].object;
+
+
+            while(
+                object.parent &&
+                !object.userData.name
+            ) {
+
+                object =
+                    object.parent;
+
+            }
+
+
+            if(object.userData.name) {
+
+                const data =
+                    object.userData;
+
+
+                xp += 25;
+
+                gems += 2;
+
+                updateStats();
+
+
+                document.getElementById(
+                    "missionText"
+                ).textContent =
+                    "Quest complete! You discovered " +
+                    data.name +
+                    ". Choose another skill zone.";
+
+
+                showMessage(
+                    data.emoji +
+                    " " +
+                    data.name,
+
+                    data.description +
+                    " You earned 25 XP and 2 gems!"
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   MOBILE CONTROLS
+===================================================== */
+
+document
+    .querySelectorAll(
+        "#mobileControls button"
+    )
+    .forEach(
+        button => {
+
+            const key =
+                button.dataset.key;
+
+
+            button.addEventListener(
+                "touchstart",
+                function(event) {
+
+                    event.preventDefault();
+
+                    keys[key] = true;
+
+                }
+            );
+
+
+            button.addEventListener(
+                "touchend",
+                function(event) {
+
+                    event.preventDefault();
+
+                    keys[key] = false;
+
+                }
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   RESIZE
+===================================================== */
+
+window.addEventListener(
+    "resize",
+    function() {
+
+        camera.aspect =
+            window.innerWidth /
+            window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+    }
+);
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+function animate() {
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    updatePlayer();
+
+    updateCamera();
+
+
+    /* Animate crystals */
+
+    crystals.forEach(
+        (crystal, index) => {
+
+            crystal.rotation.y += 0.025;
+
+            crystal.position.y =
+                1 +
+                Math.sin(
+                    Date.now() * 0.002 +
+                    index
+                ) * 0.25;
+
+        }
+    );
+
+
+    /* Animate building crystals */
+
+    skillBuildings.forEach(
+        (building, index) => {
+
+            const crystal =
+                building.userData.crystal;
+
+            crystal.rotation.y +=
+                0.035;
+
+            crystal.position.y =
+                9.2 +
+                Math.sin(
+                    Date.now() * 0.002 +
+                    index
+                ) * 0.35;
+
+        }
+    );
+
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+}
+
+
+updateStats();
+
+animate();
+
+</script>
 
 </body>
 </html>
