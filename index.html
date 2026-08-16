@@ -3,2672 +3,1226 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>SkillShareJR — Life Skills Adventure</title>
+<title>SkillShareJR — Kingdom of Skills</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
-
-html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    font-family:Arial,Helvetica,sans-serif;
-    background:#050b16;
-}
-
-canvas{
-    display:block;
-}
-
-#game{
-    position:fixed;
-    inset:0;
-}
-
-/* ================= LOADING ================= */
-
-#loading{
-    position:fixed;
-    inset:0;
-    z-index:999;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    background:
-    radial-gradient(circle at center,#17355c,#050a14 70%);
-    color:white;
-}
-
-#loading h1{
-    font-size:52px;
-    color:#62e4ff;
-    letter-spacing:4px;
-    text-shadow:0 0 30px #16bde8;
-}
-
-#loading p{
-    margin-top:12px;
-    color:#b7cce2;
-}
-
-.loader{
-    width:360px;
-    height:8px;
-    margin-top:25px;
-    border-radius:10px;
-    background:#172a42;
-    overflow:hidden;
-}
-
-.loader div{
-    width:0;
-    height:100%;
-    background:linear-gradient(
-        90deg,
-        #36dcff,
-        #7c5cff,
-        #ffd34e
-    );
-    animation:load 2s forwards;
-}
-
-@keyframes load{
-    to{width:100%}
-}
-
-/* ================= HUD ================= */
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#06111d;font-family:Arial,sans-serif}
+#game{position:fixed;inset:0}
+canvas{display:block}
 
 #hud{
-    position:fixed;
-    inset:0;
-    z-index:20;
-    pointer-events:none;
+ position:fixed;inset:0;pointer-events:none;color:white;
 }
 
 .panel{
-    background:
-    linear-gradient(
-        145deg,
-        rgba(7,19,38,.95),
-        rgba(3,9,20,.92)
-    );
-
-    border:1px solid rgba(79,196,255,.5);
-    border-radius:18px;
-
-    box-shadow:
-    0 0 30px rgba(0,170,255,.12),
-    inset 0 0 25px rgba(0,100,200,.05);
-
-    backdrop-filter:blur(10px);
+ background:linear-gradient(145deg,rgba(5,20,38,.94),rgba(8,12,28,.86));
+ border:1px solid #38bdf8;
+ border-radius:22px;
+ box-shadow:0 0 30px rgba(0,170,255,.18),inset 0 0 25px rgba(40,120,255,.05);
+ backdrop-filter:blur(10px);
 }
-
-/* ================= LOGO ================= */
 
 #logo{
-    position:absolute;
-    left:25px;
-    top:25px;
-    width:360px;
-    padding:18px 22px;
+ position:absolute;top:25px;left:25px;padding:18px 28px;
 }
-
-.logoTitle{
-    color:#61ddff;
-    font-size:28px;
-    font-weight:900;
-    letter-spacing:2px;
+#logo h1{
+ margin:0;color:#55d9ff;font-size:31px;letter-spacing:2px
 }
-
-.logoSub{
-    margin-top:5px;
-    color:#abc2d8;
-    font-size:12px;
-}
-
-/* ================= STATS ================= */
+#logo p{margin:5px 0 0;color:#b8d4e8;font-size:14px}
 
 #stats{
-    position:absolute;
-    right:25px;
-    top:25px;
-    width:280px;
-    padding:18px 22px;
+ position:absolute;top:25px;right:25px;padding:20px 28px;
+ min-width:235px;border-color:#f4c542
 }
-
-.stat{
-    display:flex;
-    justify-content:space-between;
-    margin:8px 0;
-    color:#a9bed3;
-}
-
-.stat strong{
-    color:white;
-}
-
-/* ================= QUEST ================= */
+.stat{font-size:16px;margin:7px 0;color:#aac0d5}
+.stat b{float:right;color:white;font-size:20px}
 
 #quest{
-    position:absolute;
-    left:25px;
-    bottom:25px;
-    width:400px;
-    padding:18px 22px;
+ position:absolute;left:25px;bottom:25px;width:400px;padding:20px;
+ border-color:#a970ff
 }
-
-.questTitle{
-    color:#c99cff;
-    font-size:13px;
-    font-weight:bold;
-    letter-spacing:1px;
-    margin-bottom:8px;
-}
-
-#questText{
-    color:#edf5ff;
-    line-height:1.5;
-}
-
-/* ================= CONTROLS ================= */
+#quest h3{margin:0 0 8px;color:#d4a7ff}
+#quest p{margin:0;line-height:1.5}
 
 #controls{
-    position:absolute;
-    right:25px;
-    bottom:25px;
-    padding:15px 20px;
-    color:#b8cde1;
-    line-height:1.7;
-    font-size:13px;
+ position:absolute;right:25px;bottom:25px;padding:15px 20px;
+ border-color:#24628a;color:#d6ecff;line-height:1.6
 }
 
-/* ================= INTERACT ================= */
+#location{
+ position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+ text-align:center;display:none;padding:22px 30px;
+ border-color:#f4c542;min-width:300px
+}
+#location h2{margin:0;color:#ffd75a}
+#location p{color:#d3dfeb}
 
-#interact{
-    position:absolute;
-    left:50%;
-    bottom:95px;
-    transform:translateX(-50%);
-    display:none;
-
-    padding:12px 22px;
-
-    border-radius:12px;
-
-    color:#ffe28a;
-
-    background:rgba(5,12,25,.92);
-
-    border:1px solid rgba(255,214,87,.6);
-
-    box-shadow:0 0 25px rgba(255,190,50,.15);
+#learn{
+ position:fixed;inset:0;background:rgba(0,5,15,.76);
+ display:none;align-items:center;justify-content:center;
+ pointer-events:auto;backdrop-filter:blur(8px)
 }
 
-/* ================= LOCATION WINDOW ================= */
-
-.modal{
-    position:fixed;
-    inset:0;
-    z-index:100;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:rgba(0,0,0,.62);
-
-    opacity:0;
-    visibility:hidden;
-
-    transition:.25s;
+#learnBox{
+ width:min(900px,90vw);max-height:85vh;overflow:auto;
+ padding:30px;border:1px solid #44d9ff;
+ border-radius:25px;
+ background:linear-gradient(145deg,#081a30,#10152c);
+ box-shadow:0 0 70px rgba(0,200,255,.25)
 }
-
-.modal.show{
-    opacity:1;
-    visibility:visible;
+#learnBox h1{color:#5de1ff;margin-top:0}
+.lesson{
+ padding:18px;margin:15px 0;border-radius:15px;
+ background:rgba(255,255,255,.05);
+ border-left:4px solid #52d8ff
 }
-
-.locationBox{
-    width:500px;
-    max-width:92vw;
-
-    padding:30px;
-
-    text-align:center;
-
-    border:1px solid #ffd15a;
-
-    box-shadow:
-    0 0 60px rgba(255,194,45,.18);
-
-    transform:scale(.9);
-
-    transition:.25s;
+.lesson h3{color:#ffd866}
+.lesson p{line-height:1.6;color:#d8e8f5}
+button{
+ border:0;border-radius:12px;padding:12px 22px;
+ background:linear-gradient(90deg,#087cff,#7c3cff);
+ color:white;font-weight:bold;cursor:pointer;font-size:15px;
 }
-
-.modal.show .locationBox{
-    transform:scale(1);
-}
-
-.bigIcon{
-    font-size:58px;
-}
-
-.locationBox h2{
-    color:#ffd75a;
-    font-size:30px;
-    margin:8px 0;
-}
-
-.locationBox p{
-    color:#b8cbe0;
-    line-height:1.6;
-    margin:12px 0 24px;
-}
-
-.btn{
-    border:none;
-    border-radius:12px;
-    padding:13px 22px;
-    font-weight:bold;
-    color:white;
-    cursor:pointer;
-    margin:5px;
-}
-
-.primary{
-    background:linear-gradient(
-        135deg,
-        #1976ff,
-        #7a4cff
-    );
-}
-
-.secondary{
-    background:#26384d;
-}
-
-.btn:hover{
-    transform:translateY(-2px);
-    filter:brightness(1.15);
-}
-
-/* ================= LEARNING ================= */
-
-#learning{
-    position:fixed;
-    inset:0;
-    z-index:200;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:
-    radial-gradient(
-        circle at center,
-        rgba(23,53,91,.96),
-        rgba(2,7,15,.98)
-    );
-
-    opacity:0;
-    visibility:hidden;
-
-    transition:.3s;
-
-    pointer-events:none;
-}
-
-#learning.show{
-    opacity:1;
-    visibility:visible;
-    pointer-events:auto;
-}
-
-.learningBox{
-    width:760px;
-    max-width:94vw;
-    max-height:90vh;
-
-    overflow:auto;
-
-    padding:30px;
-
-    border-radius:22px;
-
-    background:
-    linear-gradient(
-        145deg,
-        rgba(10,26,50,.98),
-        rgba(4,10,22,.98)
-    );
-
-    border:1px solid rgba(88,214,255,.5);
-
-    box-shadow:
-    0 0 80px rgba(0,180,255,.15);
-}
-
-.learningHeader{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    margin-bottom:20px;
-}
-
-.learningTitle{
-    color:#63dcff;
-    font-size:27px;
-    font-weight:bold;
-}
-
-.closeLearning{
-    border:none;
-    background:#27394f;
-    color:white;
-    width:38px;
-    height:38px;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-.progressOuter{
-    width:100%;
-    height:9px;
-    background:#182a40;
-    border-radius:10px;
-    overflow:hidden;
-    margin-bottom:25px;
-}
-
-#learningProgress{
-    width:0%;
-    height:100%;
-    background:linear-gradient(
-        90deg,
-        #32dcff,
-        #785cff
-    );
-    transition:.3s;
-}
-
-.lessonIcon{
-    font-size:65px;
-    text-align:center;
-}
-
-.lessonTitle{
-    color:white;
-    text-align:center;
-    font-size:30px;
-    margin:10px 0 15px;
-}
-
-.lessonText{
-    color:#c5d5e6;
-    line-height:1.8;
-    font-size:16px;
-    text-align:center;
-}
-
-.tip{
-    margin:22px 0;
-    padding:17px;
-
-    border-left:4px solid #5cdcff;
-
-    background:rgba(61,177,255,.08);
-
-    color:#d7eaff;
-    line-height:1.6;
-}
-
-.center{
-    text-align:center;
-}
-
-/* ================= QUIZ ================= */
-
-#quizArea{
-    display:none;
-}
-
-.questionNumber{
-    color:#9db7d2;
-    font-size:13px;
-    margin-bottom:8px;
-}
-
-.question{
-    color:white;
-    font-size:22px;
-    line-height:1.4;
-    margin-bottom:20px;
-}
-
-.answer{
-    display:block;
-    width:100%;
-
-    text-align:left;
-
-    padding:15px;
-
-    margin:10px 0;
-
-    border-radius:13px;
-
-    border:1px solid #29415b;
-
-    background:#101f34;
-
-    color:#dcecff;
-
-    cursor:pointer;
-
-    transition:.2s;
-}
-
-.answer:hover{
-    border-color:#53dfff;
-    background:#152b46;
-}
-
-.answer.correct{
-    border-color:#36e59a;
-    background:rgba(40,205,130,.14);
-}
-
-.answer.wrong{
-    border-color:#ff6666;
-    background:rgba(255,70,70,.12);
-}
-
-.feedback{
-    min-height:25px;
-    text-align:center;
-    font-weight:bold;
-    margin:15px 0;
-}
-
-/* ================= RESULT ================= */
-
-#resultArea{
-    display:none;
-    text-align:center;
-}
-
-.resultIcon{
-    font-size:80px;
-}
-
-.resultTitle{
-    color:#ffd85a;
-    font-size:34px;
-    margin:10px;
-}
-
-.reward{
-    display:flex;
-    justify-content:center;
-    gap:18px;
-    margin:25px 0;
-}
-
-.rewardCard{
-    min-width:130px;
-    padding:18px;
-    border-radius:15px;
-    background:#101f35;
-    border:1px solid #304b67;
-}
-
-.rewardCard strong{
-    display:block;
-    color:white;
-    font-size:24px;
-}
-
-.rewardCard span{
-    color:#8fa8c0;
-    font-size:12px;
-}
-
-/* ================= BADGE ================= */
-
-.badge{
-    margin:20px auto;
-    width:120px;
-    height:120px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:50%;
-
-    background:
-    radial-gradient(
-        circle,
-        #ffe17b,
-        #c58219
-    );
-
-    box-shadow:
-    0 0 40px rgba(255,207,70,.35);
-
-    font-size:55px;
-}
-
-/* ================= MOBILE ================= */
-
-@media(max-width:800px){
-
-    #logo{
-        width:260px;
-        left:12px;
-        top:12px;
-    }
-
-    #stats{
-        width:200px;
-        right:12px;
-        top:12px;
-    }
-
-    #quest{
-        width:310px;
-        left:12px;
-        bottom:12px;
-    }
-
-    #controls{
-        display:none;
-    }
-
-    .learningBox{
-        padding:20px;
-    }
+button:hover{filter:brightness(1.25)}
+.close{float:right;background:#d93652}
+#hint{
+ position:absolute;left:50%;bottom:25px;transform:translateX(-50%);
+ padding:10px 18px;color:#d9f5ff
 }
 </style>
 </head>
 
 <body>
 
-<div id="loading">
-    <h1>SKILLSHAREJR</h1>
-    <p>Loading the Kingdom of Skills...</p>
-    <div class="loader">
-        <div></div>
-    </div>
-</div>
-
 <div id="game"></div>
-
-<!-- ================= HUD ================= -->
 
 <div id="hud">
 
-    <div id="logo" class="panel">
-        <div class="logoTitle">
-            ⚔ SKILLSHAREJR
-        </div>
+ <div id="logo" class="panel">
+   <h1>⚔ SKILLSHAREJR</h1>
+   <p>MASTER LIFE SKILLS • BUILD YOUR KINGDOM</p>
+ </div>
 
-        <div class="logoSub">
-            LEARN LIFE SKILLS • PLAY • LEVEL UP
-        </div>
-    </div>
+ <div id="stats" class="panel">
+   <div class="stat">⭐ EXPERIENCE <b id="xp">0 XP</b></div>
+   <div class="stat">💎 GEMS <b id="gems">10</b></div>
+   <div class="stat">🏆 LEVEL <b id="level">1</b></div>
+ </div>
 
-    <div id="stats" class="panel">
+ <div id="quest" class="panel">
+   <h3>📜 CURRENT QUEST</h3>
+   <p id="questText">
+     Explore the Kingdom and discover your first life skill.
+   </p>
+ </div>
 
-        <div class="stat">
-            <span>⭐ XP</span>
-            <strong id="xp">100</strong>
-        </div>
+ <div id="controls" class="panel">
+   🎮 <b>WASD</b> — Move<br>
+   🖱️ <b>Mouse</b> — Look around<br>
+   ⚡ <b>SHIFT</b> — Sprint<br>
+   🏛️ Walk near a location — Learn
+ </div>
 
-        <div class="stat">
-            <span>💎 Gems</span>
-            <strong id="gems">15</strong>
-        </div>
+ <div id="location" class="panel">
+   <h2 id="locationName">Location</h2>
+   <p id="locationDescription">Discover a new skill.</p>
+   <button onclick="openLesson()">📖 START LEARNING</button>
+ </div>
 
-        <div class="stat">
-            <span>🏆 Level</span>
-            <strong id="level">1</strong>
-        </div>
-
-        <div class="stat">
-            <span>🎓 Skills</span>
-            <strong id="skills">0/7</strong>
-        </div>
-
-    </div>
-
-    <div id="quest" class="panel">
-
-        <div class="questTitle">
-            📜 CURRENT QUEST
-        </div>
-
-        <div id="questText">
-            Explore the kingdom and enter your first academy.
-        </div>
-
-    </div>
-
-    <div id="controls" class="panel">
-        🎮 <b>WASD</b> — Move<br>
-        🖱️ <b>Click</b> — Explore locations<br>
-        ⌨️ <b>E</b> — Explore nearby location
-    </div>
-
-    <div id="interact">
-        Press <b>E</b> to explore this location
-    </div>
+ <div id="hint" class="panel">
+   Explore the kingdom
+ </div>
 
 </div>
 
-<!-- ================= LOCATION MODAL ================= -->
 
-<div id="locationModal" class="modal">
+<div id="learn">
+ <div id="learnBox">
 
-    <div class="locationBox panel">
+   <button class="close" onclick="closeLesson()">CLOSE</button>
 
-        <div id="locationIcon" class="bigIcon">
-            🏠
-        </div>
+   <h1 id="lessonTitle">Life Skills Academy</h1>
 
-        <h2 id="locationName">
-            Academy
-        </h2>
+   <div id="lessonContent"></div>
 
-        <p id="locationDescription">
-            Learn a new life skill.
-        </p>
+   <button onclick="completeLesson()">⭐ COMPLETE LESSON</button>
 
-        <button
-            id="startLearning"
-            class="btn primary">
-            📖 START LEARNING
-        </button>
-
-        <button
-            id="closeLocation"
-            class="btn secondary">
-            CLOSE
-        </button>
-
-    </div>
-
+ </div>
 </div>
 
-<!-- ================= LEARNING SYSTEM ================= -->
 
-<div id="learning">
-
-    <div class="learningBox">
-
-        <div class="learningHeader">
-
-            <div class="learningTitle">
-                🎓 SKILL ACADEMY
-            </div>
-
-            <button
-                id="closeLearning"
-                class="closeLearning">
-                ✕
-            </button>
-
-        </div>
-
-        <div class="progressOuter">
-            <div id="learningProgress"></div>
-        </div>
-
-        <!-- LESSON -->
-
-        <div id="lessonArea">
-
-            <div id="lessonIcon"
-                 class="lessonIcon">
-                💰
-            </div>
-
-            <div id="lessonTitle"
-                 class="lessonTitle">
-                Money Management
-            </div>
-
-            <div id="lessonText"
-                 class="lessonText">
-                Learn how to make smart decisions with money.
-            </div>
-
-            <div id="lessonTip"
-                 class="tip">
-                💡 Smart choices today can help you build
-                better habits for the future.
-            </div>
-
-            <div class="center">
-
-                <button
-                    id="beginQuiz"
-                    class="btn primary">
-                    🎯 TAKE THE CHALLENGE
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- QUIZ -->
-
-        <div id="quizArea">
-
-            <div
-                id="questionNumber"
-                class="questionNumber">
-                Question 1 of 3
-            </div>
-
-            <div
-                id="question"
-                class="question">
-                Question
-            </div>
-
-            <div id="answers"></div>
-
-            <div
-                id="feedback"
-                class="feedback">
-            </div>
-
-            <div class="center">
-
-                <button
-                    id="nextQuestion"
-                    class="btn primary"
-                    style="display:none;">
-                    NEXT QUESTION →
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- RESULT -->
-
-        <div id="resultArea">
-
-            <div class="resultIcon">
-                🎉
-            </div>
-
-            <div class="resultTitle">
-                SKILL COMPLETE!
-            </div>
-
-            <p style="color:#b9cce0;">
-                You successfully completed this academy.
-            </p>
-
-            <div class="badge"
-                 id="badge">
-                🏆
-            </div>
-
-            <div class="reward">
-
-                <div class="rewardCard">
-                    <strong id="xpReward">
-                        +100
-                    </strong>
-                    <span>XP EARNED</span>
-                </div>
-
-                <div class="rewardCard">
-                    <strong id="gemReward">
-                        +10
-                    </strong>
-                    <span>GEMS</span>
-                </div>
-
-            </div>
-
-            <button
-                id="finishLearning"
-                class="btn primary">
-                🗺️ RETURN TO KINGDOM
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
 
 <script>
 
-/* ==========================================================
-   SKILLSHAREJR
-   COMPLETE LEARNING SYSTEM
-========================================================== */
+/* =========================================================
+   GAME SETUP
+========================================================= */
 
-let scene;
-let camera;
-let renderer;
-let clock;
+const scene = new THREE.Scene();
 
-let player;
+scene.background = new THREE.Color(0x8bc7e8);
 
-let keys={};
+scene.fog = new THREE.Fog(0x8bc7e8,70,260);
 
+
+const camera = new THREE.PerspectiveCamera(
+ 65,
+ innerWidth/innerHeight,
+ .1,
+ 500
+);
+
+const renderer = new THREE.WebGLRenderer({
+ antialias:true,
+ powerPreference:"high-performance"
+});
+
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.15;
+
+document.getElementById("game").appendChild(renderer.domElement);
+
+
+/* =========================================================
+   LIGHTING
+========================================================= */
+
+const hemi = new THREE.HemisphereLight(
+ 0xbfe8ff,
+ 0x27451f,
+ 1.8
+);
+
+scene.add(hemi);
+
+
+const sun = new THREE.DirectionalLight(
+ 0xfff0c2,
+ 3
+);
+
+sun.position.set(-80,120,60);
+sun.castShadow=true;
+
+sun.shadow.mapSize.width=2048;
+sun.shadow.mapSize.height=2048;
+
+sun.shadow.camera.left=-100;
+sun.shadow.camera.right=100;
+sun.shadow.camera.top=100;
+sun.shadow.camera.bottom=-100;
+
+scene.add(sun);
+
+
+/* =========================================================
+   MATERIALS
+========================================================= */
+
+const grassMat=new THREE.MeshStandardMaterial({
+ color:0x3d8b45,
+ roughness:1
+});
+
+const grassDark=new THREE.MeshStandardMaterial({
+ color:0x286536,
+ roughness:1
+});
+
+const roadMat=new THREE.MeshStandardMaterial({
+ color:0x9b7754,
+ roughness:.95
+});
+
+const stoneMat=new THREE.MeshStandardMaterial({
+ color:0x69737c,
+ roughness:.8
+});
+
+const waterMat=new THREE.MeshStandardMaterial({
+ color:0x159bd0,
+ transparent:true,
+ opacity:.78,
+ roughness:.15,
+ metalness:.15
+});
+
+const woodMat=new THREE.MeshStandardMaterial({
+ color:0x70452c
+});
+
+const roofMat=new THREE.MeshStandardMaterial({
+ color:0x473174
+});
+
+const goldMat=new THREE.MeshStandardMaterial({
+ color:0xffc83d,
+ metalness:.7,
+ roughness:.25
+});
+
+
+/* =========================================================
+   TERRAIN
+========================================================= */
+
+const terrainGeo=new THREE.PlaneGeometry(
+ 240,240,70,70
+);
+
+const pos=terrainGeo.attributes.position;
+
+for(let i=0;i<pos.count;i++){
+
+ let x=pos.getX(i);
+ let z=pos.getY(i);
+
+ let h=
+   Math.sin(x*.055)*2+
+   Math.cos(z*.045)*2+
+   Math.sin((x+z)*.035)*1.5;
+
+ h+=Math.max(0,Math.abs(x)-75)*.08;
+
+ pos.setZ(i,h);
+}
+
+terrainGeo.computeVertexNormals();
+
+const terrain=new THREE.Mesh(terrainGeo,grassMat);
+
+terrain.rotation.x=-Math.PI/2;
+terrain.receiveShadow=true;
+
+scene.add(terrain);
+
+
+/* =========================================================
+   RIVER
+========================================================= */
+
+const riverGeo=new THREE.PlaneGeometry(32,210);
+
+const river=new THREE.Mesh(riverGeo,waterMat);
+
+river.rotation.x=-Math.PI/2;
+river.position.set(38,.3,0);
+
+scene.add(river);
+
+
+/* =========================================================
+   ROADS
+========================================================= */
+
+function road(x,z,w,d,rot=0){
+
+ const g=new THREE.BoxGeometry(w,.18,d);
+ const m=new THREE.Mesh(g,roadMat);
+
+ m.position.set(x,.15,z);
+ m.rotation.y=rot;
+
+ m.receiveShadow=true;
+
+ scene.add(m);
+
+ return m;
+}
+
+road(0,0,8,190);
+road(-45,0,70,7);
+road(20,-45,80,7,-.2);
+road(5,45,75,7,.15);
+road(-10,20,7,70);
+
+
+/* =========================================================
+   TREES
+========================================================= */
+
+function tree(x,z,s=1){
+
+ const group=new THREE.Group();
+
+ const trunk=new THREE.Mesh(
+   new THREE.CylinderGeometry(.45*s,.65*s,4*s,8),
+   woodMat
+ );
+
+ trunk.position.y=2*s;
+ trunk.castShadow=true;
+
+ group.add(trunk);
+
+
+ for(let i=0;i<3;i++){
+
+   const crown=new THREE.Mesh(
+     new THREE.ConeGeometry(
+       3.2*s-i*.35*s,
+       5*s,
+       9
+     ),
+     grassDark
+   );
+
+   crown.position.y=(4+i*2)*s;
+   crown.castShadow=true;
+
+   group.add(crown);
+ }
+
+ group.position.set(x,0,z);
+
+ scene.add(group);
+}
+
+
+/* forest clusters */
+
+for(let i=0;i<85;i++){
+
+ let x=(Math.random()-.5)*210;
+ let z=(Math.random()-.5)*210;
+
+ if(Math.abs(x)<48 && Math.abs(z)<48) continue;
+ if(Math.abs(x-38)<22) continue;
+
+ tree(x,z,.65+Math.random()*.65);
+}
+
+
+/* =========================================================
+   MOUNTAINS
+========================================================= */
+
+function mountain(x,z,s){
+
+ const g=new THREE.ConeGeometry(
+   12*s,
+   35*s,
+   8
+ );
+
+ const m=new THREE.Mesh(g,stoneMat);
+
+ m.position.set(x,17*s,z);
+ m.castShadow=true;
+
+ scene.add(m);
+
+ const snow=new THREE.Mesh(
+   new THREE.ConeGeometry(4*s,10*s,8),
+   new THREE.MeshStandardMaterial({color:0xeaf7ff})
+ );
+
+ snow.position.set(x,34*s,z);
+ snow.castShadow=true;
+
+ scene.add(snow);
+}
+
+for(let i=0;i<15;i++){
+
+ mountain(
+   -105+Math.random()*210,
+   -105+Math.random()*210,
+   1+Math.random()*.7
+ );
+}
+
+
+/* =========================================================
+   BUILDING FUNCTION
+========================================================= */
+
+function building(x,z,name,color=0x6244a8,size=1){
+
+ const group=new THREE.Group();
+
+ const base=new THREE.Mesh(
+   new THREE.BoxGeometry(14*size,9*size,12*size),
+   new THREE.MeshStandardMaterial({
+     color:0xd0b894,
+     roughness:.8
+   })
+ );
+
+ base.position.y=4.5*size;
+ base.castShadow=true;
+ base.receiveShadow=true;
+
+ group.add(base);
+
+
+ const roof=new THREE.Mesh(
+   new THREE.ConeGeometry(10*size,8*size,4),
+   new THREE.MeshStandardMaterial({
+     color,
+     roughness:.65
+   })
+ );
+
+ roof.position.y=13*size;
+ roof.rotation.y=Math.PI/4;
+
+ roof.castShadow=true;
+
+ group.add(roof);
+
+
+ const door=new THREE.Mesh(
+   new THREE.BoxGeometry(2.2*size,4*size,.5),
+   woodMat
+ );
+
+ door.position.set(0,2*size,6.1*size);
+
+ group.add(door);
+
+
+ for(let side of [-1,1]){
+
+   const win=new THREE.Mesh(
+     new THREE.BoxGeometry(2*size,2*size,.3),
+     new THREE.MeshStandardMaterial({
+       color:0x63dfff,
+       emissive:0x187ea0,
+       emissiveIntensity:1
+     })
+   );
+
+   win.position.set(side*4*size,5*size,6.05*size);
+
+   group.add(win);
+ }
+
+
+ group.position.set(x,0,z);
+
+ scene.add(group);
+
+
+ /* name sign */
+
+ const sign=createTextSprite(name);
+
+ sign.position.set(x,12*size,z);
+
+ scene.add(sign);
+
+
+ return group;
+}
+
+
+/* =========================================================
+   TEXT SPRITES
+========================================================= */
+
+function createTextSprite(text){
+
+ const canvas=document.createElement("canvas");
+ canvas.width=512;
+ canvas.height=128;
+
+ const ctx=canvas.getContext("2d");
+
+ ctx.fillStyle="rgba(3,12,25,.88)";
+ ctx.roundRect(10,15,492,98,20);
+ ctx.fill();
+
+ ctx.strokeStyle="#58d9ff";
+ ctx.lineWidth=4;
+ ctx.stroke();
+
+ ctx.fillStyle="#ffffff";
+ ctx.font="bold 30px Arial";
+ ctx.textAlign="center";
+ ctx.fillText(text,256,73);
+
+ const tex=new THREE.CanvasTexture(canvas);
+
+ const mat=new THREE.SpriteMaterial({
+   map:tex,
+   transparent:true
+ });
+
+ const sprite=new THREE.Sprite(mat);
+
+ sprite.scale.set(15,3.75,1);
+
+ return sprite;
+}
+
+
+/* =========================================================
+   KINGDOM LOCATIONS
+========================================================= */
+
+const locations=[];
+
+
+function addLocation(name,x,z,color,description,lessons){
+
+ const buildingObj=building(x,z,name,color,1);
+
+ const ring=new THREE.Mesh(
+   new THREE.RingGeometry(5,6,48),
+   new THREE.MeshBasicMaterial({
+     color,
+     transparent:true,
+     opacity:.8,
+     side:THREE.DoubleSide
+   })
+ );
+
+ ring.rotation.x=-Math.PI/2;
+ ring.position.set(x,.35,z);
+
+ scene.add(ring);
+
+
+ const crystal=new THREE.Mesh(
+   new THREE.OctahedronGeometry(2),
+   new THREE.MeshStandardMaterial({
+     color,
+     emissive:color,
+     emissiveIntensity:1.5,
+     metalness:.3,
+     roughness:.2
+   })
+ );
+
+ crystal.position.set(x,4,z);
+
+ crystal.castShadow=true;
+
+ scene.add(crystal);
+
+
+ locations.push({
+   name,
+   x,
+   z,
+   color,
+   description,
+   lessons,
+   building:buildingObj,
+   ring,
+   crystal
+ });
+}
+
+
+/* =========================================================
+   LEARNING LOCATIONS
+========================================================= */
+
+addLocation(
+ "NEXUS ACADEMY",
+ 0,-72,
+ 0x43bfff,
+ "Your starting academy. Learn how to plan goals and build good habits.",
+ [
+  ["Goal Setting","Learn to turn a big dream into small, achievable goals."],
+  ["Time Management","Use priorities and schedules to make better use of your time."],
+  ["Growth Mindset","Mistakes can help you improve when you learn from them."]
+ ]
+);
+
+
+addLocation(
+ "HONEY PLATEAU",
+ -55,-30,
+ 0xffc83d,
+ "A peaceful village focused on money and smart choices.",
+ [
+  ["Saving Money","Saving means keeping part of your money for future needs."],
+  ["Needs vs Wants","Needs are essential. Wants are things you would like to have."],
+  ["Smart Spending","Compare choices before spending your money."]
+ ]
+);
+
+
+addLocation(
+ "HEARTH VILLAGE",
+ -10,5,
+ 0xff6b8a,
+ "Learn everyday household and personal skills.",
+ [
+  ["Organization","Keeping things organized saves time and reduces stress."],
+  ["Laundry Basics","Sort clothes by color and follow care labels."],
+  ["Cooking Safety","Keep your workspace clean and handle kitchen equipment carefully."]
+ ]
+);
+
+
+addLocation(
+ "TECH HAVEN",
+ 48,10,
+ 0x47b8ff,
+ "A futuristic city where you learn digital skills.",
+ [
+  ["Digital Safety","Use strong passwords and never share private information unnecessarily."],
+  ["Phishing Awareness","Check senders, links and requests before clicking."],
+  ["Responsible AI","Use AI thoughtfully and check important information."]
+ ]
+);
+
+
+addLocation(
+ "STORMCALLER PEAKS",
+ 50,-55,
+ 0x9d7cff,
+ "A mountain training zone for communication and resilience.",
+ [
+  ["Communication","Listen carefully and explain your ideas clearly."],
+  ["Problem Solving","Break difficult problems into smaller steps."],
+  ["Teamwork","Good teams share ideas and help each other."]
+ ]
+);
+
+
+addLocation(
+ "FORTRESS CITADEL",
+ -55,55,
+ 0xff624c,
+ "Learn about leadership, responsibility and decision-making.",
+ [
+  ["Leadership","A good leader listens, plans and takes responsibility."],
+  ["Decision Making","Think about possible results before making important choices."],
+  ["Responsibility","Take ownership of your choices and actions."]
+ ]
+);
+
+
+/* =========================================================
+   BRIDGE
+========================================================= */
+
+const bridge=new THREE.Mesh(
+ new THREE.BoxGeometry(20,1,8),
+ woodMat
+);
+
+bridge.position.set(38,1,0);
+bridge.rotation.y=Math.PI/2;
+bridge.castShadow=true;
+
+scene.add(bridge);
+
+
+/* =========================================================
+   CHARACTER
+========================================================= */
+
+const player=new THREE.Group();
+
+scene.add(player);
+
+
+/* body */
+
+const body=new THREE.Mesh(
+ new THREE.CapsuleGeometry(1.25,2.8,8,16),
+ new THREE.MeshStandardMaterial({
+   color:0x174ea6,
+   roughness:.55
+ })
+);
+
+body.position.y=3;
+body.castShadow=true;
+
+player.add(body);
+
+
+/* cloak */
+
+const cloak=new THREE.Mesh(
+ new THREE.ConeGeometry(2.2,3.7,8),
+ new THREE.MeshStandardMaterial({
+   color:0x302080,
+   roughness:.6
+ })
+);
+
+cloak.position.set(0,2.6,-.7);
+cloak.rotation.x=Math.PI;
+
+cloak.castShadow=true;
+
+player.add(cloak);
+
+
+/* head */
+
+const head=new THREE.Mesh(
+ new THREE.SphereGeometry(1.25,24,16),
+ new THREE.MeshStandardMaterial({
+   color:0xffc58e,
+   roughness:.7
+ })
+);
+
+head.position.y=6;
+head.castShadow=true;
+
+player.add(head);
+
+
+/* hair */
+
+const hair=new THREE.Mesh(
+ new THREE.SphereGeometry(1.3,16,10,0,Math.PI*2,0,Math.PI*.55),
+ new THREE.MeshStandardMaterial({
+   color:0x25180e,
+   roughness:.8
+ })
+);
+
+hair.position.set(0,6.45,-.05);
+
+player.add(hair);
+
+
+/* arms */
+
+function limb(x,z){
+
+ const arm=new THREE.Mesh(
+   new THREE.CapsuleGeometry(.38,2,8,8),
+   new THREE.MeshStandardMaterial({
+     color:0x174ea6
+   })
+ );
+
+ arm.position.set(x,3.4,z);
+ arm.rotation.z=x<0?.25:-.25;
+
+ arm.castShadow=true;
+
+ player.add(arm);
+}
+
+limb(-1.5,0);
+limb(1.5,0);
+
+
+/* legs */
+
+function leg(x){
+
+ const l=new THREE.Mesh(
+   new THREE.CapsuleGeometry(.42,2.1,8,8),
+   new THREE.MeshStandardMaterial({
+     color:0x172c54
+   })
+ );
+
+ l.position.set(x,1,0);
+ l.castShadow=true;
+
+ player.add(l);
+}
+
+leg(-.7);
+leg(.7);
+
+
+/* boots */
+
+function boot(x){
+
+ const b=new THREE.Mesh(
+   new THREE.BoxGeometry(1,1.2,1.8),
+   new THREE.MeshStandardMaterial({
+     color:0x171717
+   })
+ );
+
+ b.position.set(x,.25,.35);
+ b.castShadow=true;
+
+ player.add(b);
+}
+
+boot(-.7);
+boot(.7);
+
+
+/* player position */
+
+player.position.set(0,0,40);
+
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+let yaw=0;
+let pitch=.35;
+
+camera.position.set(0,9,55);
+
+
+/* =========================================================
+   MOVEMENT
+========================================================= */
+
+const keys={};
+
+window.addEventListener("keydown",e=>{
+ keys[e.key.toLowerCase()]=true;
+});
+
+window.addEventListener("keyup",e=>{
+ keys[e.key.toLowerCase()]=false;
+});
+
+
+let mouseDown=false;
+let lastX=0;
+let lastY=0;
+
+renderer.domElement.addEventListener("mousedown",e=>{
+ mouseDown=true;
+ lastX=e.clientX;
+ lastY=e.clientY;
+});
+
+window.addEventListener("mouseup",()=>{
+ mouseDown=false;
+});
+
+window.addEventListener("mousemove",e=>{
+
+ if(!mouseDown)return;
+
+ const dx=e.clientX-lastX;
+ const dy=e.clientY-lastY;
+
+ lastX=e.clientX;
+ lastY=e.clientY;
+
+ yaw-=dx*.004;
+ pitch-=dy*.003;
+
+ pitch=Math.max(-.05,Math.min(.9,pitch));
+});
+
+
+/* =========================================================
+   LOCATION SYSTEM
+========================================================= */
+
+let nearbyLocation=null;
 let currentLocation=null;
 
-let xp=100;
-let gems=15;
+
+function checkLocations(){
+
+ nearbyLocation=null;
+
+ let closest=999;
+
+ for(const loc of locations){
+
+   const dx=player.position.x-loc.x;
+   const dz=player.position.z-loc.z;
+
+   const d=Math.sqrt(dx*dx+dz*dz);
+
+   if(d<closest){
+
+     closest=d;
+
+     if(d<12) nearbyLocation=loc;
+   }
+ }
+
+
+ const box=document.getElementById("location");
+
+ if(nearbyLocation){
+
+   box.style.display="block";
+
+   document.getElementById("locationName").textContent=
+     nearbyLocation.name;
+
+   document.getElementById("locationDescription").textContent=
+     nearbyLocation.description;
+
+ }else{
+
+   box.style.display="none";
+ }
+}
+
+
+/* =========================================================
+   LEARNING SYSTEM
+========================================================= */
+
+function openLesson(){
+
+ if(!nearbyLocation)return;
+
+ currentLocation=nearbyLocation;
+
+ document.getElementById("learn").style.display="flex";
+
+ document.getElementById("lessonTitle").textContent=
+   currentLocation.name+" — Learning Hall";
+
+ let html="";
+
+ currentLocation.lessons.forEach((lesson,i)=>{
+
+   html+=`
+    <div class="lesson">
+      <h3>📚 ${i+1}. ${lesson[0]}</h3>
+      <p>${lesson[1]}</p>
+    </div>
+   `;
+
+ });
+
+ document.getElementById("lessonContent").innerHTML=html;
+}
+
+
+function closeLesson(){
+
+ document.getElementById("learn").style.display="none";
+}
+
+
+function completeLesson(){
+
+ xp+=100;
+ gems+=5;
+
+ level=Math.floor(xp/500)+1;
+
+ document.getElementById("xp").textContent=xp+" XP";
+ document.getElementById("gems").textContent=gems;
+ document.getElementById("level").textContent=level;
+
+ document.getElementById("questText").textContent=
+   "Excellent! You completed "+currentLocation.name+
+   ". Explore the kingdom and discover your next skill.";
+
+ closeLesson();
+}
+
+
+/* =========================================================
+   GAME STATS
+========================================================= */
+
+let xp=0;
+let gems=10;
 let level=1;
 
-let completedSkills=[];
 
-let quizIndex=0;
-let quizScore=0;
-let quizAnswered=false;
+/* =========================================================
+   MOVEMENT UPDATE
+========================================================= */
 
-let locationObjects=[];
-let labels=[];
-
-/* ==========================================================
-   SKILL DATA
-========================================================== */
-
-const skillsData={
-
-    money:{
-        icon:"💰",
-        title:"Money Management",
-        description:
-        "Learn how to make smart decisions with money, saving and spending.",
-        lesson:
-        "Money management means deciding how to use your money wisely. " +
-        "A good habit is to think before spending and separate things you NEED " +
-        "from things you simply WANT.",
-        tip:
-        "💡 Try making a simple plan: save some money, use some for necessary things, " +
-        "and think carefully before buying something unnecessary.",
-        badge:"💰",
-        questions:[
-            {
-                q:"Which is usually a NEED rather than a WANT?",
-                a:[
-                    "A new video game",
-                    "A necessary school book",
-                    "An expensive toy",
-                    "A new pair of headphones"
-                ],
-                correct:1,
-                explain:"A school book can be necessary for your education."
-            },
-            {
-                q:"What is a good money habit?",
-                a:[
-                    "Spend everything immediately",
-                    "Never think before buying",
-                    "Plan your spending",
-                    "Buy something because everyone else has it"
-                ],
-                correct:2,
-                explain:"Planning your spending helps you make responsible choices."
-            },
-            {
-                q:"What does saving mean?",
-                a:[
-                    "Using money immediately",
-                    "Keeping money for future use",
-                    "Giving away all your money",
-                    "Buying something expensive"
-                ],
-                correct:1,
-                explain:"Saving means keeping money for a future goal or need."
-            }
-        ]
-    },
-
-    problem:{
-        icon:"🧠",
-        title:"Problem Solving",
-        description:
-        "Train your brain to think clearly, analyze situations and find solutions.",
-        lesson:
-        "Problem solving is the ability to understand a problem, think of possible solutions, " +
-        "compare them and choose a sensible action. Great problem solvers don't panic when " +
-        "something goes wrong.",
-        tip:
-        "💡 When you face a problem: STOP → THINK → LIST OPTIONS → CHOOSE → TRY → LEARN.",
-        badge:"🧠",
-        questions:[
-            {
-                q:"What should you do first when facing a difficult problem?",
-                a:[
-                    "Panic",
-                    "Understand the problem",
-                    "Ignore it",
-                    "Blame someone"
-                ],
-                correct:1,
-                explain:"Understanding the problem is the first step toward solving it."
-            },
-            {
-                q:"Why should you consider multiple solutions?",
-                a:[
-                    "To waste time",
-                    "To compare different choices",
-                    "Because one solution never works",
-                    "To avoid making decisions"
-                ],
-                correct:1,
-                explain:"Different solutions can have different advantages and disadvantages."
-            },
-            {
-                q:"What can you learn from a mistake?",
-                a:[
-                    "Nothing",
-                    "Only embarrassment",
-                    "How to improve next time",
-                    "That you should never try again"
-                ],
-                correct:2,
-                explain:"Mistakes can help us understand what to improve."
-            }
-        ]
-    },
-
-    everyday:{
-        icon:"🏠",
-        title:"Everyday Life Skills",
-        description:
-        "Build independence through practical skills used in everyday life.",
-        lesson:
-        "Life skills include organizing your time, keeping your surroundings clean, " +
-        "communicating clearly, taking responsibility and making sensible everyday decisions.",
-        tip:
-        "💡 Start small. Organize your school bag, plan your day and keep track of your responsibilities.",
-        badge:"🏠",
-        questions:[
-            {
-                q:"Which is an example of responsibility?",
-                a:[
-                    "Ignoring your tasks",
-                    "Waiting for someone else to do everything",
-                    "Completing your responsibilities",
-                    "Blaming others"
-                ],
-                correct:2,
-                explain:"Taking responsibility means doing what you are responsible for."
-            },
-            {
-                q:"Why is planning your day useful?",
-                a:[
-                    "It makes time disappear",
-                    "It helps organize tasks",
-                    "It removes all responsibilities",
-                    "It means you never need rest"
-                ],
-                correct:1,
-                explain:"Planning helps you organize tasks and use your time effectively."
-            },
-            {
-                q:"Which is a useful everyday habit?",
-                a:[
-                    "Leaving everything messy",
-                    "Ignoring important tasks",
-                    "Keeping things organized",
-                    "Forgetting deadlines"
-                ],
-                correct:2,
-                explain:"Organization makes everyday tasks easier to manage."
-            }
-        ]
-    },
-
-    digital:{
-        icon:"💻",
-        title:"Digital Safety",
-        description:
-        "Learn how to stay safer and more responsible while using technology.",
-        lesson:
-        "Digital safety means making careful choices online. Protect personal information, " +
-        "use strong passwords, think before clicking unfamiliar links and ask a trusted adult " +
-        "if something online makes you uncomfortable or worried.",
-        tip:
-        "💡 Never share private information with strangers online, and don't click suspicious links.",
-        badge:"💻",
-        questions:[
-            {
-                q:"What should you do with a suspicious link?",
-                a:[
-                    "Click it immediately",
-                    "Send it to everyone",
-                    "Avoid it and check with a trusted adult",
-                    "Enter your password"
-                ],
-                correct:2,
-                explain:"Suspicious links can be unsafe. It is better to avoid them and ask for help."
-            },
-            {
-                q:"Which is better for an account password?",
-                a:[
-                    "Your name",
-                    "123456",
-                    "A unique strong password",
-                    "Your birthday"
-                ],
-                correct:2,
-                explain:"A unique strong password is harder for others to guess."
-            },
-            {
-                q:"What should you do if someone online asks for private information?",
-                a:[
-                    "Give it to them",
-                    "Ignore safety rules",
-                    "Don't share it and tell a trusted adult",
-                    "Post it publicly"
-                ],
-                correct:2,
-                explain:"Private information should be protected."
-            }
-        ]
-    },
-
-    emergency:{
-        icon:"🛡️",
-        title:"Emergency Preparedness",
-        description:
-        "Learn how to stay calm, recognize danger and respond responsibly.",
-        lesson:
-        "Emergency preparedness means knowing how to respond when something unexpected happens. " +
-        "Stay calm, move toward safety, follow instructions from responsible adults or emergency " +
-        "officials, and seek help when needed.",
-        tip:
-        "💡 Your first priority in an emergency is safety. Follow trusted instructions rather than panicking.",
-        badge:"🛡️",
-        questions:[
-            {
-                q:"What is important during an emergency?",
-                a:[
-                    "Panic",
-                    "Stay calm and follow safety instructions",
-                    "Run without thinking",
-                    "Ignore adults"
-                ],
-                correct:1,
-                explain:"Staying calm helps you follow instructions and make safer decisions."
-            },
-            {
-                q:"Who should you listen to during an emergency?",
-                a:[
-                    "Random people online",
-                    "Trusted adults and emergency officials",
-                    "Anyone shouting",
-                    "Nobody"
-                ],
-                correct:1,
-                explain:"Trusted adults and emergency officials can provide appropriate instructions."
-            },
-            {
-                q:"What is the main priority during an emergency?",
-                a:[
-                    "Taking pictures",
-                    "Finding entertainment",
-                    "Getting to safety",
-                    "Collecting objects"
-                ],
-                correct:2,
-                explain:"Safety should come first."
-            }
-        ]
-    },
-
-    teamwork:{
-        icon:"🤝",
-        title:"Teamwork & Leadership",
-        description:
-        "Learn communication, cooperation, responsibility and leadership.",
-        lesson:
-        "Good teamwork means listening, communicating respectfully, sharing responsibilities " +
-        "and helping the group work toward a common goal. Leadership isn't just giving orders — " +
-        "it also means supporting others and taking responsibility.",
-        tip:
-        "💡 Great teams listen to each other, communicate clearly and give everyone a chance to contribute.",
-        badge:"🤝",
-        questions:[
-            {
-                q:"What makes a team stronger?",
-                a:[
-                    "Everyone ignoring each other",
-                    "Clear communication",
-                    "One person doing everything",
-                    "Constant arguments"
-                ],
-                correct:1,
-                explain:"Clear communication helps people understand their roles and goals."
-            },
-            {
-                q:"What is a good leadership quality?",
-                a:[
-                    "Never listening",
-                    "Taking responsibility",
-                    "Blaming others",
-                    "Ignoring the team"
-                ],
-                correct:1,
-                explain:"Responsible leaders accept responsibility and support their team."
-            },
-            {
-                q:"What should teammates do when someone has an idea?",
-                a:[
-                    "Immediately reject it",
-                    "Listen respectfully",
-                    "Laugh at them",
-                    "Ignore them"
-                ],
-                correct:1,
-                explain:"Respectful listening helps teams consider useful ideas."
-            }
-        ]
-    },
-
-    mastery:{
-        icon:"👑",
-        title:"Life Skills Mastery",
-        description:
-        "Bring together everything you've learned and become a Life Skills Master.",
-        lesson:
-        "Life skills work together. Managing money, solving problems, staying safe online, " +
-        "communicating, organizing your time and making responsible decisions all help you become " +
-        "more independent and prepared for everyday challenges.",
-        tip:
-        "💡 The best life skill is knowing how to keep learning and improving.",
-        badge:"👑",
-        questions:[
-            {
-                q:"What is the best way to improve a life skill?",
-                a:[
-                    "Never practice",
-                    "Practice and learn from experience",
-                    "Give up immediately",
-                    "Ignore feedback"
-                ],
-                correct:1,
-                explain:"Practice and reflection help skills improve."
-            },
-            {
-                q:"Why are life skills useful?",
-                a:[
-                    "They help with everyday decisions",
-                    "They only matter in games",
-                    "They are unnecessary",
-                    "They prevent learning"
-                ],
-                correct:0,
-                explain:"Life skills help us handle everyday situations responsibly."
-            },
-            {
-                q:"Which attitude is useful when learning?",
-                a:[
-                    "I already know everything",
-                    "I can learn and improve",
-                    "I should never make mistakes",
-                    "Learning is pointless"
-                ],
-                correct:1,
-                explain:"A growth mindset helps us keep learning."
-            }
-        ]
-    }
-
-};
-
-/* ==========================================================
-   LOCATION DATA
-========================================================== */
-
-const locations=[
-    {
-        x:-28,
-        z:-10,
-        skill:"money",
-        color:0xffc928
-    },
-    {
-        x:24,
-        z:-25,
-        skill:"problem",
-        color:0x56a8ff
-    },
-    {
-        x:-3,
-        z:-1,
-        skill:"everyday",
-        color:0xff8c4a
-    },
-    {
-        x:20,
-        z:4,
-        skill:"digital",
-        color:0x46d8ff
-    },
-    {
-        x:36,
-        z:21,
-        skill:"emergency",
-        color:0xff654f
-    },
-    {
-        x:-29,
-        z:23,
-        skill:"teamwork",
-        color:0xff713d32
-    },
-    {
-        x:5,
-        z:25,
-        skill:"mastery",
-        color:0xb46cff
-    }
-];
-
-/* ==========================================================
-   INIT
-========================================================== */
-
-function init(){
-
-    clock=new THREE.Clock();
-
-    scene=new THREE.Scene();
-
-    scene.background=
-        new THREE.Color(0x071426);
-
-    scene.fog=
-        new THREE.FogExp2(
-            0x071426,
-            .012
-        );
-
-    camera=
-        new THREE.PerspectiveCamera(
-            60,
-            innerWidth/innerHeight,
-            .1,
-            500
-        );
-
-    camera.position.set(
-        0,
-        8,
-        20
-    );
-
-    renderer=
-        new THREE.WebGLRenderer({
-            antialias:true
-        });
-
-    renderer.setSize(
-        innerWidth,
-        innerHeight
-    );
-
-    renderer.setPixelRatio(
-        Math.min(devicePixelRatio,2)
-    );
-
-    renderer.shadowMap.enabled=true;
-
-    renderer.shadowMap.type=
-        THREE.PCFSoftShadowMap;
-
-    renderer.outputColorSpace=
-        THREE.SRGBColorSpace;
-
-    renderer.toneMapping=
-        THREE.ACESFilmicToneMapping;
-
-    renderer.toneMappingExposure=1.15;
-
-    document
-        .getElementById("game")
-        .appendChild(renderer.domElement);
-
-    createLights();
-    createWorld();
-    createPlayer();
-    createLocationObjects();
-
-    setupInput();
-
-    window.addEventListener(
-        "resize",
-        resize
-    );
-
-    animate();
-
-    setTimeout(()=>{
-        document
-            .getElementById("loading")
-            .style.display="none";
-    },2200);
-}
-
-/* ==========================================================
-   LIGHTS
-========================================================== */
-
-function createLights(){
-
-    const hemi=
-        new THREE.HemisphereLight(
-            0x9cddff,
-            0x16200f,
-            2.3
-        );
-
-    scene.add(hemi);
-
-    const sun=
-        new THREE.DirectionalLight(
-            0xffe5b0,
-            3
-        );
-
-    sun.position.set(
-        -40,
-        70,
-        -30
-    );
-
-    sun.castShadow=true;
-
-    sun.shadow.mapSize.width=2048;
-    sun.shadow.mapSize.height=2048;
-
-    sun.shadow.camera.left=-80;
-    sun.shadow.camera.right=80;
-    sun.shadow.camera.top=80;
-    sun.shadow.camera.bottom=-80;
-
-    scene.add(sun);
-}
-
-/* ==========================================================
-   WORLD
-========================================================== */
-
-function createWorld(){
-
-    const loader=
-        new THREE.TextureLoader();
-
-    const texture=
-        loader.load(
-            "map.png"
-        );
-
-    texture.colorSpace=
-        THREE.SRGBColorSpace;
-
-    const geo=
-        new THREE.PlaneGeometry(
-            110,
-            85
-        );
-
-    const mat=
-        new THREE.MeshStandardMaterial({
-            map:texture,
-            roughness:.9
-        });
-
-    const terrain=
-        new THREE.Mesh(
-            geo,
-            mat
-        );
-
-    terrain.rotation.x=
-        -Math.PI/2;
-
-    terrain.receiveShadow=true;
-
-    scene.add(terrain);
-
-    createPaths();
-    createTrees();
-    createWater();
-}
-
-/* ==========================================================
-   PATHS
-========================================================== */
-
-function createPaths(){
-
-    const paths=[
-        [[-30,-10],[-3,-1],[5,25]],
-        [[-3,-1],[20,4],[24,-25]],
-        [[-3,-1],[-29,23]],
-        [[20,4],[36,21]]
-    ];
-
-    paths.forEach(path=>{
-
-        for(let i=0;i<path.length-1;i++){
-
-            const a=path[i];
-            const b=path[i+1];
-
-            const dx=b[0]-a[0];
-            const dz=b[1]-a[1];
-
-            const length=
-                Math.sqrt(
-                    dx*dx+dz*dz
-                );
-
-            const geo=
-                new THREE.BoxGeometry(
-                    4,
-                    .08,
-                    length
-                );
-
-            const mat=
-                new THREE.MeshStandardMaterial({
-                    color:0x705a42
-                });
-
-            const road=
-                new THREE.Mesh(
-                    geo,
-                    mat
-                );
-
-            road.position.set(
-                (a[0]+b[0])/2,
-                .05,
-                (a[1]+b[1])/2
-            );
-
-            road.rotation.y=
-                Math.atan2(dx,dz);
-
-            scene.add(road);
-        }
-    });
-}
-
-/* ==========================================================
-   TREES
-========================================================== */
-
-function createTrees(){
-
-    for(let i=0;i<150;i++){
-
-        const x=
-            (Math.random()-.5)*95;
-
-        const z=
-            (Math.random()-.5)*68;
-
-        if(
-            Math.abs(x)<7 &&
-            Math.abs(z)<10
-        ) continue;
-
-        const group=
-            new THREE.Group();
-
-        const trunk=
-            new THREE.Mesh(
-                new THREE.CylinderGeometry(
-                    .15,.25,1.4,8
-                ),
-                new THREE.MeshStandardMaterial({
-                    color:0x573b25
-                })
-            );
-
-        trunk.position.y=.7;
-
-        const crown=
-            new THREE.Mesh(
-                new THREE.SphereGeometry(
-                    1.15,
-                    8,
-                    8
-                ),
-                new THREE.MeshStandardMaterial({
-                    color:0x1d6b3b
-                })
-            );
-
-        crown.position.y=1.9;
-
-        group.add(
-            trunk,
-            crown
-        );
-
-        group.position.set(
-            x,
-            0,
-            z
-        );
-
-        const scale=
-            .65+Math.random()*.8;
-
-        group.scale.setScalar(scale);
-
-        scene.add(group);
-    }
-}
-
-/* ==========================================================
-   WATER
-========================================================== */
-
-function createWater(){
-
-    const water=
-        new THREE.Mesh(
-            new THREE.PlaneGeometry(
-                40,
-                30
-            ),
-            new THREE.MeshPhysicalMaterial({
-                color:0x087da8,
-                roughness:.2,
-                transparent:true,
-                opacity:.8
-            })
-        );
-
-    water.rotation.x=
-        -Math.PI/2;
-
-    water.position.set(
-        43,
-        .12,
-        5
-    );
-
-    scene.add(water);
-}
-
-/* ==========================================================
-   PLAYER
-========================================================== */
-
-function createPlayer(){
-
-    player=
-        new THREE.Group();
-
-    const body=
-        new THREE.Mesh(
-            new THREE.CapsuleGeometry(
-                .55,
-                1.5,
-                8,
-                16
-            ),
-            new THREE.MeshStandardMaterial({
-                color:0x1d72c7
-            })
-        );
-
-    body.position.y=1.3;
-
-    body.castShadow=true;
-
-    const head=
-        new THREE.Mesh(
-            new THREE.SphereGeometry(
-                .48,
-                20,
-                16
-            ),
-            new THREE.MeshStandardMaterial({
-                color:0xf0bc87
-            })
-        );
-
-    head.position.y=2.5;
-
-    head.castShadow=true;
-
-    player.add(
-        body,
-        head
-    );
-
-    player.position.set(
-        0,
-        0,
-        12
-    );
-
-    scene.add(player);
-}
-
-/* ==========================================================
-   BUILDINGS + PORTALS
-========================================================== */
-
-function createLocationObjects(){
-
-    locations.forEach(data=>{
-
-        const group=
-            new THREE.Group();
-
-        const body=
-            new THREE.Mesh(
-                new THREE.BoxGeometry(
-                    5,
-                    4,
-                    5
-                ),
-                new THREE.MeshStandardMaterial({
-                    color:0x334154
-                })
-            );
-
-        body.position.y=2;
-
-        body.castShadow=true;
-
-        const roof=
-            new THREE.Mesh(
-                new THREE.ConeGeometry(
-                    4,
-                    3.5,
-                    4
-                ),
-                new THREE.MeshStandardMaterial({
-                    color:data.color
-                })
-            );
-
-        roof.position.y=5.6;
-        roof.rotation.y=Math.PI/4;
-
-        roof.castShadow=true;
-
-        const door=
-            new THREE.Mesh(
-                new THREE.BoxGeometry(
-                    1.2,
-                    2,
-                    .15
-                ),
-                new THREE.MeshStandardMaterial({
-                    color:0x101827
-                })
-            );
-
-        door.position.set(
-            0,
-            1,
-            2.55
-        );
-
-        group.add(
-            body,
-            roof,
-            door
-        );
-
-        group.position.set(
-            data.x,
-            0,
-            data.z
-        );
-
-        scene.add(group);
-
-        /* Portal */
-
-        const ring=
-            new THREE.Mesh(
-                new THREE.TorusGeometry(
-                    2.8,
-                    .16,
-                    12,
-                    40
-                ),
-                new THREE.MeshStandardMaterial({
-                    color:data.color,
-                    emissive:data.color,
-                    emissiveIntensity:2
-                })
-            );
-
-        ring.rotation.x=
-            Math.PI/2;
-
-        ring.position.set(
-            data.x,
-            .35,
-            data.z
-        );
-
-        scene.add(ring);
-
-        const crystal=
-            new THREE.Mesh(
-                new THREE.OctahedronGeometry(
-                    .65
-                ),
-                new THREE.MeshStandardMaterial({
-                    color:data.color,
-                    emissive:data.color,
-                    emissiveIntensity:2
-                })
-            );
-
-        crystal.position.set(
-            data.x,
-            3,
-            data.z
-        );
-
-        scene.add(crystal);
-
-        locationObjects.push({
-            data:data,
-            ring:ring,
-            crystal:crystal
-        });
-
-        /* label */
-
-        const label=
-            document.createElement("div");
-
-        label.style.position="fixed";
-        label.style.color="white";
-        label.style.padding="7px 10px";
-        label.style.borderRadius="8px";
-        label.style.background="rgba(3,10,20,.8)";
-        label.style.border=
-            "1px solid rgba(255,210,80,.5)";
-        label.style.fontSize="12px";
-        label.style.fontWeight="bold";
-        label.style.pointerEvents="none";
-
-        label.textContent=
-            skillsData[data.skill].icon+
-            " "+
-            skillsData[data.skill].title;
-
-        document.body.appendChild(label);
-
-        labels.push({
-            element:label,
-            data:data
-        });
-    });
-}
-
-/* ==========================================================
-   INPUT
-========================================================== */
-
-function setupInput(){
-
-    window.addEventListener(
-        "keydown",
-        e=>{
-
-            keys[
-                e.key.toLowerCase()
-            ]=true;
-
-            if(
-                e.key.toLowerCase()==="e" &&
-                currentLocation
-            ){
-                openLocation(
-                    currentLocation
-                );
-            }
-        }
-    );
-
-    window.addEventListener(
-        "keyup",
-        e=>{
-            keys[
-                e.key.toLowerCase()
-            ]=false;
-        }
-    );
-
-    renderer.domElement.addEventListener(
-        "click",
-        clickWorld
-    );
-
-    document
-        .getElementById("closeLocation")
-        .onclick=closeLocation;
-
-    document
-        .getElementById("startLearning")
-        .onclick=startLearning;
-
-    document
-        .getElementById("beginQuiz")
-        .onclick=startQuiz;
-
-    document
-        .getElementById("nextQuestion")
-        .onclick=nextQuestion;
-
-    document
-        .getElementById("finishLearning")
-        .onclick=finishLearning;
-
-    document
-        .getElementById("closeLearning")
-        .onclick=closeLearning;
-}
-
-/* ==========================================================
-   CLICK WORLD
-========================================================== */
-
-function clickWorld(){
-
-    const mouse=
-        new THREE.Vector2(
-            (event.clientX/innerWidth)*2-1,
-            -(event.clientY/innerHeight)*2+1
-        );
-
-    const ray=
-        new THREE.Raycaster();
-
-    ray.setFromCamera(
-        mouse,
-        camera
-    );
-
-    const objects=
-        locationObjects.map(
-            x=>x.ring
-        );
-
-    const hits=
-        ray.intersectObjects(
-            objects
-        );
-
-    if(hits.length){
-
-        const hit=
-            hits[0].object;
-
-        const found=
-            locationObjects.find(
-                x=>x.ring===hit
-            );
-
-        if(found){
-            openLocation(
-                found.data
-            );
-        }
-    }
-}
-
-/* ==========================================================
-   LOCATION WINDOW
-========================================================== */
-
-function openLocation(data){
-
-    currentLocation=data;
-
-    const skill=
-        skillsData[data.skill];
-
-    document
-        .getElementById("locationIcon")
-        .textContent=skill.icon;
-
-    document
-        .getElementById("locationName")
-        .textContent=skill.title;
-
-    document
-        .getElementById("locationDescription")
-        .textContent=skill.description;
-
-    document
-        .getElementById("locationModal")
-        .classList.add("show");
-}
-
-function closeLocation(){
-
-    document
-        .getElementById("locationModal")
-        .classList.remove("show");
-}
-
-/* ==========================================================
-   START LEARNING
-========================================================== */
-
-function startLearning(){
-
-    if(!currentLocation)
-        return;
-
-    const skill=
-        skillsData[
-            currentLocation.skill
-        ];
-
-    document
-        .getElementById("locationModal")
-        .classList.remove("show");
-
-    document
-        .getElementById("learning")
-        .classList.add("show");
-
-    document
-        .getElementById("lessonArea")
-        .style.display="block";
-
-    document
-        .getElementById("quizArea")
-        .style.display="none";
-
-    document
-        .getElementById("resultArea")
-        .style.display="none";
-
-    document
-        .getElementById("lessonIcon")
-        .textContent=skill.icon;
-
-    document
-        .getElementById("lessonTitle")
-        .textContent=skill.title;
-
-    document
-        .getElementById("lessonText")
-        .textContent=skill.lesson;
-
-    document
-        .getElementById("lessonTip")
-        .textContent=skill.tip;
-
-    updateLearningProgress(25);
-}
-
-/* ==========================================================
-   START QUIZ
-========================================================== */
-
-function startQuiz(){
-
-    quizIndex=0;
-    quizScore=0;
-    quizAnswered=false;
-
-    document
-        .getElementById("lessonArea")
-        .style.display="none";
-
-    document
-        .getElementById("quizArea")
-        .style.display="block";
-
-    document
-        .getElementById("resultArea")
-        .style.display="none";
-
-    showQuestion();
-}
-
-/* ==========================================================
-   SHOW QUESTION
-========================================================== */
-
-function showQuestion(){
-
-    const skill=
-        skillsData[
-            currentLocation.skill
-        ];
-
-    const q=
-        skill.questions[
-            quizIndex
-        ];
-
-    quizAnswered=false;
-
-    document
-        .getElementById("questionNumber")
-        .textContent=
-        "Question "+
-        (quizIndex+1)+
-        " of "+
-        skill.questions.length;
-
-    document
-        .getElementById("question")
-        .textContent=q.q;
-
-    document
-        .getElementById("feedback")
-        .textContent="";
-
-    document
-        .getElementById("nextQuestion")
-        .style.display="none";
-
-    const answers=
-        document.getElementById(
-            "answers"
-        );
-
-    answers.innerHTML="";
-
-    q.a.forEach(
-        (answer,index)=>{
-
-            const button=
-                document.createElement(
-                    "button"
-                );
-
-            button.className="answer";
-
-            button.textContent=
-                String.fromCharCode(
-                    65+index
-                )+
-                ". "+
-                answer;
-
-            button.onclick=()=>{
-                answerQuestion(
-                    index,
-                    button
-                );
-            };
-
-            answers.appendChild(
-                button
-            );
-        }
-    );
-
-    updateLearningProgress(
-        25+
-        ((quizIndex)/
-        skill.questions.length)*65
-    );
-}
-
-/* ==========================================================
-   ANSWER
-========================================================== */
-
-function answerQuestion(
-    selected,
-    button
-){
-
-    if(quizAnswered)
-        return;
-
-    quizAnswered=true;
-
-    const skill=
-        skillsData[
-            currentLocation.skill
-        ];
-
-    const q=
-        skill.questions[
-            quizIndex
-        ];
-
-    const all=
-        document.querySelectorAll(
-            ".answer"
-        );
-
-    all.forEach(
-        b=>{
-            b.disabled=true;
-        }
-    );
-
-    if(
-        selected===
-        q.correct
-    ){
-
-        button.classList.add(
-            "correct"
-        );
-
-        quizScore++;
-
-        document
-            .getElementById("feedback")
-            .textContent=
-            "✅ Correct! "+
-            q.explain;
-
-        document
-            .getElementById("feedback")
-            .style.color=
-            "#45e5a0";
-
-    }else{
-
-        button.classList.add(
-            "wrong"
-        );
-
-        all[
-            q.correct
-        ].classList.add(
-            "correct"
-        );
-
-        document
-            .getElementById("feedback")
-            .textContent=
-            "💡 Not quite. "+
-            q.explain;
-
-        document
-            .getElementById("feedback")
-            .style.color=
-            "#ffbd70";
-    }
-
-    document
-        .getElementById("nextQuestion")
-        .style.display="inline-block";
-}
-
-/* ==========================================================
-   NEXT QUESTION
-========================================================== */
-
-function nextQuestion(){
-
-    const skill=
-        skillsData[
-            currentLocation.skill
-        ];
-
-    quizIndex++;
-
-    if(
-        quizIndex>=
-        skill.questions.length
-    ){
-
-        finishQuiz();
-
-    }else{
-
-        showQuestion();
-    }
-}
-
-/* ==========================================================
-   FINISH QUIZ
-========================================================== */
-
-function finishQuiz(){
-
-    const skill=
-        skillsData[
-            currentLocation.skill
-        ];
-
-    document
-        .getElementById("quizArea")
-        .style.display="none";
-
-    document
-        .getElementById("resultArea")
-        .style.display="block";
-
-    let rewardXP;
-    let rewardGems;
-
-    if(quizScore===3){
-
-        rewardXP=150;
-        rewardGems=15;
-
-    }else if(quizScore===2){
-
-        rewardXP=100;
-        rewardGems=10;
-
-    }else{
-
-        rewardXP=60;
-        rewardGems=5;
-    }
-
-    /*
-      Only reward once per skill.
-    */
-
-    if(
-        !completedSkills.includes(
-            currentLocation.skill
-        )
-    ){
-
-        completedSkills.push(
-            currentLocation.skill
-        );
-
-        xp+=rewardXP;
-        gems+=rewardGems;
-
-        updateStats();
-
-    }else{
-
-        rewardXP=0;
-        rewardGems=0;
-    }
-
-    document
-        .getElementById("xpReward")
-        .textContent=
-        "+"+rewardXP;
-
-    document
-        .getElementById("gemReward")
-        .textContent=
-        "+"+rewardGems;
-
-    document
-        .getElementById("badge")
-        .textContent=
-        skill.badge;
-
-    updateLearningProgress(100);
-
-    document
-        .getElementById("questText")
-        .innerHTML=
-        "🏆 You mastered "+
-        skill.title+
-        "! Explore another academy.";
-}
-
-/* ==========================================================
-   CLOSE LEARNING
-========================================================== */
-
-function closeLearning(){
-
-    document
-        .getElementById("learning")
-        .classList.remove("show");
-
-    currentLocation=null;
-}
-
-/* ==========================================================
-   FINISH
-========================================================== */
-
-function finishLearning(){
-
-    closeLearning();
-
-    document
-        .getElementById("questText")
-        .innerHTML=
-        "🗺️ Explore the kingdom and discover your next life skill.";
-}
-
-/* ==========================================================
-   PROGRESS
-========================================================== */
-
-function updateLearningProgress(value){
-
-    document
-        .getElementById("learningProgress")
-        .style.width=
-        value+"%";
-}
-
-/* ==========================================================
-   STATS
-========================================================== */
-
-function updateStats(){
-
-    level=
-        Math.floor(
-            xp/500
-        )+1;
-
-    document
-        .getElementById("xp")
-        .textContent=xp;
-
-    document
-        .getElementById("gems")
-        .textContent=gems;
-
-    document
-        .getElementById("level")
-        .textContent=level;
-
-    document
-        .getElementById("skills")
-        .textContent=
-        completedSkills.length+
-        "/7";
-}
-
-/* ==========================================================
-   MOVEMENT
-========================================================== */
+let walking=false;
 
 function updatePlayer(){
 
-    let x=0;
-    let z=0;
+ const speed=keys["shift"]?.28:.14;
 
-    if(keys["w"]) z-=1;
-    if(keys["s"]) z+=1;
-    if(keys["a"]) x-=1;
-    if(keys["d"]) x+=1;
+ let dx=0;
+ let dz=0;
 
-    if(x||z){
+ if(keys["w"])dz-=1;
+ if(keys["s"])dz+=1;
+ if(keys["a"])dx-=1;
+ if(keys["d"])dx+=1;
 
-        const length=
-            Math.sqrt(
-                x*x+z*z
-            );
+ walking=dx!==0||dz!==0;
 
-        x/=length;
-        z/=length;
+ if(walking){
 
-        const speed=
-            keys["shift"]
-            ? .18
-            : .10;
+   const length=Math.sqrt(dx*dx+dz*dz);
 
-        player.position.x+=
-            x*speed;
+   dx/=length;
+   dz/=length;
 
-        player.position.z+=
-            z*speed;
+   const sin=Math.sin(yaw);
+   const cos=Math.cos(yaw);
 
-        player.rotation.y=
-            Math.atan2(x,z);
-    }
+   const worldX=dx*cos-dz*sin;
+   const worldZ=dx*sin+dz*cos;
 
-    player.position.x=
-        THREE.MathUtils.clamp(
-            player.position.x,
-            -49,
-            49
-        );
+   player.position.x+=worldX*speed;
+   player.position.z+=worldZ*speed;
 
-    player.position.z=
-        THREE.MathUtils.clamp(
-            player.position.z,
-            -36,
-            36
-        );
+   player.rotation.y=Math.atan2(worldX,worldZ);
+
+
+   /* walking animation */
+
+   const t=performance.now()*.012;
+
+   player.children.forEach((obj,i)=>{
+
+     if(i===0||i===1){
+
+       obj.rotation.x=Math.sin(t)*.08;
+     }
+   });
+ }
+
+
+ /* world limits */
+
+ player.position.x=
+   THREE.MathUtils.clamp(player.position.x,-105,105);
+
+ player.position.z=
+   THREE.MathUtils.clamp(player.position.z,-105,105);
 }
 
-/* ==========================================================
-   CAMERA
-========================================================== */
+
+/* =========================================================
+   CAMERA FOLLOW
+========================================================= */
 
 function updateCamera(){
 
-    const distance=11;
+ const distance=15;
 
-    const desired=
-        new THREE.Vector3();
+ const target=new THREE.Vector3(
+   player.position.x,
+   player.position.y+5,
+   player.position.z
+ );
 
-    desired.x=
-        player.position.x-
-        Math.sin(
-            player.rotation.y
-        )*
-        distance;
+ const camX=
+   player.position.x-
+   Math.sin(yaw)*distance;
 
-    desired.y=
-        player.position.y+6;
+ const camZ=
+   player.position.z-
+   Math.cos(yaw)*distance;
 
-    desired.z=
-        player.position.z-
-        Math.cos(
-            player.rotation.y
-        )*
-        distance;
+ const camY=
+   player.position.y+8+pitch*5;
 
-    camera.position.lerp(
-        desired,
-        .08
-    );
+ camera.position.lerp(
+   new THREE.Vector3(camX,camY,camZ),
+   .08
+ );
 
-    camera.lookAt(
-        player.position.x,
-        player.position.y+1.5,
-        player.position.z
-    );
+ camera.lookAt(target);
 }
 
-/* ==========================================================
-   NEARBY
-========================================================== */
 
-function checkNearby(){
+/* =========================================================
+   CRYSTAL ANIMATION
+========================================================= */
 
-    currentLocation=null;
+function animateLocations(){
 
-    let closest=999;
+ const t=performance.now()*.002;
 
-    locations.forEach(data=>{
+ locations.forEach((loc,i)=>{
 
-        const dx=
-            player.position.x-
-            data.x;
+   loc.crystal.rotation.y=t;
+   loc.crystal.rotation.x=Math.sin(t+i)*.25;
 
-        const dz=
-            player.position.z-
-            data.z;
+   loc.crystal.position.y=
+     4+Math.sin(t*1.5+i)*.5;
 
-        const d=
-            Math.sqrt(
-                dx*dx+
-                dz*dz
-            );
-
-        if(
-            d<7 &&
-            d<closest
-        ){
-
-            closest=d;
-            currentLocation=data;
-        }
-    });
-
-    document
-        .getElementById("interact")
-        .style.display=
-        currentLocation
-        ? "block"
-        : "none";
+   loc.ring.material.opacity=
+     .5+Math.sin(t*2+i)*.25;
+ });
 }
 
-/* ==========================================================
-   ANIMATION
-========================================================== */
 
-function animateObjects(){
+/* =========================================================
+   QUEST MARKER
+========================================================= */
 
-    const t=
-        performance.now()*.002;
+function updateQuest(){
 
-    locationObjects.forEach(
-        object=>{
+ if(!nearbyLocation){
 
-            object.ring.rotation.z=
-                t*.5;
+   document.getElementById("hint").textContent=
+     "Explore the kingdom";
 
-            object.crystal.rotation.y=
-                t;
+   return;
+ }
 
-            object.crystal.position.y=
-                3+
-                Math.sin(t*2)*.35;
-        }
-    );
+ document.getElementById("hint").textContent=
+   "✨ "+nearbyLocation.name+
+   " — Start Learning";
 }
 
-/* ==========================================================
-   LABELS
-========================================================== */
 
-function updateLabels(){
+/* =========================================================
+   DAYLIGHT SKY
+========================================================= */
 
-    labels.forEach(
-        label=>{
+const skyLight=new THREE.Mesh(
+ new THREE.SphereGeometry(250,32,32),
+ new THREE.MeshBasicMaterial({
+   color:0x9edbff,
+   side:THREE.BackSide
+ })
+);
 
-            const position=
-                new THREE.Vector3(
-                    label.data.x,
-                    7,
-                    label.data.z
-                );
+scene.add(skyLight);
 
-            position.project(
-                camera
-            );
 
-            const x=
-                (position.x*.5+.5)*
-                innerWidth;
-
-            const y=
-                (-position.y*.5+.5)*
-                innerHeight;
-
-            label.element.style.left=
-                x+"px";
-
-            label.element.style.top=
-                y+"px";
-
-            label.element.style.transform=
-                "translate(-50%,-100%)";
-
-            label.element.style.opacity=
-                position.z<1
-                ? "1"
-                : "0";
-        }
-    );
-}
-
-/* ==========================================================
-   MAIN LOOP
-========================================================== */
+/* =========================================================
+   ANIMATION LOOP
+========================================================= */
 
 function animate(){
 
-    requestAnimationFrame(
-        animate
-    );
+ requestAnimationFrame(animate);
 
-    updatePlayer();
+ updatePlayer();
+ updateCamera();
+ checkLocations();
+ updateQuest();
+ animateLocations();
 
-    updateCamera();
-
-    checkNearby();
-
-    animateObjects();
-
-    updateLabels();
-
-    renderer.render(
-        scene,
-        camera
-    );
+ renderer.render(scene,camera);
 }
 
-/* ==========================================================
+animate();
+
+
+/* =========================================================
    RESIZE
-========================================================== */
+========================================================= */
 
-function resize(){
+window.addEventListener("resize",()=>{
 
-    camera.aspect=
-        innerWidth/
-        innerHeight;
+ camera.aspect=innerWidth/innerHeight;
+ camera.updateProjectionMatrix();
 
-    camera.updateProjectionMatrix();
+ renderer.setSize(innerWidth,innerHeight);
+});
 
-    renderer.setSize(
-        innerWidth,
-        innerHeight
-    );
-}
-
-/* ==========================================================
-   START GAME
-========================================================== */
-
-init();
 
 </script>
 
