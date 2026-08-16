@@ -2,402 +2,733 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SkillShareJR — Kingdom of Skills</title>
 
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#06111d;font-family:Arial,sans-serif}
-#game{position:fixed;inset:0}
-canvas{display:block}
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
 
-#hud{
- position:fixed;inset:0;pointer-events:none;color:white;
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#07111f;
+}
+
+#game{
+    position:fixed;
+    inset:0;
+}
+
+canvas{
+    display:block;
 }
 
 .panel{
- background:linear-gradient(145deg,rgba(5,20,38,.94),rgba(8,12,28,.86));
- border:1px solid #38bdf8;
- border-radius:22px;
- box-shadow:0 0 30px rgba(0,170,255,.18),inset 0 0 25px rgba(40,120,255,.05);
- backdrop-filter:blur(10px);
+    position:fixed;
+    z-index:20;
+    color:white;
+    background:rgba(5,14,29,.90);
+    border:1px solid rgba(63,193,255,.7);
+    box-shadow:0 0 30px rgba(0,160,255,.15);
+    backdrop-filter:blur(12px);
+    border-radius:22px;
 }
 
 #logo{
- position:absolute;top:25px;left:25px;padding:18px 28px;
+    top:24px;
+    left:28px;
+    padding:22px 30px;
+    width:430px;
 }
+
 #logo h1{
- margin:0;color:#55d9ff;font-size:31px;letter-spacing:2px
+    color:#50d9ff;
+    font-size:38px;
+    letter-spacing:1px;
 }
-#logo p{margin:5px 0 0;color:#b8d4e8;font-size:14px}
+
+#logo p{
+    margin-top:8px;
+    color:#b9d1e8;
+    font-size:16px;
+}
 
 #stats{
- position:absolute;top:25px;right:25px;padding:20px 28px;
- min-width:235px;border-color:#f4c542
+    top:24px;
+    right:28px;
+    width:300px;
+    padding:20px 25px;
+    border-color:#e7b52d;
 }
-.stat{font-size:16px;margin:7px 0;color:#aac0d5}
-.stat b{float:right;color:white;font-size:20px}
+
+.stat{
+    display:flex;
+    justify-content:space-between;
+    margin:9px 0;
+    font-size:20px;
+}
+
+.stat span:first-child{
+    color:#a9bdd4;
+}
 
 #quest{
- position:absolute;left:25px;bottom:25px;width:400px;padding:20px;
- border-color:#a970ff
+    bottom:25px;
+    left:28px;
+    width:480px;
+    padding:22px 27px;
+    border-color:#a867ff;
 }
-#quest h3{margin:0 0 8px;color:#d4a7ff}
-#quest p{margin:0;line-height:1.5}
+
+#quest h2{
+    color:#d39aff;
+    font-size:21px;
+    margin-bottom:12px;
+}
+
+#quest p{
+    color:#e8edf5;
+    font-size:17px;
+    line-height:1.5;
+}
 
 #controls{
- position:absolute;right:25px;bottom:25px;padding:15px 20px;
- border-color:#24628a;color:#d6ecff;line-height:1.6
+    bottom:25px;
+    right:28px;
+    width:350px;
+    padding:20px;
+}
+
+.control{
+    margin:7px 0;
+    color:#d9e8f7;
+    font-size:17px;
+}
+
+.key{
+    color:#59d9ff;
+    font-weight:bold;
 }
 
 #location{
- position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
- text-align:center;display:none;padding:22px 30px;
- border-color:#f4c542;min-width:300px
+    position:fixed;
+    z-index:30;
+    left:50%;
+    top:24px;
+    transform:translateX(-50%);
+    padding:11px 22px;
+    border-radius:30px;
+    background:rgba(4,13,27,.88);
+    border:1px solid #4fd8ff;
+    color:white;
+    font-weight:bold;
+    opacity:0;
+    transition:.25s;
 }
-#location h2{margin:0;color:#ffd75a}
-#location p{color:#d3dfeb}
 
 #learn{
- position:fixed;inset:0;background:rgba(0,5,15,.76);
- display:none;align-items:center;justify-content:center;
- pointer-events:auto;backdrop-filter:blur(8px)
+    position:fixed;
+    z-index:40;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:520px;
+    padding:30px;
+    background:rgba(5,12,25,.97);
+    border:2px solid #55d9ff;
+    border-radius:25px;
+    color:white;
+    display:none;
+    box-shadow:0 0 70px rgba(0,180,255,.35);
 }
 
-#learnBox{
- width:min(900px,90vw);max-height:85vh;overflow:auto;
- padding:30px;border:1px solid #44d9ff;
- border-radius:25px;
- background:linear-gradient(145deg,#081a30,#10152c);
- box-shadow:0 0 70px rgba(0,200,255,.25)
+#learn h2{
+    color:#59ddff;
+    font-size:30px;
+    margin-bottom:10px;
 }
-#learnBox h1{color:#5de1ff;margin-top:0}
+
+#learn .subtitle{
+    color:#9eb6cf;
+    margin-bottom:20px;
+}
+
 .lesson{
- padding:18px;margin:15px 0;border-radius:15px;
- background:rgba(255,255,255,.05);
- border-left:4px solid #52d8ff
+    background:#0c1d35;
+    border:1px solid #27486c;
+    padding:15px;
+    border-radius:14px;
+    margin:10px 0;
 }
-.lesson h3{color:#ffd866}
-.lesson p{line-height:1.6;color:#d8e8f5}
-button{
- border:0;border-radius:12px;padding:12px 22px;
- background:linear-gradient(90deg,#087cff,#7c3cff);
- color:white;font-weight:bold;cursor:pointer;font-size:15px;
+
+.lesson strong{
+    color:#fff;
 }
-button:hover{filter:brightness(1.25)}
-.close{float:right;background:#d93652}
-#hint{
- position:absolute;left:50%;bottom:25px;transform:translateX(-50%);
- padding:10px 18px;color:#d9f5ff
+
+.lesson p{
+    color:#c3d5e8;
+    margin-top:6px;
+    line-height:1.4;
+}
+
+.quiz{
+    margin-top:18px;
+    color:#fff;
+}
+
+.quiz button{
+    width:100%;
+    margin-top:8px;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid #3ed4ff;
+    background:#102d4b;
+    color:white;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.quiz button:hover{
+    background:#164c73;
+}
+
+#close{
+    margin-top:20px;
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:12px;
+    background:#38c9ff;
+    color:#00101b;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#message{
+    position:fixed;
+    z-index:50;
+    left:50%;
+    bottom:115px;
+    transform:translateX(-50%);
+    padding:12px 22px;
+    background:rgba(5,15,30,.92);
+    color:#fff;
+    border:1px solid #52d9ff;
+    border-radius:25px;
+    opacity:0;
+    transition:.3s;
+}
+
+#loading{
+    position:fixed;
+    z-index:100;
+    inset:0;
+    background:#07111f;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#55d9ff;
+    font-size:30px;
+    letter-spacing:2px;
+}
+
+.hidden{
+    display:none!important;
 }
 </style>
 </head>
 
 <body>
 
+<div id="loading">ENTERING THE KINGDOM...</div>
+
 <div id="game"></div>
 
-<div id="hud">
-
- <div id="logo" class="panel">
-   <h1>⚔ SKILLSHAREJR</h1>
-   <p>MASTER LIFE SKILLS • BUILD YOUR KINGDOM</p>
- </div>
-
- <div id="stats" class="panel">
-   <div class="stat">⭐ EXPERIENCE <b id="xp">0 XP</b></div>
-   <div class="stat">💎 GEMS <b id="gems">10</b></div>
-   <div class="stat">🏆 LEVEL <b id="level">1</b></div>
- </div>
-
- <div id="quest" class="panel">
-   <h3>📜 CURRENT QUEST</h3>
-   <p id="questText">
-     Explore the Kingdom and discover your first life skill.
-   </p>
- </div>
-
- <div id="controls" class="panel">
-   🎮 <b>WASD</b> — Move<br>
-   🖱️ <b>Mouse</b> — Look around<br>
-   ⚡ <b>SHIFT</b> — Sprint<br>
-   🏛️ Walk near a location — Learn
- </div>
-
- <div id="location" class="panel">
-   <h2 id="locationName">Location</h2>
-   <p id="locationDescription">Discover a new skill.</p>
-   <button onclick="openLesson()">📖 START LEARNING</button>
- </div>
-
- <div id="hint" class="panel">
-   Explore the kingdom
- </div>
-
+<div id="logo" class="panel">
+    <h1>⚔ SKILLSHAREJR</h1>
+    <p>MASTER LIFE SKILLS • BUILD YOUR KINGDOM</p>
 </div>
 
+<div id="stats" class="panel">
+    <div class="stat">
+        <span>⭐ EXPERIENCE</span>
+        <strong id="xp">0 XP</strong>
+    </div>
+    <div class="stat">
+        <span>💎 GEMS</span>
+        <strong id="gems">10</strong>
+    </div>
+    <div class="stat">
+        <span>🏆 LEVEL</span>
+        <strong id="level">1</strong>
+    </div>
+</div>
+
+<div id="location"></div>
+
+<div id="quest" class="panel">
+    <h2>📜 CURRENT QUEST</h2>
+    <p id="questText">
+        Explore the kingdom and discover your first life skill.
+    </p>
+</div>
+
+<div id="controls" class="panel">
+    <div class="control">🎮 <span class="key">W A S D</span> — Move</div>
+    <div class="control">🖱️ <span class="key">Mouse</span> — Look around</div>
+    <div class="control">⚡ <span class="key">SHIFT</span> — Sprint</div>
+    <div class="control">🏛️ Walk near a location — Learn</div>
+</div>
+
+<div id="message"></div>
 
 <div id="learn">
- <div id="learnBox">
+    <h2 id="learnTitle">Life Skill</h2>
+    <div class="subtitle" id="learnSubtitle"></div>
 
-   <button class="close" onclick="closeLesson()">CLOSE</button>
+    <div id="lessonContent"></div>
 
-   <h1 id="lessonTitle">Life Skills Academy</h1>
+    <div class="quiz">
+        <strong>Quick Challenge</strong>
+        <div id="quizQuestion"></div>
+        <div id="answers"></div>
+    </div>
 
-   <div id="lessonContent"></div>
-
-   <button onclick="completeLesson()">⭐ COMPLETE LESSON</button>
-
- </div>
+    <button id="close">RETURN TO KINGDOM</button>
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
 <script>
 
 /* =========================================================
-   GAME SETUP
+   SKILLSHAREJR — VERSION 5
+   FULL 3D KINGDOM
 ========================================================= */
 
-const scene = new THREE.Scene();
+let scene;
+let camera;
+let renderer;
+let clock;
 
-scene.background = new THREE.Color(0x8bc7e8);
+let player;
+let playerBody;
+let playerHead;
 
-scene.fog = new THREE.Fog(0x8bc7e8,70,260);
+let keys = {};
+let yaw = 0;
+let pitch = -0.25;
+
+let velocity = new THREE.Vector3();
+
+let xp = 0;
+let gems = 10;
+let level = 1;
+
+let locations = [];
+
+let activeLocation = null;
+
+const worldSize = 180;
 
 
-const camera = new THREE.PerspectiveCamera(
- 65,
- innerWidth/innerHeight,
- .1,
- 500
-);
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
-const renderer = new THREE.WebGLRenderer({
- antialias:true,
- powerPreference:"high-performance"
-});
+function init(){
 
-renderer.setSize(innerWidth,innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    scene = new THREE.Scene();
 
-renderer.shadowMap.enabled=true;
-renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    scene.background = new THREE.Color(0x8bcfff);
 
-renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.15;
+    scene.fog = new THREE.Fog(0x8bcfff,70,190);
 
-document.getElementById("game").appendChild(renderer.domElement);
+    camera = new THREE.PerspectiveCamera(
+        65,
+        window.innerWidth/window.innerHeight,
+        0.1,
+        500
+    );
+
+    renderer = new THREE.WebGLRenderer({
+        antialias:true,
+        powerPreference:"high-performance"
+    });
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+    renderer.setPixelRatio(
+        Math.min(window.devicePixelRatio,2)
+    );
+
+    renderer.shadowMap.enabled = true;
+
+    renderer.shadowMap.type =
+        THREE.PCFSoftShadowMap;
+
+    document
+        .getElementById("game")
+        .appendChild(renderer.domElement);
+
+    clock = new THREE.Clock();
+
+
+    createSky();
+
+    createLights();
+
+    createTerrain();
+
+    createWater();
+
+    createRoadNetwork();
+
+    createForest();
+
+    createMountains();
+
+    createLocations();
+
+    createPlayer();
+
+    createDecorations();
+
+    setupControls();
+
+    window.addEventListener(
+        "resize",
+        resize
+    );
+
+    document.getElementById("loading")
+        .classList.add("hidden");
+
+    animate();
+}
+
+
+/* =========================================================
+   SKY
+========================================================= */
+
+function createSky(){
+
+    const skyGeometry =
+        new THREE.SphereGeometry(
+            400,
+            32,
+            32
+        );
+
+    const skyMaterial =
+        new THREE.MeshBasicMaterial({
+            color:0x79c9ff,
+            side:THREE.BackSide
+        });
+
+    const sky =
+        new THREE.Mesh(
+            skyGeometry,
+            skyMaterial
+        );
+
+    scene.add(sky);
+}
 
 
 /* =========================================================
    LIGHTING
 ========================================================= */
 
-const hemi = new THREE.HemisphereLight(
- 0xbfe8ff,
- 0x27451f,
- 1.8
-);
+function createLights(){
 
-scene.add(hemi);
+    const hemi =
+        new THREE.HemisphereLight(
+            0xbfe9ff,
+            0x304020,
+            2.2
+        );
 
-
-const sun = new THREE.DirectionalLight(
- 0xfff0c2,
- 3
-);
-
-sun.position.set(-80,120,60);
-sun.castShadow=true;
-
-sun.shadow.mapSize.width=2048;
-sun.shadow.mapSize.height=2048;
-
-sun.shadow.camera.left=-100;
-sun.shadow.camera.right=100;
-sun.shadow.camera.top=100;
-sun.shadow.camera.bottom=-100;
-
-scene.add(sun);
+    scene.add(hemi);
 
 
-/* =========================================================
-   MATERIALS
-========================================================= */
+    const sun =
+        new THREE.DirectionalLight(
+            0xfff1c4,
+            3.5
+        );
 
-const grassMat=new THREE.MeshStandardMaterial({
- color:0x3d8b45,
- roughness:1
-});
+    sun.position.set(
+        50,
+        100,
+        30
+    );
 
-const grassDark=new THREE.MeshStandardMaterial({
- color:0x286536,
- roughness:1
-});
+    sun.castShadow = true;
 
-const roadMat=new THREE.MeshStandardMaterial({
- color:0x9b7754,
- roughness:.95
-});
+    sun.shadow.mapSize.width = 2048;
+    sun.shadow.mapSize.height = 2048;
 
-const stoneMat=new THREE.MeshStandardMaterial({
- color:0x69737c,
- roughness:.8
-});
+    sun.shadow.camera.left = -120;
+    sun.shadow.camera.right = 120;
+    sun.shadow.camera.top = 120;
+    sun.shadow.camera.bottom = -120;
 
-const waterMat=new THREE.MeshStandardMaterial({
- color:0x159bd0,
- transparent:true,
- opacity:.78,
- roughness:.15,
- metalness:.15
-});
-
-const woodMat=new THREE.MeshStandardMaterial({
- color:0x70452c
-});
-
-const roofMat=new THREE.MeshStandardMaterial({
- color:0x473174
-});
-
-const goldMat=new THREE.MeshStandardMaterial({
- color:0xffc83d,
- metalness:.7,
- roughness:.25
-});
+    scene.add(sun);
+}
 
 
 /* =========================================================
    TERRAIN
 ========================================================= */
 
-const terrainGeo=new THREE.PlaneGeometry(
- 240,240,70,70
-);
+function createTerrain(){
 
-const pos=terrainGeo.attributes.position;
+    const geometry =
+        new THREE.PlaneGeometry(
+            worldSize,
+            worldSize,
+            100,
+            100
+        );
 
-for(let i=0;i<pos.count;i++){
+    const pos =
+        geometry.attributes.position;
 
- let x=pos.getX(i);
- let z=pos.getY(i);
+    for(let i=0;i<pos.count;i++){
 
- let h=
-   Math.sin(x*.055)*2+
-   Math.cos(z*.045)*2+
-   Math.sin((x+z)*.035)*1.5;
+        const x = pos.getX(i);
+        const z = pos.getY(i);
 
- h+=Math.max(0,Math.abs(x)-75)*.08;
+        let y =
+            Math.sin(x*0.055)*1.5 +
+            Math.cos(z*0.065)*1.3 +
+            Math.sin((x+z)*0.035)*1.8;
 
- pos.setZ(i,h);
+        const d =
+            Math.sqrt(x*x+z*z);
+
+        if(d<35){
+            y *= 0.35;
+        }
+
+        pos.setZ(i,y);
+    }
+
+    geometry.computeVertexNormals();
+
+    const material =
+        new THREE.MeshStandardMaterial({
+            color:0x3f873f,
+            roughness:1
+        });
+
+    const terrain =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+    terrain.rotation.x =
+        -Math.PI/2;
+
+    terrain.receiveShadow = true;
+
+    scene.add(terrain);
 }
-
-terrainGeo.computeVertexNormals();
-
-const terrain=new THREE.Mesh(terrainGeo,grassMat);
-
-terrain.rotation.x=-Math.PI/2;
-terrain.receiveShadow=true;
-
-scene.add(terrain);
 
 
 /* =========================================================
-   RIVER
+   WATER
 ========================================================= */
 
-const riverGeo=new THREE.PlaneGeometry(32,210);
+function createWater(){
 
-const river=new THREE.Mesh(riverGeo,waterMat);
+    const geometry =
+        new THREE.PlaneGeometry(
+            170,
+            45
+        );
 
-river.rotation.x=-Math.PI/2;
-river.position.set(38,.3,0);
+    const material =
+        new THREE.MeshStandardMaterial({
+            color:0x167fb0,
+            roughness:.2,
+            metalness:.1,
+            transparent:true,
+            opacity:.9
+        });
 
-scene.add(river);
+    const water =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+    water.rotation.x =
+        -Math.PI/2;
+
+    water.position.set(
+        0,
+        -1,
+        -75
+    );
+
+    scene.add(water);
+}
 
 
 /* =========================================================
    ROADS
 ========================================================= */
 
-function road(x,z,w,d,rot=0){
+function createRoad(
+    x1,z1,x2,z2,width=5
+){
 
- const g=new THREE.BoxGeometry(w,.18,d);
- const m=new THREE.Mesh(g,roadMat);
+    const dx=x2-x1;
+    const dz=z2-z1;
 
- m.position.set(x,.15,z);
- m.rotation.y=rot;
+    const length =
+        Math.sqrt(dx*dx+dz*dz);
 
- m.receiveShadow=true;
+    const geometry =
+        new THREE.PlaneGeometry(
+            width,
+            length
+        );
 
- scene.add(m);
+    const material =
+        new THREE.MeshStandardMaterial({
+            color:0x8c7255,
+            roughness:1
+        });
 
- return m;
+    const road =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+    road.rotation.x =
+        -Math.PI/2;
+
+    road.position.set(
+        (x1+x2)/2,
+        .08,
+        (z1+z2)/2
+    );
+
+    road.rotation.z =
+        -Math.atan2(dz,dx)+Math.PI/2;
+
+    road.receiveShadow=true;
+
+    scene.add(road);
 }
 
-road(0,0,8,190);
-road(-45,0,70,7);
-road(20,-45,80,7,-.2);
-road(5,45,75,7,.15);
-road(-10,20,7,70);
+
+function createRoadNetwork(){
+
+    createRoad(-65,45,0,20,6);
+    createRoad(0,20,55,5,6);
+    createRoad(0,20,-35,-25,6);
+    createRoad(-35,-25,5,-58,6);
+    createRoad(5,-58,50,-45,6);
+    createRoad(0,20,0,70,6);
+}
 
 
 /* =========================================================
    TREES
 ========================================================= */
 
-function tree(x,z,s=1){
+function createTree(x,z,scale=1){
 
- const group=new THREE.Group();
+    const group =
+        new THREE.Group();
 
- const trunk=new THREE.Mesh(
-   new THREE.CylinderGeometry(.45*s,.65*s,4*s,8),
-   woodMat
- );
+    const trunk =
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                .35,
+                .5,
+                3,
+                8
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x6e4327
+            })
+        );
 
- trunk.position.y=2*s;
- trunk.castShadow=true;
+    trunk.position.y=1.5;
 
- group.add(trunk);
+    trunk.castShadow=true;
+
+    group.add(trunk);
 
 
- for(let i=0;i<3;i++){
+    const leaves =
+        new THREE.Mesh(
+            new THREE.ConeGeometry(
+                2.4,
+                5,
+                8
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x226b38,
+                roughness:1
+            })
+        );
 
-   const crown=new THREE.Mesh(
-     new THREE.ConeGeometry(
-       3.2*s-i*.35*s,
-       5*s,
-       9
-     ),
-     grassDark
-   );
+    leaves.position.y=5;
 
-   crown.position.y=(4+i*2)*s;
-   crown.castShadow=true;
+    leaves.castShadow=true;
 
-   group.add(crown);
- }
+    group.add(leaves);
 
- group.position.set(x,0,z);
+    group.position.set(x,0,z);
 
- scene.add(group);
+    group.scale.setScalar(scale);
+
+    scene.add(group);
 }
 
 
-/* forest clusters */
+function createForest(){
 
-for(let i=0;i<85;i++){
+    for(let i=0;i<120;i++){
 
- let x=(Math.random()-.5)*210;
- let z=(Math.random()-.5)*210;
+        const x =
+            (Math.random()-.5)*170;
 
- if(Math.abs(x)<48 && Math.abs(z)<48) continue;
- if(Math.abs(x-38)<22) continue;
+        const z =
+            (Math.random()-.5)*150;
 
- tree(x,z,.65+Math.random()*.65);
+        if(
+            Math.abs(x)<35 &&
+            Math.abs(z)<35
+        ){
+            continue;
+        }
+
+        createTree(
+            x,
+            z,
+            .7+Math.random()*.7
+        );
+    }
 }
 
 
@@ -405,569 +736,774 @@ for(let i=0;i<85;i++){
    MOUNTAINS
 ========================================================= */
 
-function mountain(x,z,s){
+function createMountain(x,z,size){
 
- const g=new THREE.ConeGeometry(
-   12*s,
-   35*s,
-   8
- );
+    const mountain =
+        new THREE.Mesh(
+            new THREE.ConeGeometry(
+                size,
+                size*1.8,
+                7
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x536978,
+                roughness:1
+            })
+        );
 
- const m=new THREE.Mesh(g,stoneMat);
+    mountain.position.set(
+        x,
+        size*.7,
+        z
+    );
 
- m.position.set(x,17*s,z);
- m.castShadow=true;
+    mountain.castShadow=true;
 
- scene.add(m);
-
- const snow=new THREE.Mesh(
-   new THREE.ConeGeometry(4*s,10*s,8),
-   new THREE.MeshStandardMaterial({color:0xeaf7ff})
- );
-
- snow.position.set(x,34*s,z);
- snow.castShadow=true;
-
- scene.add(snow);
-}
-
-for(let i=0;i<15;i++){
-
- mountain(
-   -105+Math.random()*210,
-   -105+Math.random()*210,
-   1+Math.random()*.7
- );
+    scene.add(mountain);
 }
 
 
-/* =========================================================
-   BUILDING FUNCTION
-========================================================= */
+function createMountains(){
 
-function building(x,z,name,color=0x6244a8,size=1){
+    for(let i=0;i<16;i++){
 
- const group=new THREE.Group();
-
- const base=new THREE.Mesh(
-   new THREE.BoxGeometry(14*size,9*size,12*size),
-   new THREE.MeshStandardMaterial({
-     color:0xd0b894,
-     roughness:.8
-   })
- );
-
- base.position.y=4.5*size;
- base.castShadow=true;
- base.receiveShadow=true;
-
- group.add(base);
-
-
- const roof=new THREE.Mesh(
-   new THREE.ConeGeometry(10*size,8*size,4),
-   new THREE.MeshStandardMaterial({
-     color,
-     roughness:.65
-   })
- );
-
- roof.position.y=13*size;
- roof.rotation.y=Math.PI/4;
-
- roof.castShadow=true;
-
- group.add(roof);
-
-
- const door=new THREE.Mesh(
-   new THREE.BoxGeometry(2.2*size,4*size,.5),
-   woodMat
- );
-
- door.position.set(0,2*size,6.1*size);
-
- group.add(door);
-
-
- for(let side of [-1,1]){
-
-   const win=new THREE.Mesh(
-     new THREE.BoxGeometry(2*size,2*size,.3),
-     new THREE.MeshStandardMaterial({
-       color:0x63dfff,
-       emissive:0x187ea0,
-       emissiveIntensity:1
-     })
-   );
-
-   win.position.set(side*4*size,5*size,6.05*size);
-
-   group.add(win);
- }
-
-
- group.position.set(x,0,z);
-
- scene.add(group);
-
-
- /* name sign */
-
- const sign=createTextSprite(name);
-
- sign.position.set(x,12*size,z);
-
- scene.add(sign);
-
-
- return group;
+        createMountain(
+            -75+i*10,
+            -65,
+            8+Math.random()*8
+        );
+    }
 }
 
 
 /* =========================================================
-   TEXT SPRITES
+   BUILDINGS
 ========================================================= */
 
-function createTextSprite(text){
+function createBuilding(
+    x,
+    z,
+    color,
+    name,
+    skill
+){
 
- const canvas=document.createElement("canvas");
- canvas.width=512;
- canvas.height=128;
+    const group =
+        new THREE.Group();
 
- const ctx=canvas.getContext("2d");
 
- ctx.fillStyle="rgba(3,12,25,.88)";
- ctx.roundRect(10,15,492,98,20);
- ctx.fill();
+    const base =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                12,
+                7,
+                10
+            ),
+            new THREE.MeshStandardMaterial({
+                color:color,
+                roughness:.8
+            })
+        );
 
- ctx.strokeStyle="#58d9ff";
- ctx.lineWidth=4;
- ctx.stroke();
+    base.position.y=3.5;
 
- ctx.fillStyle="#ffffff";
- ctx.font="bold 30px Arial";
- ctx.textAlign="center";
- ctx.fillText(text,256,73);
+    base.castShadow=true;
 
- const tex=new THREE.CanvasTexture(canvas);
+    group.add(base);
 
- const mat=new THREE.SpriteMaterial({
-   map:tex,
-   transparent:true
- });
 
- const sprite=new THREE.Sprite(mat);
+    const roof =
+        new THREE.Mesh(
+            new THREE.ConeGeometry(
+                8.5,
+                5,
+                4
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x30233f,
+                roughness:.8
+            })
+        );
 
- sprite.scale.set(15,3.75,1);
+    roof.rotation.y=Math.PI/4;
 
- return sprite;
+    roof.position.y=9.5;
+
+    roof.castShadow=true;
+
+    group.add(roof);
+
+
+    /* door */
+
+    const door =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                2.2,
+                3.5,
+                .3
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x24160e
+            })
+        );
+
+    door.position.set(
+        0,
+        1.75,
+        5.1
+    );
+
+    group.add(door);
+
+
+    /* windows */
+
+    for(const side of [-1,1]){
+
+        const windowMesh =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    2,
+                    1.7,
+                    .25
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:0x76dfff,
+                    emissive:0x164f68,
+                    emissiveIntensity:.7
+                })
+            );
+
+        windowMesh.position.set(
+            side*3.2,
+            4.2,
+            5.05
+        );
+
+        group.add(windowMesh);
+    }
+
+
+    group.position.set(
+        x,
+        0,
+        z
+    );
+
+    scene.add(group);
+
+
+    const ring =
+        new THREE.Mesh(
+            new THREE.RingGeometry(
+                5.5,
+                6,
+                40
+            ),
+            new THREE.MeshBasicMaterial({
+                color:0x40d9ff,
+                side:THREE.DoubleSide
+            })
+        );
+
+    ring.rotation.x=-Math.PI/2;
+
+    ring.position.set(
+        x,
+        .25,
+        z+8
+    );
+
+    scene.add(ring);
+
+
+    locations.push({
+        x:x,
+        z:z+8,
+        name:name,
+        skill:skill,
+        group:group
+    });
 }
 
 
 /* =========================================================
-   KINGDOM LOCATIONS
+   LOCATIONS
 ========================================================= */
 
-const locations=[];
+function createLocations(){
 
+    createBuilding(
+        -35,
+        50,
+        0x334e8c,
+        "Nexus Academy",
+        "Digital Safety"
+    );
 
-function addLocation(name,x,z,color,description,lessons){
+    createBuilding(
+        42,
+        25,
+        0x247b63,
+        "Household Village",
+        "Home Skills"
+    );
 
- const buildingObj=building(x,z,name,color,1);
+    createBuilding(
+        -40,
+        -20,
+        0x7d4d9b,
+        "Tech Haven",
+        "Technology"
+    );
 
- const ring=new THREE.Mesh(
-   new THREE.RingGeometry(5,6,48),
-   new THREE.MeshBasicMaterial({
-     color,
-     transparent:true,
-     opacity:.8,
-     side:THREE.DoubleSide
-   })
- );
+    createBuilding(
+        5,
+        -50,
+        0x9a632c,
+        "Market Plaza",
+        "Money Skills"
+    );
 
- ring.rotation.x=-Math.PI/2;
- ring.position.set(x,.35,z);
-
- scene.add(ring);
-
-
- const crystal=new THREE.Mesh(
-   new THREE.OctahedronGeometry(2),
-   new THREE.MeshStandardMaterial({
-     color,
-     emissive:color,
-     emissiveIntensity:1.5,
-     metalness:.3,
-     roughness:.2
-   })
- );
-
- crystal.position.set(x,4,z);
-
- crystal.castShadow=true;
-
- scene.add(crystal);
-
-
- locations.push({
-   name,
-   x,
-   z,
-   color,
-   description,
-   lessons,
-   building:buildingObj,
-   ring,
-   crystal
- });
+    createBuilding(
+        50,
+        -35,
+        0x82423d,
+        "Health Center",
+        "Health & First Aid"
+    );
 }
 
 
 /* =========================================================
-   LEARNING LOCATIONS
+   PLAYER
 ========================================================= */
 
-addLocation(
- "NEXUS ACADEMY",
- 0,-72,
- 0x43bfff,
- "Your starting academy. Learn how to plan goals and build good habits.",
- [
-  ["Goal Setting","Learn to turn a big dream into small, achievable goals."],
-  ["Time Management","Use priorities and schedules to make better use of your time."],
-  ["Growth Mindset","Mistakes can help you improve when you learn from them."]
- ]
-);
+function createPlayer(){
+
+    player =
+        new THREE.Group();
+
+    player.position.set(
+        0,
+        0,
+        10
+    );
 
 
-addLocation(
- "HONEY PLATEAU",
- -55,-30,
- 0xffc83d,
- "A peaceful village focused on money and smart choices.",
- [
-  ["Saving Money","Saving means keeping part of your money for future needs."],
-  ["Needs vs Wants","Needs are essential. Wants are things you would like to have."],
-  ["Smart Spending","Compare choices before spending your money."]
- ]
-);
+    /* body */
+
+    const bodyGeometry =
+        new THREE.CylinderGeometry(
+            1.2,
+            1.5,
+            3.2,
+            16
+        );
+
+    const bodyMaterial =
+        new THREE.MeshStandardMaterial({
+            color:0x1756a8,
+            roughness:.7
+        });
+
+    playerBody =
+        new THREE.Mesh(
+            bodyGeometry,
+            bodyMaterial
+        );
+
+    playerBody.position.y=2.2;
+
+    playerBody.castShadow=true;
+
+    player.add(playerBody);
 
 
-addLocation(
- "HEARTH VILLAGE",
- -10,5,
- 0xff6b8a,
- "Learn everyday household and personal skills.",
- [
-  ["Organization","Keeping things organized saves time and reduces stress."],
-  ["Laundry Basics","Sort clothes by color and follow care labels."],
-  ["Cooking Safety","Keep your workspace clean and handle kitchen equipment carefully."]
- ]
-);
+    /* head */
+
+    const headGeometry =
+        new THREE.SphereGeometry(
+            1.15,
+            24,
+            24
+        );
+
+    const headMaterial =
+        new THREE.MeshStandardMaterial({
+            color:0xf2c49b,
+            roughness:.8
+        });
+
+    playerHead =
+        new THREE.Mesh(
+            headGeometry,
+            headMaterial
+        );
+
+    playerHead.position.y=4.5;
+
+    playerHead.castShadow=true;
+
+    player.add(playerHead);
 
 
-addLocation(
- "TECH HAVEN",
- 48,10,
- 0x47b8ff,
- "A futuristic city where you learn digital skills.",
- [
-  ["Digital Safety","Use strong passwords and never share private information unnecessarily."],
-  ["Phishing Awareness","Check senders, links and requests before clicking."],
-  ["Responsible AI","Use AI thoughtfully and check important information."]
- ]
-);
+    /* hair */
+
+    const hair =
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                1.2,
+                16,
+                12,
+                0,
+                Math.PI*2,
+                0,
+                Math.PI*.55
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x241a18
+            })
+        );
+
+    hair.position.y=5;
+
+    player.add(hair);
 
 
-addLocation(
- "STORMCALLER PEAKS",
- 50,-55,
- 0x9d7cff,
- "A mountain training zone for communication and resilience.",
- [
-  ["Communication","Listen carefully and explain your ideas clearly."],
-  ["Problem Solving","Break difficult problems into smaller steps."],
-  ["Teamwork","Good teams share ideas and help each other."]
- ]
-);
+    /* cape */
+
+    const cape =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                2.8,
+                3.6,
+                .35
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x24116b,
+                roughness:.7
+            })
+        );
+
+    cape.position.set(
+        0,
+        2.3,
+        .9
+    );
+
+    player.add(cape);
 
 
-addLocation(
- "FORTRESS CITADEL",
- -55,55,
- 0xff624c,
- "Learn about leadership, responsibility and decision-making.",
- [
-  ["Leadership","A good leader listens, plans and takes responsibility."],
-  ["Decision Making","Think about possible results before making important choices."],
-  ["Responsibility","Take ownership of your choices and actions."]
- ]
-);
+    /* feet */
+
+    for(const side of [-1,1]){
+
+        const foot =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    .9,
+                    .55,
+                    1.7
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:0x111b2d
+                })
+            );
+
+        foot.position.set(
+            side*.65,
+            .3,
+            -.25
+        );
+
+        foot.castShadow=true;
+
+        player.add(foot);
+    }
+
+
+    /* player glow ring */
+
+    const ring =
+        new THREE.Mesh(
+            new THREE.RingGeometry(
+                1.7,
+                1.85,
+                32
+            ),
+            new THREE.MeshBasicMaterial({
+                color:0x65eaff,
+                side:THREE.DoubleSide
+            })
+        );
+
+    ring.rotation.x=-Math.PI/2;
+
+    ring.position.y=.08;
+
+    player.add(ring);
+
+
+    scene.add(player);
+}
 
 
 /* =========================================================
-   BRIDGE
+   DECORATIONS
 ========================================================= */
 
-const bridge=new THREE.Mesh(
- new THREE.BoxGeometry(20,1,8),
- woodMat
-);
+function createDecorations(){
 
-bridge.position.set(38,1,0);
-bridge.rotation.y=Math.PI/2;
-bridge.castShadow=true;
+    /* crystals */
 
-scene.add(bridge);
+    for(let i=0;i<18;i++){
+
+        const crystal =
+            new THREE.Mesh(
+                new THREE.OctahedronGeometry(
+                    .8+Math.random()
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:0x50eaff,
+                    emissive:0x08627d,
+                    emissiveIntensity:1
+                })
+            );
+
+        crystal.position.set(
+            (Math.random()-.5)*150,
+            1,
+            (Math.random()-.5)*120
+        );
+
+        crystal.castShadow=true;
+
+        scene.add(crystal);
+    }
+
+
+    /* central fountain */
+
+    const fountain =
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                6,
+                7,
+                1,
+                32
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x6b7180,
+                roughness:.5
+            })
+        );
+
+    fountain.position.set(
+        0,
+        .5,
+        20
+    );
+
+    fountain.castShadow=true;
+
+    scene.add(fountain);
+
+
+    const water =
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                4.5,
+                4.5,
+                .3,
+                32
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x35cfff,
+                emissive:0x084d70,
+                emissiveIntensity:.7
+            })
+        );
+
+    water.position.set(
+        0,
+        1.1,
+        20
+    );
+
+    scene.add(water);
+}
 
 
 /* =========================================================
-   CHARACTER
+   CONTROLS
 ========================================================= */
 
-const player=new THREE.Group();
+function setupControls(){
 
-scene.add(player);
+    window.addEventListener(
+        "keydown",
+        e=>{
+            keys[e.key.toLowerCase()]=true;
 
-
-/* body */
-
-const body=new THREE.Mesh(
- new THREE.CapsuleGeometry(1.25,2.8,8,16),
- new THREE.MeshStandardMaterial({
-   color:0x174ea6,
-   roughness:.55
- })
-);
-
-body.position.y=3;
-body.castShadow=true;
-
-player.add(body);
+            if(
+                e.key==="Shift"
+            ){
+                keys.shift=true;
+            }
+        }
+    );
 
 
-/* cloak */
+    window.addEventListener(
+        "keyup",
+        e=>{
+            keys[e.key.toLowerCase()]=false;
 
-const cloak=new THREE.Mesh(
- new THREE.ConeGeometry(2.2,3.7,8),
- new THREE.MeshStandardMaterial({
-   color:0x302080,
-   roughness:.6
- })
-);
-
-cloak.position.set(0,2.6,-.7);
-cloak.rotation.x=Math.PI;
-
-cloak.castShadow=true;
-
-player.add(cloak);
+            if(
+                e.key==="Shift"
+            ){
+                keys.shift=false;
+            }
+        }
+    );
 
 
-/* head */
-
-const head=new THREE.Mesh(
- new THREE.SphereGeometry(1.25,24,16),
- new THREE.MeshStandardMaterial({
-   color:0xffc58e,
-   roughness:.7
- })
-);
-
-head.position.y=6;
-head.castShadow=true;
-
-player.add(head);
+    renderer.domElement.addEventListener(
+        "click",
+        ()=>{
+            renderer.domElement.requestPointerLock();
+        }
+    );
 
 
-/* hair */
+    document.addEventListener(
+        "mousemove",
+        e=>{
 
-const hair=new THREE.Mesh(
- new THREE.SphereGeometry(1.3,16,10,0,Math.PI*2,0,Math.PI*.55),
- new THREE.MeshStandardMaterial({
-   color:0x25180e,
-   roughness:.8
- })
-);
+            if(
+                document.pointerLockElement !==
+                renderer.domElement
+            ){
+                return;
+            }
 
-hair.position.set(0,6.45,-.05);
+            yaw -= e.movementX*.0025;
 
-player.add(hair);
+            pitch -= e.movementY*.002;
+
+            pitch =
+                Math.max(
+                    -.7,
+                    Math.min(.45,pitch)
+                );
+        }
+    );
 
 
-/* arms */
-
-function limb(x,z){
-
- const arm=new THREE.Mesh(
-   new THREE.CapsuleGeometry(.38,2,8,8),
-   new THREE.MeshStandardMaterial({
-     color:0x174ea6
-   })
- );
-
- arm.position.set(x,3.4,z);
- arm.rotation.z=x<0?.25:-.25;
-
- arm.castShadow=true;
-
- player.add(arm);
+    document
+        .getElementById("close")
+        .onclick=closeLesson;
 }
-
-limb(-1.5,0);
-limb(1.5,0);
-
-
-/* legs */
-
-function leg(x){
-
- const l=new THREE.Mesh(
-   new THREE.CapsuleGeometry(.42,2.1,8,8),
-   new THREE.MeshStandardMaterial({
-     color:0x172c54
-   })
- );
-
- l.position.set(x,1,0);
- l.castShadow=true;
-
- player.add(l);
-}
-
-leg(-.7);
-leg(.7);
-
-
-/* boots */
-
-function boot(x){
-
- const b=new THREE.Mesh(
-   new THREE.BoxGeometry(1,1.2,1.8),
-   new THREE.MeshStandardMaterial({
-     color:0x171717
-   })
- );
-
- b.position.set(x,.25,.35);
- b.castShadow=true;
-
- player.add(b);
-}
-
-boot(-.7);
-boot(.7);
-
-
-/* player position */
-
-player.position.set(0,0,40);
-
-
-/* =========================================================
-   CAMERA
-========================================================= */
-
-let yaw=0;
-let pitch=.35;
-
-camera.position.set(0,9,55);
 
 
 /* =========================================================
    MOVEMENT
 ========================================================= */
 
-const keys={};
+function updatePlayer(dt){
 
-window.addEventListener("keydown",e=>{
- keys[e.key.toLowerCase()]=true;
-});
+    if(
+        document.getElementById("learn")
+            .style.display==="block"
+    ){
+        return;
+    }
 
-window.addEventListener("keyup",e=>{
- keys[e.key.toLowerCase()]=false;
-});
+    const speed =
+        keys.shift ? 15 : 8;
+
+    let forward=0;
+    let strafe=0;
+
+    if(keys.w) forward+=1;
+    if(keys.s) forward-=1;
+    if(keys.a) strafe-=1;
+    if(keys.d) strafe+=1;
 
 
-let mouseDown=false;
-let lastX=0;
-let lastY=0;
+    if(
+        forward!==0 ||
+        strafe!==0
+    ){
 
-renderer.domElement.addEventListener("mousedown",e=>{
- mouseDown=true;
- lastX=e.clientX;
- lastY=e.clientY;
-});
+        const direction =
+            new THREE.Vector3(
+                strafe,
+                0,
+                -forward
+            );
 
-window.addEventListener("mouseup",()=>{
- mouseDown=false;
-});
+        direction
+            .applyAxisAngle(
+                new THREE.Vector3(0,1,0),
+                yaw
+            );
 
-window.addEventListener("mousemove",e=>{
+        direction.normalize();
 
- if(!mouseDown)return;
+        player.position.add(
+            direction.multiplyScalar(
+                speed*dt
+            )
+        );
 
- const dx=e.clientX-lastX;
- const dy=e.clientY-lastY;
+        player.rotation.y =
+            Math.atan2(
+                direction.x,
+                direction.z
+            );
+    }
 
- lastX=e.clientX;
- lastY=e.clientY;
 
- yaw-=dx*.004;
- pitch-=dy*.003;
+    player.position.x =
+        THREE.MathUtils.clamp(
+            player.position.x,
+            -82,
+            82
+        );
 
- pitch=Math.max(-.05,Math.min(.9,pitch));
-});
+    player.position.z =
+        THREE.MathUtils.clamp(
+            player.position.z,
+            -82,
+            82
+        );
+
+
+    /* walking animation */
+
+    const moving =
+        forward!==0 ||
+        strafe!==0;
+
+    if(moving){
+
+        playerBody.position.y =
+            2.2+
+            Math.sin(
+                performance.now()*.012
+            )*.08;
+    }
+}
 
 
 /* =========================================================
-   LOCATION SYSTEM
+   CAMERA
 ========================================================= */
 
-let nearbyLocation=null;
-let currentLocation=null;
+function updateCamera(){
 
+    const distance=13;
+
+    const target =
+        new THREE.Vector3(
+            player.position.x,
+            player.position.y+3,
+            player.position.z
+        );
+
+    const cameraPosition =
+        new THREE.Vector3(
+            0,
+            6,
+            distance
+        );
+
+    cameraPosition.applyEuler(
+        new THREE.Euler(
+            pitch,
+            yaw,
+            0,
+            "YXZ"
+        )
+    );
+
+    camera.position.lerp(
+        target.clone().add(cameraPosition),
+        .08
+    );
+
+    camera.lookAt(target);
+}
+
+
+/* =========================================================
+   LOCATION DETECTION
+========================================================= */
 
 function checkLocations(){
 
- nearbyLocation=null;
+    let nearest=null;
+    let nearestDistance=999;
 
- let closest=999;
+    for(
+        const location of locations
+    ){
 
- for(const loc of locations){
+        const dx =
+            player.position.x-location.x;
 
-   const dx=player.position.x-loc.x;
-   const dz=player.position.z-loc.z;
+        const dz =
+            player.position.z-location.z;
 
-   const d=Math.sqrt(dx*dx+dz*dz);
+        const distance =
+            Math.sqrt(
+                dx*dx+dz*dz
+            );
 
-   if(d<closest){
+        if(
+            distance<nearestDistance
+        ){
+            nearestDistance=distance;
+            nearest=location;
+        }
+    }
 
-     closest=d;
 
-     if(d<12) nearbyLocation=loc;
-   }
- }
+    const locationUI =
+        document.getElementById(
+            "location"
+        );
 
 
- const box=document.getElementById("location");
+    if(
+        nearest &&
+        nearestDistance<13
+    ){
 
- if(nearbyLocation){
+        activeLocation=nearest;
 
-   box.style.display="block";
+        locationUI.textContent =
+            "🏛️ "+nearest.name+
+            " — Press E to Learn";
 
-   document.getElementById("locationName").textContent=
-     nearbyLocation.name;
+        locationUI.style.opacity=1;
 
-   document.getElementById("locationDescription").textContent=
-     nearbyLocation.description;
+        if(keys.e){
 
- }else{
+            keys.e=false;
 
-   box.style.display="none";
- }
+            openLesson(nearest);
+        }
+
+    }else{
+
+        activeLocation=null;
+
+        locationUI.style.opacity=0;
+    }
 }
 
 
@@ -975,254 +1511,399 @@ function checkLocations(){
    LEARNING SYSTEM
 ========================================================= */
 
-function openLesson(){
+const lessons={
 
- if(!nearbyLocation)return;
+    "Digital Safety":{
+        subtitle:
+            "Learn how to stay safe online.",
 
- currentLocation=nearbyLocation;
+        lessons:[
+            [
+                "🔐 Strong Passwords",
+                "Use long, unique passwords for important accounts."
+            ],
+            [
+                "🛡️ Two-Factor Authentication",
+                "Extra verification makes accounts much harder to access without permission."
+            ],
+            [
+                "🎣 Spot Phishing",
+                "Be careful with urgent messages, strange links and requests for passwords."
+            ]
+        ],
 
- document.getElementById("learn").style.display="flex";
+        question:
+            "What should you do with a suspicious link?",
 
- document.getElementById("lessonTitle").textContent=
-   currentLocation.name+" — Learning Hall";
+        answers:[
+            "Click it immediately",
+            "Ignore or verify it first",
+            "Send it to everyone"
+        ],
 
- let html="";
+        correct:1
+    },
 
- currentLocation.lessons.forEach((lesson,i)=>{
 
-   html+=`
-    <div class="lesson">
-      <h3>📚 ${i+1}. ${lesson[0]}</h3>
-      <p>${lesson[1]}</p>
-    </div>
-   `;
+    "Home Skills":{
+        subtitle:
+            "Build useful skills for everyday life.",
 
- });
+        lessons:[
+            [
+                "🧹 Organization",
+                "Keeping things organized saves time and reduces stress."
+            ],
+            [
+                "🍳 Cooking",
+                "Learn basic food preparation and safe kitchen habits."
+            ],
+            [
+                "🧺 Laundry",
+                "Sort clothes properly and follow care instructions."
+            ]
+        ],
 
- document.getElementById("lessonContent").innerHTML=html;
+        question:
+            "Why is organization useful?",
+
+        answers:[
+            "It wastes time",
+            "It helps you work efficiently",
+            "It makes everything harder"
+        ],
+
+        correct:1
+    },
+
+
+    "Technology":{
+        subtitle:
+            "Understand technology and use it responsibly.",
+
+        lessons:[
+            [
+                "💻 Digital Literacy",
+                "Understand how devices, apps and online services work."
+            ],
+            [
+                "🤖 Responsible AI",
+                "Use AI as a tool while checking important information."
+            ],
+            [
+                "🧠 Critical Thinking",
+                "Don't automatically believe everything you see online."
+            ]
+        ],
+
+        question:
+            "What should you do before trusting online information?",
+
+        answers:[
+            "Check reliable sources",
+            "Believe it instantly",
+            "Forward it immediately"
+        ],
+
+        correct:0
+    },
+
+
+    "Money Skills":{
+        subtitle:
+            "Learn the foundations of smart money decisions.",
+
+        lessons:[
+            [
+                "💰 Needs vs Wants",
+                "Needs are essential. Wants are things you would like to have."
+            ],
+            [
+                "🐷 Saving",
+                "Saving regularly can help you prepare for future goals."
+            ],
+            [
+                "📊 Budgeting",
+                "A budget helps you understand where money is going."
+            ]
+        ],
+
+        question:
+            "What is a budget?",
+
+        answers:[
+            "A plan for managing money",
+            "A video game",
+            "A password"
+        ],
+
+        correct:0
+    },
+
+
+    "Health & First Aid":{
+        subtitle:
+            "Learn basic health awareness and emergency readiness.",
+
+        lessons:[
+            [
+                "❤️ Healthy Habits",
+                "Sleep, nutrition, exercise and hygiene all contribute to wellbeing."
+            ],
+            [
+                "🧰 First Aid",
+                "Know when to seek adult or professional help during an emergency."
+            ],
+            [
+                "📞 Emergencies",
+                "Tell a trusted adult or contact appropriate emergency services when necessary."
+            ]
+        ],
+
+        question:
+            "What should you do during a serious emergency?",
+
+        answers:[
+            "Ignore it",
+            "Seek appropriate help",
+            "Hide the problem"
+        ],
+
+        correct:1
+    }
+
+};
+
+
+function openLesson(location){
+
+    const data =
+        lessons[location.skill];
+
+    if(!data)return;
+
+    document.getElementById(
+        "learnTitle"
+    ).textContent =
+        location.skill;
+
+    document.getElementById(
+        "learnSubtitle"
+    ).textContent =
+        data.subtitle;
+
+
+    let html="";
+
+    for(
+        const item of data.lessons
+    ){
+
+        html+=`
+            <div class="lesson">
+                <strong>${item[0]}</strong>
+                <p>${item[1]}</p>
+            </div>
+        `;
+    }
+
+    document.getElementById(
+        "lessonContent"
+    ).innerHTML=html;
+
+
+    document.getElementById(
+        "quizQuestion"
+    ).textContent=data.question;
+
+
+    const answers =
+        document.getElementById(
+            "answers"
+        );
+
+    answers.innerHTML="";
+
+
+    data.answers.forEach(
+        (answer,index)=>{
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.textContent=answer;
+
+            button.onclick=()=>{
+
+                if(
+                    index===data.correct
+                ){
+
+                    addXP(50);
+
+                    showMessage(
+                        "🎉 Correct! +50 XP"
+                    );
+
+                    document.getElementById(
+                        "questText"
+                    ).textContent =
+                        "Excellent! You completed a skill challenge. Explore the kingdom for another skill.";
+                }else{
+
+                    showMessage(
+                        "Try again — think carefully!"
+                    );
+                }
+            };
+
+            answers.appendChild(
+                button
+            );
+        }
+    );
+
+
+    document.getElementById(
+        "learn"
+    ).style.display="block";
 }
 
 
 function closeLesson(){
 
- document.getElementById("learn").style.display="none";
-}
-
-
-function completeLesson(){
-
- xp+=100;
- gems+=5;
-
- level=Math.floor(xp/500)+1;
-
- document.getElementById("xp").textContent=xp+" XP";
- document.getElementById("gems").textContent=gems;
- document.getElementById("level").textContent=level;
-
- document.getElementById("questText").textContent=
-   "Excellent! You completed "+currentLocation.name+
-   ". Explore the kingdom and discover your next skill.";
-
- closeLesson();
+    document.getElementById(
+        "learn"
+    ).style.display="none";
 }
 
 
 /* =========================================================
-   GAME STATS
+   XP
 ========================================================= */
 
-let xp=0;
-let gems=10;
-let level=1;
+function addXP(amount){
 
+    xp+=amount;
 
-/* =========================================================
-   MOVEMENT UPDATE
-========================================================= */
+    level =
+        Math.floor(xp/200)+1;
 
-let walking=false;
+    document.getElementById(
+        "xp"
+    ).textContent =
+        xp+" XP";
 
-function updatePlayer(){
+    document.getElementById(
+        "level"
+    ).textContent =
+        level;
 
- const speed=keys["shift"]?.28:.14;
+    gems+=5;
 
- let dx=0;
- let dz=0;
-
- if(keys["w"])dz-=1;
- if(keys["s"])dz+=1;
- if(keys["a"])dx-=1;
- if(keys["d"])dx+=1;
-
- walking=dx!==0||dz!==0;
-
- if(walking){
-
-   const length=Math.sqrt(dx*dx+dz*dz);
-
-   dx/=length;
-   dz/=length;
-
-   const sin=Math.sin(yaw);
-   const cos=Math.cos(yaw);
-
-   const worldX=dx*cos-dz*sin;
-   const worldZ=dx*sin+dz*cos;
-
-   player.position.x+=worldX*speed;
-   player.position.z+=worldZ*speed;
-
-   player.rotation.y=Math.atan2(worldX,worldZ);
-
-
-   /* walking animation */
-
-   const t=performance.now()*.012;
-
-   player.children.forEach((obj,i)=>{
-
-     if(i===0||i===1){
-
-       obj.rotation.x=Math.sin(t)*.08;
-     }
-   });
- }
-
-
- /* world limits */
-
- player.position.x=
-   THREE.MathUtils.clamp(player.position.x,-105,105);
-
- player.position.z=
-   THREE.MathUtils.clamp(player.position.z,-105,105);
+    document.getElementById(
+        "gems"
+    ).textContent =
+        gems;
 }
 
 
 /* =========================================================
-   CAMERA FOLLOW
+   MESSAGE
 ========================================================= */
 
-function updateCamera(){
+let messageTimer;
 
- const distance=15;
+function showMessage(text){
 
- const target=new THREE.Vector3(
-   player.position.x,
-   player.position.y+5,
-   player.position.z
- );
+    const element =
+        document.getElementById(
+            "message"
+        );
 
- const camX=
-   player.position.x-
-   Math.sin(yaw)*distance;
+    element.textContent=text;
 
- const camZ=
-   player.position.z-
-   Math.cos(yaw)*distance;
+    element.style.opacity=1;
 
- const camY=
-   player.position.y+8+pitch*5;
+    clearTimeout(messageTimer);
 
- camera.position.lerp(
-   new THREE.Vector3(camX,camY,camZ),
-   .08
- );
-
- camera.lookAt(target);
+    messageTimer =
+        setTimeout(
+            ()=>{
+                element.style.opacity=0;
+            },
+            2500
+        );
 }
-
-
-/* =========================================================
-   CRYSTAL ANIMATION
-========================================================= */
-
-function animateLocations(){
-
- const t=performance.now()*.002;
-
- locations.forEach((loc,i)=>{
-
-   loc.crystal.rotation.y=t;
-   loc.crystal.rotation.x=Math.sin(t+i)*.25;
-
-   loc.crystal.position.y=
-     4+Math.sin(t*1.5+i)*.5;
-
-   loc.ring.material.opacity=
-     .5+Math.sin(t*2+i)*.25;
- });
-}
-
-
-/* =========================================================
-   QUEST MARKER
-========================================================= */
-
-function updateQuest(){
-
- if(!nearbyLocation){
-
-   document.getElementById("hint").textContent=
-     "Explore the kingdom";
-
-   return;
- }
-
- document.getElementById("hint").textContent=
-   "✨ "+nearbyLocation.name+
-   " — Start Learning";
-}
-
-
-/* =========================================================
-   DAYLIGHT SKY
-========================================================= */
-
-const skyLight=new THREE.Mesh(
- new THREE.SphereGeometry(250,32,32),
- new THREE.MeshBasicMaterial({
-   color:0x9edbff,
-   side:THREE.BackSide
- })
-);
-
-scene.add(skyLight);
-
-
-/* =========================================================
-   ANIMATION LOOP
-========================================================= */
-
-function animate(){
-
- requestAnimationFrame(animate);
-
- updatePlayer();
- updateCamera();
- checkLocations();
- updateQuest();
- animateLocations();
-
- renderer.render(scene,camera);
-}
-
-animate();
 
 
 /* =========================================================
    RESIZE
 ========================================================= */
 
-window.addEventListener("resize",()=>{
+function resize(){
 
- camera.aspect=innerWidth/innerHeight;
- camera.updateProjectionMatrix();
+    camera.aspect =
+        window.innerWidth/
+        window.innerHeight;
 
- renderer.setSize(innerWidth,innerHeight);
-});
+    camera.updateProjectionMatrix();
 
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+    const dt =
+        Math.min(
+            clock.getDelta(),
+            .05
+        );
+
+    updatePlayer(dt);
+
+    updateCamera();
+
+    checkLocations();
+
+    renderer.render(
+        scene,
+        camera
+    );
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+try{
+
+    init();
+
+}catch(error){
+
+    console.error(error);
+
+    document.getElementById(
+        "loading"
+    ).innerHTML =
+        "GAME ERROR — PRESS F12 TO VIEW DETAILS";
+}
 
 </script>
 
