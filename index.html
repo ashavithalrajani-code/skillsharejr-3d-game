@@ -2,1333 +2,3117 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>SkillShareJR — Kingdom of Life Skills</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillShareJR — Hearth Village</title>
 
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07111d;font-family:Arial,sans-serif}
-canvas{display:block}
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#07111d;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+#game{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+
+canvas{
+    display:block;
+}
+
+/* LOADING */
 
 #loading{
- position:fixed;inset:0;z-index:100;
- display:flex;align-items:center;justify-content:center;
- background:radial-gradient(circle at center,#162d45,#050b13 75%);
- color:white;flex-direction:column;
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    background:
+        radial-gradient(circle at 50% 40%,#18395b 0%,#091625 42%,#030912 100%);
+    color:white;
 }
-#loading h1{font-size:42px;color:#67ddff;margin:0 0 15px}
-.loader{
- width:280px;height:8px;background:#172637;border-radius:20px;overflow:hidden
-}
-.loader div{
- height:100%;width:0;background:linear-gradient(90deg,#31b9ff,#9c6cff,#ffd85a);
- animation:load 2s forwards
-}
-@keyframes load{to{width:100%}}
 
-#start{
- position:fixed;inset:0;z-index:90;
- display:none;color:white;
- background:
- radial-gradient(circle at 75% 25%,rgba(90,150,255,.25),transparent 25%),
- linear-gradient(180deg,rgba(4,12,24,.08),rgba(3,8,16,.78)),
- url("https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2400&q=85");
- background-size:cover;background-position:center;
+.loading-title{
+    font-size:48px;
+    font-weight:900;
+    letter-spacing:3px;
+    color:#6de7ff;
+    text-shadow:0 0 30px #00bfff;
 }
-.startShade{
- position:absolute;inset:0;
- background:linear-gradient(90deg,rgba(2,8,17,.82),rgba(2,8,17,.15),rgba(2,8,17,.35))
-}
-.startContent{
- position:absolute;left:7%;top:50%;transform:translateY(-50%);
- max-width:650px
-}
-.logo{
- font-size:18px;letter-spacing:5px;color:#67dfff;font-weight:bold;
- margin-bottom:20px
-}
-.startContent h1{
- font-family:Georgia,serif;font-size:72px;line-height:.98;
- margin:0 0 18px;text-shadow:0 8px 30px #000
-}
-.startContent h1 span{color:#e6bb55}
-.startContent p{
- color:#d7e5f4;font-size:20px;line-height:1.6;
- max-width:590px
-}
-.startButton{
- margin-top:25px;padding:17px 35px;border-radius:7px;
- border:1px solid #f2c45b;background:linear-gradient(135deg,#9a681d,#e4b948);
- color:#fff;font-weight:bold;font-size:17px;cursor:pointer;
- box-shadow:0 10px 35px rgba(224,173,61,.28)
-}
-.startButton:hover{transform:translateY(-2px);filter:brightness(1.1)}
 
-#game{display:none;position:fixed;inset:0}
-
-#hud{
- position:absolute;inset:0;pointer-events:none;z-index:20
+.loading-sub{
+    margin-top:12px;
+    color:#b9cee1;
+    font-size:18px;
 }
+
+.loading-bar{
+    margin-top:30px;
+    width:360px;
+    height:8px;
+    background:#18283b;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.loading-progress{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#29d9ff,#a96cff,#ffd15c);
+    transition:width .2s;
+}
+
+/* UI */
+
+#ui{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:50;
+}
+
 .panel{
- background:linear-gradient(135deg,rgba(6,17,30,.93),rgba(8,23,39,.78));
- border:1px solid rgba(101,190,255,.55);
- box-shadow:0 12px 40px rgba(0,0,0,.38),inset 0 0 30px rgba(50,150,255,.04);
- backdrop-filter:blur(8px)
+    position:absolute;
+    background:
+        linear-gradient(145deg,
+        rgba(8,25,43,.94),
+        rgba(4,12,25,.91));
+    border:1px solid rgba(65,194,255,.6);
+    box-shadow:
+        0 0 25px rgba(0,140,255,.12),
+        inset 0 0 25px rgba(0,100,200,.05);
+    border-radius:22px;
+    backdrop-filter:blur(12px);
 }
-#brand{
- position:absolute;left:24px;top:20px;padding:16px 22px;
- border-radius:16px;color:white
+
+#logo{
+    left:32px;
+    top:28px;
+    width:465px;
+    padding:25px 30px;
 }
-#brand strong{font-size:26px;color:#65ddff;letter-spacing:1px}
-#brand small{display:block;color:#9eb8cf;margin-top:5px}
+
+.logo-main{
+    font-size:38px;
+    font-weight:900;
+    letter-spacing:1px;
+    color:#55dcff;
+    text-shadow:0 0 15px rgba(0,190,255,.5);
+}
+
+.logo-sub{
+    color:#a8bfd4;
+    font-size:18px;
+    margin-top:5px;
+}
 
 #stats{
- position:absolute;right:24px;top:20px;padding:15px 22px;
- border-radius:16px;min-width:205px;color:white
+    right:32px;
+    top:28px;
+    width:290px;
+    padding:24px 28px;
+    border-color:rgba(255,206,66,.65);
 }
-.stat{display:flex;justify-content:space-between;gap:25px;margin:7px 0}
-.stat span{color:#a9bfd3}.stat b{color:#fff}
+
+.stat{
+    display:flex;
+    justify-content:space-between;
+    margin:10px 0;
+    font-size:20px;
+    color:#d7e7f5;
+}
+
+.stat strong{
+    color:#fff;
+}
+
+.stat .xp{
+    color:#ffd85b;
+}
+
+.stat .gem{
+    color:#4ddcff;
+}
+
+.stat .level{
+    color:#ffd84f;
+}
 
 #quest{
- position:absolute;left:24px;bottom:25px;width:330px;
- padding:18px;border-radius:16px;color:white
+    left:32px;
+    bottom:35px;
+    width:480px;
+    padding:25px;
+    border-color:#ae74ff;
 }
-#questTitle{color:#d4a5ff;font-weight:bold;font-size:17px;margin-bottom:8px}
-#questText{line-height:1.45;color:#d8e6f3}
+
+.quest-title{
+    color:#ca9bff;
+    font-size:22px;
+    font-weight:800;
+    margin-bottom:10px;
+}
+
+.quest-text{
+    color:#d9e6f3;
+    font-size:18px;
+    line-height:1.5;
+}
 
 #controls{
- position:absolute;right:24px;bottom:25px;
- padding:16px 20px;border-radius:16px;color:#c8d9e9;
- line-height:1.7
+    right:32px;
+    bottom:35px;
+    width:330px;
+    padding:22px 25px;
 }
 
-#prompt{
- position:absolute;left:50%;bottom:55px;transform:translateX(-50%);
- padding:13px 24px;border-radius:30px;color:white;
- font-weight:bold;display:none
+.control{
+    color:#cfe1ef;
+    font-size:18px;
+    margin:9px 0;
+}
+
+.key{
+    color:#fff;
+    font-weight:bold;
 }
 
 #location{
- position:absolute;top:20px;left:50%;transform:translateX(-50%);
- color:#ffe39a;font-family:Georgia,serif;font-size:19px;
- text-shadow:0 2px 12px #000
+    position:absolute;
+    top:28px;
+    left:50%;
+    transform:translateX(-50%);
+    color:#ffe6a1;
+    font-family:Georgia,serif;
+    font-size:30px;
+    font-weight:bold;
+    text-shadow:0 2px 8px #000;
 }
 
-#challenge,#dialogue,#shop,#map{
- position:absolute;inset:0;z-index:50;
- display:none;align-items:center;justify-content:center;
- background:rgba(1,6,12,.68);backdrop-filter:blur(7px);
- pointer-events:auto
+/* INTERACTION */
+
+#interaction{
+    position:fixed;
+    left:50%;
+    bottom:35px;
+    transform:translateX(-50%);
+    z-index:100;
+    display:none;
+    pointer-events:none;
+    text-align:center;
 }
 
-.modal{
- width:min(720px,90vw);max-height:85vh;overflow:auto;
- border-radius:20px;padding:28px;color:white;
- background:linear-gradient(145deg,#0c2035,#091321);
- border:1px solid #5ccfff;
- box-shadow:0 25px 80px #000
+.interaction-box{
+    background:rgba(5,14,26,.93);
+    border:1px solid #64ddff;
+    box-shadow:0 0 30px rgba(0,190,255,.2);
+    padding:15px 25px;
+    border-radius:15px;
+    color:white;
+    font-size:18px;
 }
-.modal h2{margin-top:0;color:#66dfff;font-family:Georgia,serif}
-.modal p{color:#c7d9e8;line-height:1.6}
+
+.interaction-key{
+    display:inline-block;
+    padding:5px 10px;
+    margin-right:8px;
+    border-radius:7px;
+    background:#1c91c5;
+    font-weight:bold;
+}
+
+/* MODAL */
+
+#modal{
+    position:fixed;
+    inset:0;
+    z-index:200;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,5,12,.72);
+    backdrop-filter:blur(8px);
+}
+
+.modal-card{
+    width:min(850px,90vw);
+    max-height:90vh;
+    overflow:auto;
+    padding:35px;
+    border-radius:25px;
+    border:1px solid #54dfff;
+    background:
+        linear-gradient(145deg,#10263d,#071321);
+    box-shadow:
+        0 0 80px rgba(0,170,255,.25);
+    color:white;
+}
+
+.modal-title{
+    color:#6ee6ff;
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.modal-description{
+    color:#bfd1df;
+    font-size:17px;
+    line-height:1.6;
+    margin-bottom:25px;
+}
+
+.button-row{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+button{
+    border:0;
+    border-radius:12px;
+    padding:13px 20px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.primary{
+    background:linear-gradient(135deg,#25c8ff,#596cff);
+    color:white;
+}
+
+.secondary{
+    background:#18283a;
+    color:#d9e7f4;
+}
+
+/* CHALLENGE */
+
+#challenge{
+    display:none;
+}
+
+.challenge-progress{
+    width:100%;
+    height:9px;
+    background:#172536;
+    border-radius:10px;
+    overflow:hidden;
+    margin:18px 0;
+}
+
+.challenge-fill{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#30d9ff,#9a65ff);
+}
+
 .question{
- padding:18px;background:#10283d;border-radius:12px;
- border:1px solid #234b67;margin:15px 0
+    font-size:24px;
+    line-height:1.4;
+    margin:20px 0;
 }
+
+.answers{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
 .answer{
- display:block;width:100%;margin:9px 0;padding:13px;
- border-radius:9px;border:1px solid #35566e;
- background:#0b1b2b;color:#dcecff;text-align:left;cursor:pointer
-}
-.answer:hover{background:#173d59}
-.close{
- padding:11px 18px;border:0;border-radius:8px;
- background:#34516b;color:white;cursor:pointer
-}
-.good{color:#72ef9f}.bad{color:#ff8585}
-
-.shopItems{
- display:grid;grid-template-columns:repeat(3,1fr);gap:15px
-}
-.item{
- padding:18px;border-radius:12px;background:#0c2237;
- border:1px solid #2c5472;text-align:center
-}
-.item button{
- padding:9px 15px;border:0;border-radius:7px;
- background:#d5a83c;color:#101722;cursor:pointer
+    background:#102235;
+    border:1px solid #31526c;
+    color:white;
+    padding:18px;
+    text-align:left;
+    border-radius:14px;
 }
 
-#map .modal{width:min(900px,94vw)}
-.mapWorld{
- height:430px;border-radius:15px;overflow:hidden;
- position:relative;
- background:
- radial-gradient(circle at 72% 20%,#58a4da 0 5%,transparent 6%),
- linear-gradient(135deg,#2f683a,#527e3c 35%,#356a46 60%,#26708b 61%,#194a68)
+.answer:hover{
+    background:#173650;
 }
-.mapCastle{
- position:absolute;left:43%;top:17%;font-size:45px
+
+.correct{
+    background:#155c45 !important;
+    border-color:#4effbb !important;
 }
-.mapLabel{
- position:absolute;padding:7px 11px;background:rgba(4,14,22,.82);
- color:white;border:1px solid #d8ae4c;border-radius:8px;font-size:12px
+
+.wrong{
+    background:#632f3a !important;
+    border-color:#ff7187 !important;
 }
-.m1{left:10%;top:55%}.m2{left:42%;top:8%}.m3{left:68%;top:55%}
-.m4{left:75%;top:20%}.m5{left:17%;top:20%}
+
+#mapModal .modal-card{
+    width:min(1050px,94vw);
+}
+
+.map{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    overflow:hidden;
+    border-radius:18px;
+    background:
+        radial-gradient(circle at 20% 25%,#508a4a 0 9%,transparent 10%),
+        radial-gradient(circle at 75% 30%,#477e46 0 12%,transparent 13%),
+        linear-gradient(135deg,#315d3d,#517e48 50%,#244f62);
+}
+
+.map-road{
+    position:absolute;
+    background:#b3976d;
+    border-radius:100px;
+    transform:rotate(-25deg);
+    width:80%;
+    height:45px;
+    left:10%;
+    top:50%;
+}
+
+.map-location{
+    position:absolute;
+    padding:10px 14px;
+    background:#091726dd;
+    color:white;
+    border:1px solid #53dfff;
+    border-radius:12px;
+    font-weight:bold;
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+    #logo{
+        width:300px;
+        padding:15px;
+    }
+
+    .logo-main{
+        font-size:25px;
+    }
+
+    .logo-sub{
+        font-size:13px;
+    }
+
+    #stats{
+        right:15px;
+        top:15px;
+        width:190px;
+        padding:12px;
+    }
+
+    .stat{
+        font-size:14px;
+    }
+
+    #quest{
+        left:15px;
+        bottom:15px;
+        width:300px;
+    }
+
+    #controls{
+        display:none;
+    }
+
+    #location{
+        font-size:20px;
+    }
+}
 </style>
 </head>
 
 <body>
 
 <div id="loading">
- <h1>SKILLSHAREJR</h1>
- <div class="loader"><div></div></div>
- <p>Building the Kingdom...</p>
-</div>
-
-<div id="start">
- <div class="startShade"></div>
- <div class="startContent">
-  <div class="logo">✦ SKILLSHAREJR • KINGDOM OF LIFE SKILLS</div>
-  <h1>Master Life Skills.<br><span>Save a Kingdom.</span></h1>
-  <p>
-   Explore a living fantasy kingdom, meet its people, discover useful skills,
-   solve challenges and build your own path as an adventurer.
-  </p>
-  <button class="startButton" id="startBtn">START YOUR ADVENTURE →</button>
- </div>
+    <div class="loading-title">SKILLSHAREJR</div>
+    <div class="loading-sub">Loading Hearth Village...</div>
+    <div class="loading-bar">
+        <div class="loading-progress" id="loadingProgress"></div>
+    </div>
 </div>
 
 <div id="game"></div>
 
-<div id="hud">
+<div id="ui">
 
- <div id="brand" class="panel">
-  <strong>⚔ SKILLSHAREJR</strong>
-  <small>MASTER LIFE SKILLS • BUILD YOUR KINGDOM</small>
- </div>
+    <div id="logo" class="panel">
+        <div class="logo-main">⚔ SKILLSHAREJR</div>
+        <div class="logo-sub">MASTER LIFE SKILLS • BUILD YOUR KINGDOM</div>
+    </div>
 
- <div id="stats" class="panel">
-  <div class="stat"><span>⭐ Experience</span><b id="xp">0 XP</b></div>
-  <div class="stat"><span>💎 Gems</span><b id="gems">15</b></div>
-  <div class="stat"><span>🏆 Level</span><b id="level">1</b></div>
- </div>
+    <div id="location">HEARTH VILLAGE</div>
 
- <div id="location">HEARTH VILLAGE</div>
+    <div id="stats" class="panel">
+        <div class="stat">
+            <span>⭐ Experience</span>
+            <strong class="xp" id="xp">0 XP</strong>
+        </div>
+        <div class="stat">
+            <span>💎 Gems</span>
+            <strong class="gem" id="gems">15</strong>
+        </div>
+        <div class="stat">
+            <span>🏆 Level</span>
+            <strong class="level" id="level">1</strong>
+        </div>
+    </div>
 
- <div id="quest" class="panel">
-  <div id="questTitle">📜 CURRENT QUEST</div>
-  <div id="questText">
-   Explore Hearth Village and find someone who can teach you your first life skill.
-  </div>
- </div>
+    <div id="quest" class="panel">
+        <div class="quest-title">📜 CURRENT QUEST</div>
+        <div class="quest-text" id="questText">
+            Explore Hearth Village and find someone who can teach you your first life skill.
+        </div>
+    </div>
 
- <div id="controls" class="panel">
-  🎮 <b>WASD</b> — Move<br>
-  🖱 <b>Mouse</b> — Look around<br>
-  ⚡ <b>SHIFT</b> — Run<br>
-  🟡 <b>E</b> — Interact<br>
-  🗺 <b>M</b> — World Map<br>
-  ⎋ <b>ESC</b> — Close
- </div>
+    <div id="controls" class="panel">
+        <div class="control">🎮 <span class="key">WASD</span> — Move</div>
+        <div class="control">🖱️ <span class="key">Mouse</span> — Look around</div>
+        <div class="control">⚡ <span class="key">SHIFT</span> — Run</div>
+        <div class="control">🟡 <span class="key">E</span> — Interact</div>
+        <div class="control">🗺️ <span class="key">M</span> — World Map</div>
+        <div class="control">⎋ <span class="key">ESC</span> — Close</div>
+    </div>
 
- <div id="prompt" class="panel">Press E to interact</div>
 </div>
 
-<div id="dialogue">
- <div class="modal">
-  <h2 id="dialogueName">Traveller</h2>
-  <p id="dialogueText"></p>
-  <button class="close" onclick="closeAll()">Continue</button>
- </div>
+<div id="interaction">
+    <div class="interaction-box">
+        <span class="interaction-key">E</span>
+        <span id="interactionText">Interact</span>
+    </div>
 </div>
 
-<div id="shop">
- <div class="modal">
-  <h2 id="shopTitle">Merchant Shop</h2>
-  <p id="shopDescription">Useful items for your adventure.</p>
-  <div class="shopItems">
-   <div class="item">
-    <div style="font-size:40px">🎒</div>
-    <h3>Adventure Pack</h3>
-    <p>Increase your kingdom supplies.</p>
-    <button onclick="buyItem('Adventure Pack',5)">5 💎</button>
-   </div>
-   <div class="item">
-    <div style="font-size:40px">🧭</div>
-    <h3>Explorer Compass</h3>
-    <p>Reveals nearby locations.</p>
-    <button onclick="buyItem('Explorer Compass',7)">7 💎</button>
-   </div>
-   <div class="item">
-    <div style="font-size:40px">📖</div>
-    <h3>Skill Journal</h3>
-    <p>Record what you learn.</p>
-    <button onclick="buyItem('Skill Journal',3)">3 💎</button>
-   </div>
-  </div>
-  <br>
-  <button class="close" onclick="closeAll()">Leave Shop</button>
- </div>
+<div id="modal">
+
+    <div class="modal-card" id="npcModal">
+
+        <div class="modal-title" id="modalTitle">
+            Welcome, traveller
+        </div>
+
+        <div class="modal-description" id="modalDescription">
+            Welcome to Hearth Village.
+        </div>
+
+        <div class="button-row">
+            <button class="primary" id="startChallenge">
+                Start Challenge
+            </button>
+
+            <button class="secondary" id="closeModal">
+                Leave
+            </button>
+        </div>
+
+    </div>
+
+    <div class="modal-card" id="challenge">
+
+        <div class="modal-title">
+            🧠 Life Skill Challenge
+        </div>
+
+        <div class="modal-description">
+            Think carefully and choose the best answer.
+        </div>
+
+        <div class="challenge-progress">
+            <div class="challenge-fill" id="challengeFill"></div>
+        </div>
+
+        <div id="questionArea"></div>
+
+    </div>
+
 </div>
 
-<div id="challenge">
- <div class="modal">
-  <h2 id="challengeTitle">Life Skill Challenge</h2>
-  <p id="challengeIntro"></p>
-  <div id="challengeContent"></div>
-  <button class="close" onclick="closeAll()">Leave Challenge</button>
- </div>
+<div id="mapModal" style="
+position:fixed;
+inset:0;
+z-index:300;
+display:none;
+align-items:center;
+justify-content:center;
+background:rgba(0,5,12,.78);
+backdrop-filter:blur(8px);
+">
+
+    <div class="modal-card">
+
+        <div class="modal-title">🗺️ KINGDOM MAP</div>
+
+        <div class="modal-description">
+            Explore the kingdom and discover new skills.
+        </div>
+
+        <div class="map">
+
+            <div class="map-road"></div>
+
+            <div class="map-location" style="left:8%;top:15%;">
+                🏘️ Hearth Village
+            </div>
+
+            <div class="map-location" style="left:43%;top:20%;">
+                🏰 Nexus Academy
+            </div>
+
+            <div class="map-location" style="right:8%;top:15%;">
+                🔮 Wizard's Tower
+            </div>
+
+            <div class="map-location" style="left:35%;bottom:15%;">
+                🌲 Forest
+            </div>
+
+            <div class="map-location" style="right:10%;bottom:18%;">
+                🌊 Crystal Lake
+            </div>
+
+        </div>
+
+        <br>
+
+        <button class="secondary" onclick="closeMap()">
+            Close Map
+        </button>
+
+    </div>
+
 </div>
 
-<div id="map">
- <div class="modal">
-  <h2>🗺 Kingdom Map</h2>
-  <div class="mapWorld">
-   <div class="mapCastle">🏰</div>
-   <div class="mapLabel m1">1 • Hearth Village</div>
-   <div class="mapLabel m2">2 • Nexus Academy</div>
-   <div class="mapLabel m3">3 • Crystal Harbor</div>
-   <div class="mapLabel m4">4 • Wizard's Tower</div>
-   <div class="mapLabel m5">5 • Mountain Pass</div>
-  </div>
-  <br>
-  <button class="close" onclick="closeAll()">Close Map</button>
- </div>
-</div>
 
-<script type="module">
+<!-- Stable non-module Three.js -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
-import * as THREE from
-"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+<script>
 
-let scene,camera,renderer,clock;
+"use strict";
+
+/* =========================================================
+   SKILLSHAREJR VERSION 19
+   STABLE 3D WORLD
+========================================================= */
+
+let scene;
+let camera;
+let renderer;
+let clock;
+
 let player;
-let yaw=0;
-let pitch=-0.18;
-let keys={};
-let velocity=new THREE.Vector3();
-let nearby=null;
-let xp=0;
-let gems=15;
-let level=1;
-let npcs=[];
-let colliders=[];
-let trees=[];
-let water;
-let gameStarted=false;
+let playerParts = {};
 
-const $=id=>document.getElementById(id);
+let keys = {};
+let yaw = 0;
+let pitch = 0;
 
-const world={
- width:180,
- depth:180
-};
+let canLook = false;
 
-function mat(color,rough=.75,metal=0){
- return new THREE.MeshStandardMaterial({
-  color,
-  roughness:rough,
-  metalness:metal
- });
+let xp = 0;
+let gems = 15;
+let level = 1;
+
+let nearestNPC = null;
+
+const colliders = [];
+
+const npcs = [];
+
+const trees = [];
+
+const worldSize = 320;
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+const progress = document.getElementById("loadingProgress");
+
+function setProgress(value){
+    progress.style.width = value + "%";
 }
 
-function box(w,h,d,color,x,y,z,rot=0){
- const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(color));
- m.position.set(x,y,z);
- m.rotation.y=rot;
- m.castShadow=true;
- m.receiveShadow=true;
- scene.add(m);
- return m;
-}
 
-function cyl(r,h,color,x,y,z,segments=16){
- const m=new THREE.Mesh(
-  new THREE.CylinderGeometry(r,r,h,segments),
-  mat(color)
- );
- m.position.set(x,y,z);
- m.castShadow=true;
- m.receiveShadow=true;
- scene.add(m);
- return m;
-}
-
-function sphere(r,color,x,y,z){
- const m=new THREE.Mesh(
-  new THREE.SphereGeometry(r,20,16),
-  mat(color,.65)
- );
- m.position.set(x,y,z);
- m.castShadow=true;
- m.receiveShadow=true;
- scene.add(m);
- return m;
-}
-
-function makeTree(x,z,scale=1){
- const group=new THREE.Group();
-
- const trunk=new THREE.Mesh(
-  new THREE.CylinderGeometry(.32*scale,.48*scale,3*scale,9),
-  mat(0x65452e)
- );
- trunk.position.y=1.5*scale;
- trunk.castShadow=true;
- group.add(trunk);
-
- for(let i=0;i<4;i++){
-  const crown=new THREE.Mesh(
-   new THREE.IcosahedronGeometry((1.6-i*.15)*scale,1),
-   mat(i%2?0x27643c:0x347747)
-  );
-  crown.position.set(
-   (Math.random()-.5)*.7*scale,
-   (3.4+i*.65)*scale,
-   (Math.random()-.5)*.7*scale
-  );
-  crown.castShadow=true;
-  crown.receiveShadow=true;
-  group.add(crown);
- }
-
- group.position.set(x,0,z);
- scene.add(group);
- trees.push({x,z,r:1.8*scale});
- colliders.push({x,z,r:1.7*scale});
-}
-
-function makeHouse(x,z,scale=1,color=0x8b6548){
- const g=new THREE.Group();
-
- const body=new THREE.Mesh(
-  new THREE.BoxGeometry(8*scale,5*scale,7*scale),
-  mat(color)
- );
- body.position.y=2.5*scale;
- body.castShadow=true;
- body.receiveShadow=true;
- g.add(body);
-
- const roof=new THREE.Mesh(
-  new THREE.ConeGeometry(6*scale,4*scale,4),
-  mat(0x304a68)
- );
- roof.rotation.y=Math.PI/4;
- roof.position.y=7*scale;
- roof.castShadow=true;
- g.add(roof);
-
- for(const sx of [-2,2]){
-  const win=box(1.3*scale,1.2*scale,.12*scale,0x74c9e8,
-   x+sx*scale,3.1*scale,z-3.56*scale);
-  win.material.emissive=new THREE.Color(0x183c52);
- }
-
- box(1.4*scale,2.4*scale,.2*scale,0x42291d,
-  x,1.2*scale,z-3.62*scale);
-
- g.position.set(x,0,z);
- scene.add(g);
-
- colliders.push({x,z,r:5.5*scale});
-}
-
-function makeShop(x,z,type){
- makeHouse(x,z,1.25,type==="old"?0x8d6341:0x463e72);
-
- const sign=box(4,1.3,.25,type==="old"?0xd0a343:0x68a9d8,
-  x,5.3,z-4.8);
-
- const canvas=document.createElement("canvas");
- canvas.width=512;canvas.height=128;
- const ctx=canvas.getContext("2d");
- ctx.fillStyle="#fff";
- ctx.font="bold 52px Arial";
- ctx.textAlign="center";
- ctx.fillText(type==="old"?"TRAVELLER SHOP":"WIZARD SHOP",256,80);
-
- const tex=new THREE.CanvasTexture(canvas);
- sign.material=new THREE.MeshStandardMaterial({map:tex});
-}
-
-function makeCastle(){
- const x=0,z=-58;
-
- for(let i=0;i<5;i++){
-  const px=x+(i-2)*9;
-  const tower=cyl(4,18,0x7b8799,px,9,z,10);
-  tower.castShadow=true;
-
-  const roof=new THREE.Mesh(
-   new THREE.ConeGeometry(4.8,7,8),
-   mat(0x3a4f79)
-  );
-  roof.position.set(px,21,z);
-  roof.castShadow=true;
-  scene.add(roof);
- }
-
- box(43,12,8,0x8b93a1,x,6,z+2);
-
- box(6,9,.5,0x1d2633,x,4.5,z-2.2);
-
- colliders.push({x,z,r:25});
-}
-
-function makeMountain(x,z,s=1){
- const m=new THREE.Mesh(
-  new THREE.ConeGeometry(13*s,30*s,7),
-  mat(0x4d5b66)
- );
- m.position.set(x,15*s,z);
- m.castShadow=true;
- scene.add(m);
-
- const snow=new THREE.Mesh(
-  new THREE.ConeGeometry(7*s,14*s,7),
-  mat(0xdce9ed)
- );
- snow.position.set(x,27*s,z);
- snow.castShadow=true;
- scene.add(snow);
-}
-
-function createGround(){
-
- const geo=new THREE.PlaneGeometry(220,220,100,100);
- const pos=geo.attributes.position;
-
- for(let i=0;i<pos.count;i++){
-  const x=pos.getX(i);
-  const z=pos.getY(i);
-
-  let h=
-   Math.sin(x*.07)*1.4+
-   Math.cos(z*.06)*1.2+
-   Math.sin((x+z)*.035)*2;
-
-  if(z<-55)h+=Math.max(0,(-z-55)*.02);
-
-  pos.setZ(i,h);
- }
-
- geo.computeVertexNormals();
-
- const ground=new THREE.Mesh(
-  geo,
-  new THREE.MeshStandardMaterial({
-   color:0x3e7545,
-   roughness:1
-  })
- );
-
- ground.rotation.x=-Math.PI/2;
- ground.receiveShadow=true;
- scene.add(ground);
-
- // dirt paths
- for(let i=-2;i<=2;i++){
-  const path=box(
-   8,0.08,160,0x806848,
-   i*7,.08,0
-  );
-  path.rotation.y=i*.05;
- }
-
- const cross=box(150,.08,7,0x806848,0,.09,0);
- cross.rotation.y=.08;
-
- // water
- const wg=new THREE.PlaneGeometry(80,70,30,30);
- const wm=new THREE.MeshStandardMaterial({
-  color:0x197da0,
-  roughness:.18,
-  metalness:.2,
-  transparent:true,
-  opacity:.88
- });
- water=new THREE.Mesh(wg,wm);
- water.rotation.x=-Math.PI/2;
- water.position.set(55,-.1,40);
- scene.add(water);
-}
-
-function createWorld(){
-
- createGround();
-
- // trees deliberately sparse
- [
-  [-65,-55,1.2],[-55,-30,1],[-75,-5,1.1],
-  [-68,30,1.3],[-45,55,1],[-20,68,1.2],
-  [25,67,1.1],[60,70,1.3],[75,10,1],
-  [-80,55,1],[-10,45,.9],[75,-40,1.2],
-  [60,-65,1],[-70,-70,1]
- ].forEach(t=>makeTree(...t));
-
- makeHouse(-32,-18,1,0x876044);
- makeHouse(28,-18,1,0x755b48);
- makeHouse(-32,18,1,0x6b7652);
- makeHouse(31,19,1,0x79584b);
-
- makeShop(-10,22,"old");
- makeShop(55,-5,"wizard");
-
- makeCastle();
-
- makeMountain(-65,-100,1.3);
- makeMountain(-30,-108,1.1);
- makeMountain(30,-108,1.4);
- makeMountain(70,-98,1.2);
-
- // floating island
- const island=cyl(9,3,0x536b50,55,-1,-65,8);
- island.position.y=30;
- const tower=cyl(3,12,0x626f89,55,37,-65,8);
- const roof=new THREE.Mesh(
-  new THREE.ConeGeometry(4,5,8),
-  mat(0x3b4f8a)
- );
- roof.position.set(55,45,-65);
- scene.add(roof);
-
- // crystal locations
- for(const p of [[-50,30],[45,35],[65,-28]]){
-  const c=new THREE.Mesh(
-   new THREE.OctahedronGeometry(2.2),
-   mat(0x67dfff,.25,.45)
-  );
-  c.position.set(p[0],2,p[1]);
-  c.castShadow=true;
-  scene.add(c);
- }
-}
-
-function createCharacter(color=0x203f72,npc=false){
-
- const g=new THREE.Group();
-
- // legs
- const leftLeg=new THREE.Group();
- const rightLeg=new THREE.Group();
-
- function limbGroup(x){
-  const lg=new THREE.Group();
-
-  const upper=new THREE.Mesh(
-   new THREE.CylinderGeometry(.34,.4,1.65,12),
-   mat(0x273444)
-  );
-  upper.position.y=-.8;
-  upper.castShadow=true;
-  lg.add(upper);
-
-  const boot=new THREE.Mesh(
-   new THREE.BoxGeometry(.62,.38,1.05),
-   mat(0x382719)
-  );
-  boot.position.set(0,-1.75,.2);
-  boot.castShadow=true;
-  lg.add(boot);
-
-  lg.position.x=x;
-  return lg;
- }
-
- leftLeg=limbGroup(-.48);
- rightLeg=limbGroup(.48);
-
- g.add(leftLeg,rightLeg);
-
- // torso
- const torso=new THREE.Mesh(
-  new THREE.CylinderGeometry(.85,1.05,2.4,12),
-  mat(color)
- );
- torso.position.y=1.5;
- torso.castShadow=true;
- g.add(torso);
-
- // jacket/coat
- if(!npc){
-  const cloak=new THREE.Mesh(
-   new THREE.ConeGeometry(1.15,2.8,8,1,true),
-   mat(0x17395f)
-  );
-  cloak.position.set(0,1.45,.35);
-  cloak.rotation.x=.02;
-  cloak.castShadow=true;
-  g.add(cloak);
-
-  const backpack=new THREE.Mesh(
-   new THREE.BoxGeometry(1.2,1.5,.6),
-   mat(0x5a3926)
-  );
-  backpack.position.set(0,1.65,.78);
-  backpack.castShadow=true;
-  g.add(backpack);
-
-  const strap1=box(.12,2,.08,0xd2a54d,0.5,1.65,.45);
-  strap1.parent=g;
-  const strap2=strap1.clone();
-  strap2.position.x=-.5;
-  g.add(strap2);
- }
-
- // neck
- const neck=cyl(.28,.45,0xb77c55,0,2.8,0,12);
- neck.parent=g;
- neck.position.set(0,2.8,0);
- g.add(neck);
-
- // head
- const head=new THREE.Mesh(
-  new THREE.SphereGeometry(.72,24,18),
-  mat(0xb87953,.72)
- );
- head.scale.set(.9,1.08,.88);
- head.position.y=3.55;
- head.castShadow=true;
- g.add(head);
-
- // hair
- const hair=new THREE.Mesh(
-  new THREE.SphereGeometry(.77,18,12),
-  mat(0x241812)
- );
- hair.scale.set(1,0.7,1);
- hair.position.set(0,3.95,-.03);
- hair.castShadow=true;
- g.add(hair);
-
- // face features point toward -Z
- const eyeMat=mat(0x101820,.3);
- const eye1=sphere(.075,0x101820,-.25,3.58,-.66);
- const eye2=sphere(.075,0x101820,.25,3.58,-.66);
- eye1.parent=g;eye2.parent=g;
- eye1.position.set(-.25,3.58,-.66);
- eye2.position.set(.25,3.58,-.66);
- g.add(eye1,eye2);
-
- const nose=new THREE.Mesh(
-  new THREE.ConeGeometry(.09,.24,8),
-  mat(0xa76548)
- );
- nose.rotation.x=Math.PI/2;
- nose.position.set(0,3.43,-.73);
- g.add(nose);
-
- // arms
- function arm(x){
-  const a=new THREE.Group();
-
-  const upper=new THREE.Mesh(
-   new THREE.CylinderGeometry(.27,.32,1.5,12),
-   mat(color)
-  );
-  upper.position.y=-.72;
-  upper.castShadow=true;
-  a.add(upper);
-
-  const hand=new THREE.Mesh(
-   new THREE.SphereGeometry(.28,14,10),
-   mat(0xb87953)
-  );
-  hand.position.y=-1.55;
-  hand.castShadow=true;
-  a.add(hand);
-
-  a.position.set(x,2.25,0);
-  return a;
- }
-
- const la=arm(-1.02);
- const ra=arm(1.02);
- g.add(la,ra);
-
- g.userData={
-  leftLeg,rightLeg,la,ra,
-  walkTime:Math.random()*10
- };
-
- return g;
-}
-
-function createPlayer(){
- player=createCharacter(0x1d4677,false);
- player.position.set(0,0,42);
- player.rotation.y=Math.PI;
- scene.add(player);
-}
-
-function createNPC(name,x,z,color,type){
-
- const mesh=createCharacter(color,true);
- mesh.position.set(x,0,z);
- scene.add(mesh);
-
- npcs.push({
-  mesh,
-  name,
-  type,
-  home:new THREE.Vector3(x,0,z),
-  target:new THREE.Vector3(x,0,z),
-  speed:.8+Math.random()*.55,
-  timer:0,
-  talk:type==="wizard"||type==="merchant"
- });
-
- return mesh;
-}
-
-function createNPCs(){
-
- createNPC("Old Traveller",-10,15,0x8a613d,"merchant");
- createNPC("Elder Wizard",55,-14,0x493a87,"wizard");
-
- createNPC("Village Guard",-18,-2,0x7a3f45,"guard");
- createNPC("Village Cook",-39,9,0x9b563d,"villager");
- createNPC("Explorer",18,8,0x365c4d,"traveller");
- createNPC("Farmer",35,35,0x6d5935,"villager");
- createNPC("Scholar",-42,-38,0x5a4779,"scholar");
- createNPC("Merchant",68,18,0x825d39,"merchant");
- createNPC("Young Adventurer",-60,10,0x3e628a,"traveller");
- createNPC("Castle Guard",12,-50,0x334d6c,"guard");
-}
-
-function chooseNPCTarget(n){
-
- const angle=Math.random()*Math.PI*2;
- const radius=8+Math.random()*18;
-
- n.target.set(
-  n.home.x+Math.cos(angle)*radius,
-  0,
-  n.home.z+Math.sin(angle)*radius
- );
-}
-
-function updateNPCs(dt){
-
- for(const n of npcs){
-
-  n.timer-=dt;
-
-  if(n.timer<=0){
-   chooseNPCTarget(n);
-   n.timer=4+Math.random()*7;
-  }
-
-  const dx=n.target.x-n.mesh.position.x;
-  const dz=n.target.z-n.mesh.position.z;
-  const dist=Math.hypot(dx,dz);
-
-  if(dist>.4){
-
-   n.mesh.rotation.y=Math.atan2(dx,dz);
-
-   const step=n.speed*dt;
-   n.mesh.position.x+=dx/dist*step;
-   n.mesh.position.z+=dz/dist*step;
-
-   animateCharacter(n.mesh,dt,true);
-  }else{
-   animateCharacter(n.mesh,dt,false);
-  }
- }
-}
-
-function animateCharacter(ch,dt,moving){
-
- const u=ch.userData;
- u.walkTime+=dt*(moving?8:1.5);
-
- const amount=moving?.55:0.03;
- const s=Math.sin(u.walkTime)*amount;
-
- u.leftLeg.rotation.x=s;
- u.rightLeg.rotation.x=-s;
- u.la.rotation.x=-s*.65;
- u.ra.rotation.x=s*.65;
-
- ch.position.y=moving?Math.abs(Math.sin(u.walkTime))*0.025:Math.sin(u.walkTime)*.01;
-}
-
-function terrainHeight(x,z){
- return (
-  Math.sin(x*.07)*1.4+
-  Math.cos(z*.06)*1.2+
-  Math.sin((x+z)*.035)*2
- );
-}
-
-function blocked(x,z){
-
- for(const c of colliders){
-  const d=Math.hypot(x-c.x,z-c.z);
-  if(d<c.r)return true;
- }
-
- // world boundary
- if(Math.abs(x)>103||Math.abs(z)>103)return true;
-
- return false;
-}
-
-function movePlayer(dt){
-
- if(!gameStarted)return;
-
- let forward=0;
- let side=0;
-
- if(keys.KeyW)forward+=1;
- if(keys.KeyS)forward-=1;
- if(keys.KeyA)side-=1;
- if(keys.KeyD)side+=1;
-
- const moving=forward!==0||side!==0;
-
- if(!moving){
-  animateCharacter(player,dt,false);
-  return;
- }
-
- const speed=keys.ShiftLeft||keys.ShiftRight?10:5.5;
-
- const dir=new THREE.Vector3();
-
- // W = forward in facing direction
- const forwardVec=new THREE.Vector3(
-  Math.sin(player.rotation.y),
-  0,
-  Math.cos(player.rotation.y)
- );
-
- const rightVec=new THREE.Vector3(
-  Math.cos(player.rotation.y),
-  0,
-  -Math.sin(player.rotation.y)
- );
-
- dir.addScaledVector(forwardVec,forward);
- dir.addScaledVector(rightVec,side);
-
- if(dir.length()>0)dir.normalize();
-
- const nx=player.position.x+dir.x*speed*dt;
- const nz=player.position.z+dir.z*speed*dt;
-
- if(!blocked(nx,player.position.z))
-  player.position.x=nx;
-
- if(!blocked(player.position.x,nz))
-  player.position.z=nz;
-
- player.position.y=terrainHeight(player.position.x,player.position.z);
-
- if(moving){
-  const targetRot=Math.atan2(dir.x,dir.z);
-  player.rotation.y=THREE.MathUtils.lerp(
-   player.rotation.y,targetRot,.18
-  );
- }
-
- animateCharacter(player,dt,true);
-}
-
-function setupCamera(){
-
- const distance=8;
- const height=4;
-
- const offset=new THREE.Vector3(
-  Math.sin(yaw)*distance,
-  height+pitch*3,
-  Math.cos(yaw)*distance
- );
-
- const desired=player.position.clone().add(offset);
-
- camera.position.lerp(desired,.08);
-
- const look=player.position.clone();
- look.y+=2.2;
- camera.lookAt(look);
-}
-
-function setupLights(){
-
- const hemi=new THREE.HemisphereLight(
-  0xaad9ff,
-  0x263728,
-  1.7
- );
- scene.add(hemi);
-
- const sun=new THREE.DirectionalLight(0xffe3b0,3.3);
- sun.position.set(-40,80,35);
- sun.castShadow=true;
-
- sun.shadow.mapSize.width=2048;
- sun.shadow.mapSize.height=2048;
-
- sun.shadow.camera.left=-90;
- sun.shadow.camera.right=90;
- sun.shadow.camera.top=90;
- sun.shadow.camera.bottom=-90;
- sun.shadow.camera.near=1;
- sun.shadow.camera.far=220;
-
- scene.add(sun);
-
- const moon=new THREE.DirectionalLight(0x426da5,.35);
- moon.position.set(80,40,-80);
- scene.add(moon);
-}
-
-function setupRenderer(){
-
- renderer=new THREE.WebGLRenderer({
-  antialias:true,
-  powerPreference:"high-performance"
- });
-
- renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
- renderer.setSize(window.innerWidth,window.innerHeight);
-
- renderer.shadowMap.enabled=true;
- renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-
- renderer.outputColorSpace=THREE.SRGBColorSpace;
- renderer.toneMapping=THREE.ACESFilmicToneMapping;
- renderer.toneMappingExposure=1.15;
-
- $("game").appendChild(renderer.domElement);
-}
+/* =========================================================
+   SCENE
+========================================================= */
 
 function init(){
 
- scene=new THREE.Scene();
+    try{
 
- scene.background=new THREE.Color(0x86b7d5);
+        setProgress(10);
 
- scene.fog=new THREE.FogExp2(0x86a9b7,.0045);
+        scene = new THREE.Scene();
 
- camera=new THREE.PerspectiveCamera(
-  65,
-  window.innerWidth/window.innerHeight,
-  .1,
-  500
- );
+        scene.background = new THREE.Color(0x9fc9e7);
 
- clock=new THREE.Clock();
+        scene.fog = new THREE.Fog(
+            0x9fc9e7,
+            80,
+            320
+        );
 
- setupRenderer();
- setupLights();
- createWorld();
- createPlayer();
- createNPCs();
+        setProgress(20);
 
- camera.position.set(0,5,50);
 
- window.addEventListener("resize",resize);
+        /* CAMERA */
 
- animate();
+        camera = new THREE.PerspectiveCamera(
+            60,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+
+        setProgress(30);
+
+
+        /* RENDERER */
+
+        renderer = new THREE.WebGLRenderer({
+            antialias:true,
+            powerPreference:"high-performance"
+        });
+
+        renderer.setPixelRatio(
+            Math.min(window.devicePixelRatio,2)
+        );
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+        renderer.shadowMap.enabled = true;
+
+        renderer.shadowMap.type =
+            THREE.PCFSoftShadowMap;
+
+        renderer.outputColorSpace =
+            THREE.SRGBColorSpace;
+
+        renderer.toneMapping =
+            THREE.ACESFilmicToneMapping;
+
+        renderer.toneMappingExposure = 1.15;
+
+        document.getElementById("game")
+            .appendChild(renderer.domElement);
+
+        setProgress(45);
+
+
+        clock = new THREE.Clock();
+
+
+        /* LIGHT */
+
+        createLighting();
+
+        setProgress(55);
+
+
+        /* WORLD */
+
+        createTerrain();
+
+        createWater();
+
+        createMountains();
+
+        createRoads();
+
+        createHouses();
+
+        createTrees();
+
+        createRocks();
+
+        createVillageDetails();
+
+        setProgress(75);
+
+
+        /* PLAYER */
+
+        createPlayer();
+
+        setProgress(82);
+
+
+        /* NPCS */
+
+        createNPC(
+            "Old Man",
+            -14,
+            0,
+            -17,
+            0x9b7048,
+            "oldman"
+        );
+
+        createNPC(
+            "Wizard",
+            50,
+            0,
+            -42,
+            0x6d43c7,
+            "wizard"
+        );
+
+        createNPC(
+            "Village Merchant",
+            20,
+            0,
+            15,
+            0xb96b3c,
+            "merchant"
+        );
+
+        createNPC(
+            "Traveller",
+            -30,
+            0,
+            34,
+            0x3e779c,
+            "traveller"
+        );
+
+        createNPC(
+            "Village Guard",
+            42,
+            0,
+            28,
+            0x526272,
+            "guard"
+        );
+
+        setProgress(92);
+
+
+        /* EVENTS */
+
+        window.addEventListener(
+            "resize",
+            onResize
+        );
+
+        document.addEventListener(
+            "keydown",
+            onKeyDown
+        );
+
+        document.addEventListener(
+            "keyup",
+            onKeyUp
+        );
+
+        renderer.domElement.addEventListener(
+            "click",
+            requestLook
+        );
+
+        setProgress(100);
+
+
+        setTimeout(()=>{
+            document.getElementById("loading").style.display="none";
+        },500);
+
+
+        animate();
+
+    }catch(error){
+
+        console.error(
+            "WORLD ERROR:",
+            error
+        );
+
+        document.querySelector(".loading-sub")
+            .textContent =
+            "3D engine error. Press F12 and check Console.";
+
+    }
+
 }
 
-function resize(){
 
- camera.aspect=window.innerWidth/window.innerHeight;
- camera.updateProjectionMatrix();
+/* =========================================================
+   LIGHTING
+========================================================= */
 
- renderer.setSize(window.innerWidth,window.innerHeight);
+function createLighting(){
+
+    const hemi =
+        new THREE.HemisphereLight(
+            0xdff5ff,
+            0x39502d,
+            2.2
+        );
+
+    scene.add(hemi);
+
+
+    const sun =
+        new THREE.DirectionalLight(
+            0xfff1cf,
+            3.2
+        );
+
+    sun.position.set(
+        -80,
+        120,
+        70
+    );
+
+    sun.castShadow = true;
+
+    sun.shadow.mapSize.width = 2048;
+
+    sun.shadow.mapSize.height = 2048;
+
+    sun.shadow.camera.left = -150;
+    sun.shadow.camera.right = 150;
+    sun.shadow.camera.top = 150;
+    sun.shadow.camera.bottom = -150;
+
+    scene.add(sun);
+
+
+    const fill =
+        new THREE.DirectionalLight(
+            0x78bfff,
+            .55
+        );
+
+    fill.position.set(
+        100,
+        40,
+        -100
+    );
+
+    scene.add(fill);
+
 }
 
-function animate(){
 
- requestAnimationFrame(animate);
+/* =========================================================
+   TERRAIN
+========================================================= */
 
- const dt=Math.min(clock.getDelta(),.05);
+function createTerrain(){
 
- movePlayer(dt);
- updateNPCs(dt);
- setupCamera();
+    const geometry =
+        new THREE.PlaneGeometry(
+            worldSize,
+            worldSize,
+            100,
+            100
+        );
 
- // crystals float
- const t=performance.now()*.001;
+    const positions =
+        geometry.attributes.position;
 
- scene.traverse(o=>{
-  if(o.geometry instanceof THREE.OctahedronGeometry){
-   o.rotation.y+=dt*.6;
-   o.position.y+=Math.sin(t+o.position.x)*dt*.15;
-  }
- });
+    for(
+        let i=0;
+        i<positions.count;
+        i++
+    ){
 
- renderer.render(scene,camera);
+        const x =
+            positions.getX(i);
+
+        const y =
+            positions.getY(i);
+
+        let height =
+            Math.sin(x*.035)*1.8 +
+            Math.cos(y*.045)*1.5 +
+            Math.sin((x+y)*.018)*2;
+
+        const dist =
+            Math.sqrt(x*x+y*y);
+
+        if(dist < 55){
+
+            height *= .25;
+
+        }
+
+        positions.setZ(
+            i,
+            height
+        );
+
+    }
+
+    geometry.computeVertexNormals();
+
+
+    const material =
+        new THREE.MeshStandardMaterial({
+            color:0x507d48,
+            roughness:.92,
+            metalness:0
+        });
+
+
+    const ground =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+    ground.rotation.x =
+        -Math.PI/2;
+
+    ground.receiveShadow = true;
+
+    scene.add(ground);
+
 }
 
-function nearestNPC(){
 
- let closest=null;
- let best=5;
+/* =========================================================
+   WATER
+========================================================= */
 
- for(const n of npcs){
+function createWater(){
 
-  const d=n.mesh.position.distanceTo(player.position);
+    const geometry =
+        new THREE.PlaneGeometry(
+            120,
+            120,
+            20,
+            20
+        );
 
-  if(d<best){
-   best=d;
-   closest=n;
-  }
- }
+    const material =
+        new THREE.MeshStandardMaterial({
+            color:0x267da4,
+            roughness:.2,
+            metalness:.25,
+            transparent:true,
+            opacity:.88
+        });
 
- return closest;
+    const water =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+    water.rotation.x =
+        -Math.PI/2;
+
+    water.position.set(
+        95,
+        -1,
+        50
+    );
+
+    water.receiveShadow = true;
+
+    scene.add(water);
+
 }
+
+
+/* =========================================================
+   MOUNTAINS
+========================================================= */
+
+function createMountains(){
+
+    for(let i=0;i<18;i++){
+
+        const angle =
+            (i/18)*Math.PI*2;
+
+        const radius = 130;
+
+        const mountain =
+            new THREE.Group();
+
+        const height =
+            25 + Math.random()*35;
+
+        const geo =
+            new THREE.ConeGeometry(
+                16 + Math.random()*15,
+                height,
+                7
+            );
+
+        const mat =
+            new THREE.MeshStandardMaterial({
+                color:
+                    i%2===0
+                    ?0x657b76
+                    :0x526a66,
+                roughness:1
+            });
+
+        const mesh =
+            new THREE.Mesh(
+                geo,
+                mat
+            );
+
+        mesh.position.y =
+            height/2-2;
+
+        mesh.castShadow = true;
+
+        mountain.add(mesh);
+
+        mountain.position.x =
+            Math.cos(angle)*radius;
+
+        mountain.position.z =
+            Math.sin(angle)*radius;
+
+        scene.add(mountain);
+
+    }
+
+}
+
+
+/* =========================================================
+   ROADS
+========================================================= */
+
+function createRoads(){
+
+    createRoad(
+        0,
+        .08,
+        0,
+        125,
+        9,
+        0
+    );
+
+    createRoad(
+        0,
+        .09,
+        0,
+        100,
+        8,
+        Math.PI/2
+    );
+
+    createRoad(
+        -20,
+        .1,
+        -15,
+        75,
+        6,
+        Math.PI/4
+    );
+
+}
+
+
+function createRoad(
+    x,
+    y,
+    z,
+    length,
+    width,
+    rotation
+){
+
+    const geo =
+        new THREE.BoxGeometry(
+            width,
+            .18,
+            length
+        );
+
+    const mat =
+        new THREE.MeshStandardMaterial({
+            color:0x9c825f,
+            roughness:1
+        });
+
+    const road =
+        new THREE.Mesh(
+            geo,
+            mat
+        );
+
+    road.position.set(
+        x,
+        y,
+        z
+    );
+
+    road.rotation.y =
+        rotation;
+
+    road.receiveShadow = true;
+
+    scene.add(road);
+
+}
+
+
+/* =========================================================
+   HOUSE
+========================================================= */
+
+function createHouse(
+    x,
+    z,
+    scale=1,
+    color=0x8b553a
+){
+
+    const group =
+        new THREE.Group();
+
+
+    /* WALL */
+
+    const wallGeo =
+        new THREE.BoxGeometry(
+            9*scale,
+            6*scale,
+            8*scale
+        );
+
+    const wallMat =
+        new THREE.MeshStandardMaterial({
+            color,
+            roughness:.82
+        });
+
+    const wall =
+        new THREE.Mesh(
+            wallGeo,
+            wallMat
+        );
+
+    wall.position.y =
+        3*scale;
+
+    wall.castShadow = true;
+    wall.receiveShadow = true;
+
+    group.add(wall);
+
+
+    /* ROOF */
+
+    const roofGeo =
+        new THREE.ConeGeometry(
+            7.2*scale,
+            5*scale,
+            4
+        );
+
+    const roofMat =
+        new THREE.MeshStandardMaterial({
+            color:0x49362d,
+            roughness:.9
+        });
+
+    const roof =
+        new THREE.Mesh(
+            roofGeo,
+            roofMat
+        );
+
+    roof.rotation.y =
+        Math.PI/4;
+
+    roof.position.y =
+        8*scale;
+
+    roof.castShadow = true;
+
+    group.add(roof);
+
+
+    /* DOOR */
+
+    const doorGeo =
+        new THREE.BoxGeometry(
+            1.6*scale,
+            3*scale,
+            .3*scale
+        );
+
+    const doorMat =
+        new THREE.MeshStandardMaterial({
+            color:0x332019
+        });
+
+    const door =
+        new THREE.Mesh(
+            doorGeo,
+            doorMat
+        );
+
+    door.position.set(
+        0,
+        1.5*scale,
+        4.1*scale
+    );
+
+    group.add(door);
+
+
+    /* WINDOWS */
+
+    for(
+        const side of [-1,1]
+    ){
+
+        const windowGeo =
+            new THREE.BoxGeometry(
+                1.7*scale,
+                1.5*scale,
+                .2*scale
+            );
+
+        const windowMat =
+            new THREE.MeshStandardMaterial({
+                color:0x6bc7df,
+                emissive:0x143e52,
+                emissiveIntensity:.5,
+                roughness:.2
+            });
+
+        const win =
+            new THREE.Mesh(
+                windowGeo,
+                windowMat
+            );
+
+        win.position.set(
+            side*2.6*scale,
+            3.4*scale,
+            4.05*scale
+        );
+
+        group.add(win);
+
+    }
+
+
+    group.position.set(
+        x,
+        0,
+        z
+    );
+
+    group.userData.collider = true;
+
+    scene.add(group);
+
+    colliders.push({
+        x:x,
+        z:z,
+        radius:6*scale
+    });
+
+}
+
+
+/* =========================================================
+   HOUSES
+========================================================= */
+
+function createHouses(){
+
+    createHouse(
+        -17,
+        -17,
+        1.15,
+        0x956344
+    );
+
+    createHouse(
+        17,
+        -18,
+        1,
+        0x6d6651
+    );
+
+    createHouse(
+        26,
+        13,
+        1.25,
+        0x815541
+    );
+
+    createHouse(
+        -32,
+        14,
+        .95,
+        0x6e5948
+    );
+
+    createHouse(
+        54,
+        -40,
+        1.4,
+        0x554b66
+    );
+
+}
+
+
+/* =========================================================
+   TREES
+========================================================= */
+
+function createTree(x,z,scale=1){
+
+    const group =
+        new THREE.Group();
+
+
+    const trunkGeo =
+        new THREE.CylinderGeometry(
+            .55*scale,
+            .8*scale,
+            4*scale,
+            8
+        );
+
+    const trunkMat =
+        new THREE.MeshStandardMaterial({
+            color:0x67442c,
+            roughness:1
+        });
+
+    const trunk =
+        new THREE.Mesh(
+            trunkGeo,
+            trunkMat
+        );
+
+    trunk.position.y =
+        2*scale;
+
+    trunk.castShadow = true;
+
+    group.add(trunk);
+
+
+    const leavesMat =
+        new THREE.MeshStandardMaterial({
+            color:0x2d683d,
+            roughness:.95
+        });
+
+
+    for(let i=0;i<3;i++){
+
+        const leaves =
+            new THREE.Mesh(
+                new THREE.IcosahedronGeometry(
+                    2.6*scale,
+                    1
+                ),
+                leavesMat
+            );
+
+        leaves.position.y =
+            (4.3+i*1.5)*scale;
+
+        leaves.scale.set(
+            1,
+            .85,
+            1
+        );
+
+        leaves.castShadow = true;
+
+        group.add(leaves);
+
+    }
+
+
+    group.position.set(
+        x,
+        0,
+        z
+    );
+
+    scene.add(group);
+
+    trees.push(group);
+
+    colliders.push({
+        x:x,
+        z:z,
+        radius:2.5*scale
+    });
+
+}
+
+
+function createTrees(){
+
+    const locations = [
+
+        [-65,-70],
+        [-48,-60],
+        [-35,-76],
+        [-5,-70],
+        [30,-70],
+        [70,-65],
+        [78,-25],
+        [78,20],
+        [72,65],
+        [40,75],
+        [0,78],
+        [-40,75],
+        [-75,55],
+        [-75,20],
+        [-72,-20],
+        [65,45],
+        [-60,40]
+
+    ];
+
+    locations.forEach(
+        p=>createTree(
+            p[0],
+            p[1],
+            .8+Math.random()*.45
+        )
+    );
+
+}
+
+
+/* =========================================================
+   ROCKS
+========================================================= */
+
+function createRock(x,z){
+
+    const geo =
+        new THREE.DodecahedronGeometry(
+            1.5+Math.random(),
+            0
+        );
+
+    const mat =
+        new THREE.MeshStandardMaterial({
+            color:0x68777b,
+            roughness:.95
+        });
+
+    const rock =
+        new THREE.Mesh(
+            geo,
+            mat
+        );
+
+    rock.position.set(
+        x,
+        1,
+        z
+    );
+
+    rock.rotation.set(
+        Math.random(),
+        Math.random(),
+        Math.random()
+    );
+
+    rock.castShadow = true;
+
+    scene.add(rock);
+
+}
+
+
+function createRocks(){
+
+    for(let i=0;i<25;i++){
+
+        const angle =
+            Math.random()*Math.PI*2;
+
+        const radius =
+            45+Math.random()*90;
+
+        createRock(
+            Math.cos(angle)*radius,
+            Math.sin(angle)*radius
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   VILLAGE DETAILS
+========================================================= */
+
+function createVillageDetails(){
+
+    for(let i=0;i<10;i++){
+
+        const lantern =
+            new THREE.PointLight(
+                0xffaa55,
+                1.5,
+                12
+            );
+
+        lantern.position.set(
+            -25+i*5,
+            3,
+            2
+        );
+
+        scene.add(lantern);
+
+    }
+
+}
+
+
+/* =========================================================
+   PLAYER
+========================================================= */
+
+function createPlayer(){
+
+    player =
+        new THREE.Group();
+
+    player.position.set(
+        0,
+        0,
+        38
+    );
+
+    scene.add(player);
+
+
+    /* BODY */
+
+    const body =
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                .75,
+                .9,
+                2.5,
+                16
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x1c3658,
+                roughness:.7
+            })
+        );
+
+    body.position.y =
+        2.4;
+
+    body.castShadow = true;
+
+    player.add(body);
+
+    playerParts.body = body;
+
+
+    /* HEAD */
+
+    const head =
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                .65,
+                24,
+                16
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0xd9a47a,
+                roughness:.65
+            })
+        );
+
+    head.position.y =
+        4.2;
+
+    head.castShadow = true;
+
+    player.add(head);
+
+    playerParts.head = head;
+
+
+    /* HAIR */
+
+    const hair =
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                .69,
+                20,
+                12
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x241b19,
+                roughness:.8
+            })
+        );
+
+    hair.scale.set(
+        1,
+        .75,
+        1
+    );
+
+    hair.position.set(
+        0,
+        4.65,
+        -.05
+    );
+
+    hair.castShadow = true;
+
+    player.add(hair);
+
+
+    /* EYES */
+
+    createEye(-.23,4.3,.58);
+    createEye(.23,4.3,.58);
+
+
+    /* ARMS */
+
+    const armMat =
+        new THREE.MeshStandardMaterial({
+            color:0x294c74,
+            roughness:.75
+        });
+
+    const leftArm =
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                .22,
+                .28,
+                2.3,
+                12
+            ),
+            armMat
+        );
+
+    leftArm.position.set(
+        -.95,
+        2.6,
+        0
+    );
+
+    leftArm.rotation.z =
+        -.25;
+
+    leftArm.castShadow = true;
+
+    player.add(leftArm);
+
+
+    const rightArm =
+        leftArm.clone();
+
+    rightArm.position.x =
+        .95;
+
+    rightArm.rotation.z =
+        .25;
+
+    player.add(rightArm);
+
+
+    /* LEGS */
+
+    const legMat =
+        new THREE.MeshStandardMaterial({
+            color:0x263444,
+            roughness:.8
+        });
+
+    const leftLeg =
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                .3,
+                .35,
+                2.5,
+                12
+            ),
+            legMat
+        );
+
+    leftLeg.position.set(
+        -.4,
+        .9,
+        0
+    );
+
+    leftLeg.castShadow = true;
+
+    player.add(leftLeg);
+
+
+    const rightLeg =
+        leftLeg.clone();
+
+    rightLeg.position.x =
+        .4;
+
+    player.add(rightLeg);
+
+
+    playerParts.leftLeg =
+        leftLeg;
+
+    playerParts.rightLeg =
+        rightLeg;
+
+    playerParts.leftArm =
+        leftArm;
+
+    playerParts.rightArm =
+        rightArm;
+
+
+    /* CAPE */
+
+    const cape =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                1.8,
+                2.8,
+                .15
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x152b4a,
+                roughness:.8
+            })
+        );
+
+    cape.position.set(
+        0,
+        2.7,
+        -.8
+    );
+
+    cape.rotation.x =
+        -.12;
+
+    cape.castShadow = true;
+
+    player.add(cape);
+
+
+    /* CAMERA */
+
+    camera.position.set(
+        0,
+        6,
+        10
+    );
+
+}
+
+
+/* =========================================================
+   EYES
+========================================================= */
+
+function createEye(x,y,z){
+
+    const eye =
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                .075,
+                10,
+                8
+            ),
+            new THREE.MeshBasicMaterial({
+                color:0x17191c
+            })
+        );
+
+    eye.position.set(
+        x,
+        y,
+        z
+    );
+
+    player.add(eye);
+
+}
+
+
+/* =========================================================
+   NPC
+========================================================= */
+
+function createNPC(
+    name,
+    x,
+    y,
+    z,
+    color,
+    type
+){
+
+    const npc =
+        new THREE.Group();
+
+    npc.position.set(
+        x,
+        y,
+        z
+    );
+
+    npc.userData.name =
+        name;
+
+    npc.userData.type =
+        type;
+
+    npc.userData.originX =
+        x;
+
+    npc.userData.originZ =
+        z;
+
+    npc.userData.walkTime =
+        Math.random()*10;
+
+    npc.userData.speed =
+        .4+Math.random()*.35;
+
+
+    /* BODY */
+
+    const body =
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                .65,
+                .8,
+                2.2,
+                14
+            ),
+            new THREE.MeshStandardMaterial({
+                color,
+                roughness:.8
+            })
+        );
+
+    body.position.y =
+        2.2;
+
+    body.castShadow = true;
+
+    npc.add(body);
+
+
+    /* HEAD */
+
+    const head =
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                .62,
+                20,
+                14
+            ),
+            new THREE.MeshStandardMaterial({
+                color:
+                    type==="wizard"
+                    ?0xc99473
+                    :0xd6a078,
+                roughness:.7
+            })
+        );
+
+    head.position.y =
+        3.9;
+
+    head.castShadow = true;
+
+    npc.add(head);
+
+
+    /* HAT */
+
+    if(type==="wizard"){
+
+        const hat =
+            new THREE.Mesh(
+                new THREE.ConeGeometry(
+                    1,
+                    2,
+                    16
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:0x352060,
+                    roughness:.75
+                })
+            );
+
+        hat.position.y =
+            5;
+
+        hat.castShadow = true;
+
+        npc.add(hat);
+
+    }
+
+
+    /* BEARD */
+
+    if(type==="oldman"){
+
+        const beard =
+            new THREE.Mesh(
+                new THREE.SphereGeometry(
+                    .45,
+                    16,
+                    12
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:0xd8d2c6,
+                    roughness:1
+                })
+            );
+
+        beard.scale.set(
+            .8,
+            1.2,
+            .7
+        );
+
+        beard.position.set(
+            0,
+            3.35,
+            .45
+        );
+
+        npc.add(beard);
+
+    }
+
+
+    /* LEGS */
+
+    const legMaterial =
+        new THREE.MeshStandardMaterial({
+            color:0x303b48
+        });
+
+    const leg1 =
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                .2,
+                .25,
+                1.7,
+                10
+            ),
+            legMaterial
+        );
+
+    leg1.position.set(
+        -.3,
+        .85,
+        0
+    );
+
+    npc.add(leg1);
+
+
+    const leg2 =
+        leg1.clone();
+
+    leg2.position.x =
+        .3;
+
+    npc.add(leg2);
+
+
+    npc.userData.legs =
+        [leg1,leg2];
+
+    npc.userData.animOffset =
+        Math.random()*Math.PI*2;
+
+
+    scene.add(npc);
+
+    npcs.push(npc);
+
+}
+
+
+/* =========================================================
+   MOVEMENT
+========================================================= */
+
+function onKeyDown(e){
+
+    keys[e.code] = true;
+
+
+    if(
+        e.code==="KeyE" &&
+        !document.getElementById("modal").style.display
+    ){
+
+        interact();
+
+    }
+
+
+    if(e.code==="KeyM"){
+
+        openMap();
+
+    }
+
+
+    if(e.code==="Escape"){
+
+        closeModal();
+
+        closeMap();
+
+    }
+
+}
+
+
+function onKeyUp(e){
+
+    keys[e.code] = false;
+
+}
+
+
+/* =========================================================
+   POINTER LOOK
+========================================================= */
+
+function requestLook(){
+
+    if(
+        document.pointerLockElement !==
+        renderer.domElement
+    ){
+
+        renderer.domElement.requestPointerLock();
+
+    }
+
+}
+
+
+document.addEventListener(
+    "mousemove",
+    e=>{
+
+        if(
+            document.pointerLockElement !==
+            renderer.domElement
+        ) return;
+
+        yaw -= e.movementX*.002;
+
+        pitch -= e.movementY*.0015;
+
+        pitch =
+            Math.max(
+                -.45,
+                Math.min(.5,pitch)
+            );
+
+    }
+);
+
+
+/* =========================================================
+   COLLISION
+========================================================= */
+
+function blocked(x,z){
+
+    for(
+        const c of colliders
+    ){
+
+        const dx =
+            x-c.x;
+
+        const dz =
+            z-c.z;
+
+        const distance =
+            Math.sqrt(
+                dx*dx+dz*dz
+            );
+
+        if(
+            distance <
+            c.radius+1.3
+        ){
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+
+}
+
+
+/* =========================================================
+   PLAYER UPDATE
+========================================================= */
+
+function updatePlayer(dt){
+
+    let forward = 0;
+    let strafe = 0;
+
+
+    /*
+       CORRECT CONTROLS
+
+       W = forward
+       S = backward
+       A = left
+       D = right
+    */
+
+    if(keys["KeyW"])
+        forward += 1;
+
+    if(keys["KeyS"])
+        forward -= 1;
+
+    if(keys["KeyA"])
+        strafe -= 1;
+
+    if(keys["KeyD"])
+        strafe += 1;
+
+
+    const moving =
+        forward !== 0 ||
+        strafe !== 0;
+
+
+    if(moving){
+
+        const length =
+            Math.sqrt(
+                forward*forward+
+                strafe*strafe
+            );
+
+        forward /= length;
+        strafe /= length;
+
+
+        const speed =
+            keys["ShiftLeft"] ||
+            keys["ShiftRight"]
+            ?10
+            :5.5;
+
+
+        const sin =
+            Math.sin(yaw);
+
+        const cos =
+            Math.cos(yaw);
+
+
+        const dx =
+            (strafe*cos -
+            forward*sin) *
+            speed*dt;
+
+        const dz =
+            (strafe*sin +
+            forward*cos) *
+            speed*dt;
+
+
+        const newX =
+            player.position.x+dx;
+
+        const newZ =
+            player.position.z+dz;
+
+
+        if(!blocked(newX,newZ)){
+
+            player.position.x =
+                newX;
+
+            player.position.z =
+                newZ;
+
+        }
+
+
+        player.rotation.y =
+            yaw;
+
+
+        /* WALK ANIMATION */
+
+        const t =
+            performance.now()*.012 *
+            (speed/5.5);
+
+        const swing =
+            Math.sin(t)*.55;
+
+        playerParts.leftLeg.rotation.x =
+            swing;
+
+        playerParts.rightLeg.rotation.x =
+            -swing;
+
+        playerParts.leftArm.rotation.x =
+            -swing*.6;
+
+        playerParts.rightArm.rotation.x =
+            swing*.6;
+
+    }else{
+
+        playerParts.leftLeg.rotation.x =
+            THREE.MathUtils.lerp(
+                playerParts.leftLeg.rotation.x,
+                0,
+                .15
+            );
+
+        playerParts.rightLeg.rotation.x =
+            THREE.MathUtils.lerp(
+                playerParts.rightLeg.rotation.x,
+                0,
+                .15
+            );
+
+    }
+
+
+    /* Keep player grounded */
+
+    player.position.y = 0;
+
+
+    /* CAMERA */
+
+    const cameraDistance = 10;
+
+    const cameraHeight = 5.7;
+
+
+    const targetX =
+        player.position.x -
+        Math.sin(yaw)*
+        Math.cos(pitch)*
+        cameraDistance;
+
+    const targetY =
+        player.position.y+
+        cameraHeight+
+        Math.sin(pitch)*
+        cameraDistance;
+
+    const targetZ =
+        player.position.z -
+        Math.cos(yaw)*
+        Math.cos(pitch)*
+        cameraDistance;
+
+
+    camera.position.lerp(
+        new THREE.Vector3(
+            targetX,
+            targetY,
+            targetZ
+        ),
+        .12
+    );
+
+
+    const lookAt =
+        new THREE.Vector3(
+            player.position.x,
+            player.position.y+2.7,
+            player.position.z
+        );
+
+    camera.lookAt(
+        lookAt
+    );
+
+}
+
+
+/* =========================================================
+   NPC ANIMATION
+========================================================= */
+
+function updateNPCs(dt){
+
+    npcs.forEach(
+        npc=>{
+
+            npc.userData.walkTime +=
+                dt*npc.userData.speed;
+
+
+            const t =
+                npc.userData.walkTime;
+
+
+            const radius =
+                npc.userData.type==="wizard"
+                ?4
+                :7;
+
+
+            const originX =
+                npc.userData.originX;
+
+            const originZ =
+                npc.userData.originZ;
+
+
+            const newX =
+                originX+
+                Math.sin(t*.35)*
+                radius;
+
+            const newZ =
+                originZ+
+                Math.cos(t*.4)*
+                radius*.6;
+
+
+            const dx =
+                newX-npc.position.x;
+
+            const dz =
+                newZ-npc.position.z;
+
+
+            if(
+                Math.abs(dx)+
+                Math.abs(dz)>.01
+            ){
+
+                npc.rotation.y =
+                    Math.atan2(
+                        dx,
+                        dz
+                    );
+
+            }
+
+
+            npc.position.x =
+                newX;
+
+            npc.position.z =
+                newZ;
+
+            npc.position.y =
+                0;
+
+
+            const walking =
+                Math.abs(
+                    Math.sin(t)
+                );
+
+
+            npc.userData.legs[0]
+                .rotation.x =
+                walking*.45;
+
+            npc.userData.legs[1]
+                .rotation.x =
+                -walking*.45;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INTERACTION
+========================================================= */
+
+function findNearestNPC(){
+
+    let nearest = null;
+
+    let nearestDistance = 6;
+
+
+    npcs.forEach(
+        npc=>{
+
+            const dx =
+                npc.position.x-
+                player.position.x;
+
+            const dz =
+                npc.position.z-
+                player.position.z;
+
+            const distance =
+                Math.sqrt(
+                    dx*dx+dz*dz
+                );
+
+
+            if(
+                distance <
+                nearestDistance
+            ){
+
+                nearest =
+                    npc;
+
+                nearestDistance =
+                    distance;
+
+            }
+
+        }
+    );
+
+
+    return nearest;
+
+}
+
 
 function interact(){
 
- const n=nearestNPC();
+    nearestNPC =
+        findNearestNPC();
 
- if(!n){
-  $("prompt").style.display="none";
-  return;
- }
 
- if(n.type==="merchant"){
-  openShop(
-   "Old Traveller's Shop",
-   "The traveller has collected useful equipment from across the kingdom."
-  );
-  return;
- }
+    if(!nearestNPC)
+        return;
 
- if(n.type==="wizard"){
-  openChallenge(
-   "The Wizard's Financial Challenge",
-   "The wizard wants to see whether you can make a smart decision with limited money."
-  );
-  return;
- }
 
- openDialogue(
-  n.name,
-  getNPCDialogue(n)
- );
-}
-
-function getNPCDialogue(n){
-
- const messages={
-  guard:"Stay alert, adventurer. A good guardian thinks before acting.",
-  villager:"Hearth Village is built by ordinary people learning useful skills every day.",
-  traveller:"The road is full of lessons. Learn how to navigate, communicate and solve problems.",
-  scholar:"Knowledge becomes useful when you know how to apply it.",
-  merchant:"A wise traveller knows the difference between something they need and something they merely want."
- };
-
- return messages[n.type]||"Welcome to the kingdom, adventurer!";
-}
-
-function openDialogue(name,text){
-
- $("dialogueName").textContent=name;
- $("dialogueText").textContent=text;
- $("dialogue").style.display="flex";
-}
-
-function openShop(title,desc){
-
- $("shopTitle").textContent=title;
- $("shopDescription").textContent=desc;
- $("shop").style.display="flex";
-}
-
-function openChallenge(title,intro){
-
- $("challengeTitle").textContent=title;
- $("challengeIntro").textContent=intro;
-
- const content=$("challengeContent");
-
- content.innerHTML=`
-  <div class="question">
-   <b>🏦 You have 1000 coins.</b>
-   <p>You need food for your journey and you also want to buy an expensive new item.</p>
-   <p>What is the smartest first decision?</p>
-
-   <button class="answer" data-correct="1">
-    A. Buy the expensive item immediately.
-   </button>
-
-   <button class="answer" data-correct="2">
-    B. Set aside money for your essential needs first.
-   </button>
-
-   <button class="answer" data-correct="3">
-    C. Spend everything because you can earn it later.
-   </button>
-  </div>
- `;
-
- content.querySelectorAll(".answer").forEach(btn=>{
-  btn.onclick=()=>{
-   if(btn.dataset.correct==="2"){
-    btn.innerHTML="✓ Correct! Needs should come before wants.";
-    btn.classList.add("good");
-    reward(100,3);
-   }else{
-    btn.innerHTML="✗ Think again. Start with essential needs.";
-    btn.classList.add("bad");
-   }
-  };
- });
-
- $("challenge").style.display="flex";
-}
-
-function reward(amount,g){
-
- xp+=amount;
- gems+=g;
-
- level=Math.floor(xp/300)+1;
-
- $("xp").textContent=xp+" XP";
- $("gems").textContent=gems;
- $("level").textContent=level;
-
- $("questTitle").textContent="✨ QUEST COMPLETE";
- $("questText").textContent=
-  "Excellent decision! You gained experience and learned a useful life skill.";
-}
-
-function buyItem(name,cost){
-
- if(gems<cost){
-  alert("You don't have enough gems.");
-  return;
- }
-
- gems-=cost;
- $("gems").textContent=gems;
- reward(20,0);
-
- alert(name+" added to your adventure supplies!");
-}
-
-window.closeAll=function(){
- $("dialogue").style.display="none";
- $("shop").style.display="none";
- $("challenge").style.display="none";
- $("map").style.display="none";
-};
-
-$("startBtn").onclick=()=>{
-
- $("start").style.display="none";
- $("game").style.display="block";
-
- gameStarted=true;
-
- init();
-};
-
-window.addEventListener("keydown",e=>{
-
- keys[e.code]=true;
-
- if(e.code==="KeyE"&&!e.repeat){
-
-  if(
-   $("dialogue").style.display!=="flex" &&
-   $("shop").style.display!=="flex" &&
-   $("challenge").style.display!=="flex"
-  ){
-   interact();
-  }
- }
-
- if(e.code==="KeyM"&&!e.repeat){
-  $("map").style.display="flex";
- }
-
- if(e.code==="Escape"){
-  closeAll();
- }
-});
-
-window.addEventListener("keyup",e=>{
- keys[e.code]=false;
-});
-
-// Mouse look
-let mouseDown=false;
-let lastX=0;
-
-rendererMouseSetup();
-
-function rendererMouseSetup(){
-
- window.addEventListener("mousedown",e=>{
-  if(e.button===0){
-   mouseDown=true;
-   lastX=e.clientX;
-  }
- });
-
- window.addEventListener("mouseup",()=>{
-  mouseDown=false;
- });
-
- window.addEventListener("mousemove",e=>{
-
-  if(!mouseDown||!gameStarted)return;
-
-  const dx=e.clientX-lastX;
-  lastX=e.clientX;
-
-  yaw-=dx*.004;
- });
+    openNPC(
+        nearestNPC.userData.name,
+        nearestNPC.userData.type
+    );
 
 }
 
-// proximity prompt
-setInterval(()=>{
 
- if(!gameStarted||!player)return;
+/* =========================================================
+   NPC MODAL
+========================================================= */
 
- const n=nearestNPC();
+function openNPC(name,type){
 
- if(n){
-  $("prompt").style.display="block";
-  $("prompt").textContent=
-   `🟡 Press E — Talk to ${n.name}`;
- }else{
-  $("prompt").style.display="none";
- }
+    const modal =
+        document.getElementById("modal");
 
- // location names
- const x=player.position.x;
- const z=player.position.z;
+    const title =
+        document.getElementById("modalTitle");
 
- if(z<-45)$("location").textContent="NEXUS CASTLE";
- else if(x>40&&z>-35&&z<35)$("location").textContent="WIZARD'S QUARTER";
- else if(Math.abs(x)<50&&Math.abs(z)<45)$("location").textContent="HEARTH VILLAGE";
- else if(z>55)$("location").textContent="MOUNTAIN PASS";
- else $("location").textContent="KINGDOM WILDERLAND";
+    const description =
+        document.getElementById("modalDescription");
 
-},100);
+    const challenge =
+        document.getElementById("challenge");
 
-window.addEventListener("load",()=>{
- setTimeout(()=>{
-  $("loading").style.display="none";
-  $("start").style.display="block";
- },2100);
-});
+    const npcModal =
+        document.getElementById("npcModal");
+
+
+    npcModal.style.display =
+        "block";
+
+    challenge.style.display =
+        "none";
+
+
+    modal.style.display =
+        "flex";
+
+
+    if(type==="oldman"){
+
+        title.textContent =
+            "👴 Aldric — Village Elder";
+
+        description.textContent =
+            "Welcome, young traveller. I have spent many years learning how to manage a home, plan ahead and make sensible choices. Complete my challenge to learn Responsibility.";
+
+    }
+
+    else if(type==="wizard"){
+
+        title.textContent =
+            "🧙 Eldrin — The Wizard";
+
+        description.textContent =
+            "The kingdom is full of choices. A clever adventurer thinks before acting. Complete my challenge and learn Critical Thinking.";
+
+    }
+
+    else if(type==="merchant"){
+
+        title.textContent =
+            "🛒 Mira — Village Merchant";
+
+        description.textContent =
+            "Every coin is a choice. Learn how to distinguish needs from wants and make smarter spending decisions.";
+
+    }
+
+    else if(type==="traveller"){
+
+        title.textContent =
+            "🎒 Rowan — Fellow Traveller";
+
+        description.textContent =
+            "Travelling teaches preparation. Learn how to plan your day, organise your belongings and stay ready for unexpected situations.";
+
+    }
+
+    else{
+
+        title.textContent =
+            "🛡️ Village Guard";
+
+        description.textContent =
+            "A good guardian notices danger and thinks before reacting. Learn the basics of staying safe online and in everyday life.";
+
+    }
+
+}
+
+
+/* =========================================================
+   CHALLENGE
+========================================================= */
+
+const challenges = [
+
+    {
+        q:"You receive an urgent message asking for your password. What should you do?",
+        a:[
+            "Send the password immediately",
+            "Ignore it and verify who sent it",
+            "Post it publicly",
+            "Forward it to everyone"
+        ],
+        correct:1
+    },
+
+    {
+        q:"You have ₹1000. Which is the best first step before spending it?",
+        a:[
+            "Buy everything you want",
+            "Make a simple plan for needs and savings",
+            "Spend it immediately",
+            "Give it all away"
+        ],
+        correct:1
+    },
+
+    {
+        q:"You have an important task tomorrow. What is a smart choice?",
+        a:[
+            "Wait until the last minute",
+            "Make a plan and prepare early",
+            "Ignore the task",
+            "Stay awake all night"
+        ],
+        correct:1
+    }
+
+];
+
+let currentQuestion = 0;
+let challengeScore = 0;
+
+
+function startChallenge(){
+
+    document.getElementById("npcModal")
+        .style.display="none";
+
+    document.getElementById("challenge")
+        .style.display="block";
+
+    currentQuestion=0;
+
+    challengeScore=0;
+
+    showQuestion();
+
+}
+
+
+function showQuestion(){
+
+    const data =
+        challenges[currentQuestion];
+
+    const area =
+        document.getElementById("questionArea");
+
+    const fill =
+        document.getElementById("challengeFill");
+
+
+    fill.style.width =
+        (
+            currentQuestion/
+            challenges.length*
+            100
+        )+"%";
+
+
+    area.innerHTML = "";
+
+
+    const q =
+        document.createElement("div");
+
+    q.className =
+        "question";
+
+    q.textContent =
+        data.q;
+
+    area.appendChild(q);
+
+
+    const answers =
+        document.createElement("div");
+
+    answers.className =
+        "answers";
+
+
+    data.a.forEach(
+        (answer,index)=>{
+
+            const button =
+                document.createElement("button");
+
+            button.className =
+                "answer";
+
+            button.textContent =
+                answer;
+
+            button.onclick =
+                ()=>{
+                    answerQuestion(
+                        index,
+                        button
+                    );
+                };
+
+            answers.appendChild(
+                button
+            );
+
+        }
+    );
+
+
+    area.appendChild(
+        answers
+    );
+
+}
+
+
+function answerQuestion(
+    index,
+    button
+){
+
+    const data =
+        challenges[currentQuestion];
+
+
+    const buttons =
+        document.querySelectorAll(
+            ".answer"
+        );
+
+
+    buttons.forEach(
+        b=>b.disabled=true
+    );
+
+
+    if(index===data.correct){
+
+        button.classList.add(
+            "correct"
+        );
+
+        challengeScore++;
+
+        xp += 50;
+
+    }else{
+
+        button.classList.add(
+            "wrong"
+        );
+
+        buttons[data.correct]
+            .classList.add(
+                "correct"
+            );
+
+    }
+
+
+    updateStats();
+
+
+    setTimeout(
+        ()=>{
+
+            currentQuestion++;
+
+            if(
+                currentQuestion >=
+                challenges.length
+            ){
+
+                finishChallenge();
+
+            }else{
+
+                showQuestion();
+
+            }
+
+        },
+        1000
+    );
+
+}
+
+
+function finishChallenge(){
+
+    document.getElementById(
+        "questionArea"
+    ).innerHTML = `
+
+        <div style="
+        text-align:center;
+        padding:30px;
+        ">
+
+        <div style="
+        font-size:60px;
+        margin-bottom:15px;
+        ">🏆</div>
+
+        <h2 style="
+        font-size:30px;
+        color:#ffd96b;
+        margin-bottom:12px;
+        ">
+        Challenge Complete!
+        </h2>
+
+        <p style="
+        font-size:19px;
+        color:#cbdce9;
+        ">
+        You scored ${challengeScore}
+        out of ${challenges.length}.
+        </p>
+
+        <br>
+
+        <p style="
+        color:#67e4ff;
+        ">
+        +150 XP earned
+        </p>
+
+        <br>
+
+        <button
+        class="primary"
+        onclick="closeModal()">
+        Return to Village
+        </button>
+
+        </div>
+    `;
+
+
+    xp += 100;
+
+    if(
+        xp >= level*250
+    ){
+
+        level++;
+
+        gems += 5;
+
+    }
+
+    updateStats();
+
+}
+
+
+/* =========================================================
+   UI
+========================================================= */
+
+function updateStats(){
+
+    document.getElementById(
+        "xp"
+    ).textContent =
+        xp+" XP";
+
+    document.getElementById(
+        "gems"
+    ).textContent =
+        gems;
+
+    document.getElementById(
+        "level"
+    ).textContent =
+        level;
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeModal(){
+
+    document.getElementById(
+        "modal"
+    ).style.display="none";
+
+}
+
+
+/* =========================================================
+   MAP
+========================================================= */
+
+function openMap(){
+
+    document.getElementById(
+        "mapModal"
+    ).style.display="flex";
+
+}
+
+function closeMap(){
+
+    document.getElementById(
+        "mapModal"
+    ).style.display="none";
+
+}
+
+
+/* =========================================================
+   NEAREST NPC UI
+========================================================= */
+
+function updateInteraction(){
+
+    const npc =
+        findNearestNPC();
+
+    const interaction =
+        document.getElementById(
+            "interaction"
+        );
+
+
+    if(npc){
+
+        interaction.style.display =
+            "block";
+
+        document.getElementById(
+            "interactionText"
+        ).textContent =
+            "Talk to "+npc.userData.name;
+
+    }else{
+
+        interaction.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   ANIMATION LOOP
+========================================================= */
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    const dt =
+        Math.min(
+            clock.getDelta(),
+            .05
+        );
+
+
+    updatePlayer(dt);
+
+    updateNPCs(dt);
+
+    updateInteraction();
+
+
+    /* subtle water animation */
+
+    scene.traverse(
+        object=>{
+
+            if(
+                object.isMesh &&
+                object.material &&
+                object.material.color &&
+                object.material.color.getHex()===
+                0x267da4
+            ){
+
+                object.position.y =
+                    -1+
+                    Math.sin(
+                        performance.now()*.001
+                    )*.04;
+
+            }
+
+        }
+    );
+
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+}
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+function onResize(){
+
+    if(!camera || !renderer)
+        return;
+
+    camera.aspect =
+        window.innerWidth/
+        window.innerHeight;
+
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+document.getElementById(
+    "closeModal"
+).onclick =
+    closeModal;
+
+
+document.getElementById(
+    "startChallenge"
+).onclick =
+    startChallenge;
+
+
+/* =========================================================
+   START
+========================================================= */
+
+init();
 
 </script>
+
 </body>
 </html>
