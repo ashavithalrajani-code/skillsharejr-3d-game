@@ -1933,6 +1933,112 @@ function updatePlayer(){
     }
 }{
 
+    let forward = 0;
+    let strafe = 0;
+
+    // W = FORWARD
+    if(keys["w"]) forward += 1;
+
+    // S = BACKWARD
+    if(keys["s"]) forward -= 1;
+
+    // A = LEFT
+    if(keys["a"]) strafe -= 1;
+
+    // D = RIGHT
+    if(keys["d"]) strafe += 1;
+
+    if(forward === 0 && strafe === 0){
+
+        player.position.y =
+            terrainHeight(
+                player.position.x,
+                player.position.z
+            );
+
+        return;
+    }
+
+    const length = Math.sqrt(
+        forward * forward +
+        strafe * strafe
+    );
+
+    forward /= length;
+    strafe /= length;
+
+    const speed =
+        keys["shift"] ? 0.30 : 0.15;
+
+    // Forward direction
+    const forwardX = Math.sin(yaw);
+    const forwardZ = Math.cos(yaw);
+
+    // Right direction
+    const rightX = Math.cos(yaw);
+    const rightZ = -Math.sin(yaw);
+
+    const moveX =
+        (forwardX * forward +
+         rightX * strafe) * speed;
+
+    const moveZ =
+        (forwardZ * forward +
+         rightZ * strafe) * speed;
+
+    const newX =
+        player.position.x + moveX;
+
+    const newZ =
+        player.position.z + moveZ;
+
+    // Collision
+    if(
+        canMoveTo(
+            newX,
+            player.position.z
+        )
+    ){
+        player.position.x = newX;
+    }
+
+    if(
+        canMoveTo(
+            player.position.x,
+            newZ
+        )
+    ){
+        player.position.z = newZ;
+    }
+
+    // Keep player on ground
+    player.position.y =
+        terrainHeight(
+            player.position.x,
+            player.position.z
+        );
+
+    // Face movement direction
+    if(
+        Math.abs(moveX) +
+        Math.abs(moveZ) > 0.001
+    ){
+
+        const targetRotation =
+            Math.atan2(
+                moveX,
+                moveZ
+            );
+
+        player.rotation.y =
+            THREE.MathUtils.lerp(
+                player.rotation.y,
+                targetRotation,
+                0.18
+            );
+    }
+}{
+
     let forward=0;
     let side=0;
 
