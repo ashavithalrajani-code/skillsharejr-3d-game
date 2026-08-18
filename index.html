@@ -3,188 +3,447 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SkillShareJR — Hearth Village</title>
+<title>SkillShareJR — Version 21 3D Adventure</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#06101a;font-family:Arial,Segoe UI,sans-serif;color:#eef8ff}
-canvas{display:block}
-#boot{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 30%,#183e5d,#07121e 48%,#02060b)}
-.card{width:min(720px,90vw);padding:42px;border:1px solid #46d8ff;border-radius:28px;background:rgba(5,17,29,.94);box-shadow:0 30px 100px #000}
-.logo{font-size:clamp(34px,6vw,64px);font-weight:900;letter-spacing:3px;color:#59ddff}.sub{color:#a9c4d8;margin-top:8px;font-size:18px}
-.load{height:8px;background:#14283a;border-radius:20px;overflow:hidden;margin:30px 0 12px}.load i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4edfff,#b978ff,#ffd36a)}
-#start{display:none;margin-top:24px;padding:15px 28px;border:0;border-radius:14px;background:linear-gradient(135deg,#66e4ff,#c48cff);font-weight:900;font-size:17px;cursor:pointer}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#08131d;color:#fff;font-family:Inter,Segoe UI,Arial,sans-serif}
+#game{position:fixed;inset:0}
+canvas{display:block;width:100%;height:100%}
+#boot{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#173d53,#03080e 70%);transition:.5s}
+.card{width:min(760px,90vw);padding:38px;border:1px solid #4adfff;border-radius:24px;background:#061522ee;box-shadow:0 30px 100px #000}
+.logo{font-size:clamp(34px,6vw,70px);font-weight:950;letter-spacing:3px;color:#6eeaff;text-shadow:0 0 30px #35cfff66}
+.small{color:#a9c4d4;margin:8px 0 25px}.bar{height:8px;background:#183244;border-radius:99px;overflow:hidden}.bar i{display:block;width:0;height:100%;background:linear-gradient(90deg,#44e3ff,#a26cff,#ffd36b)}
+#start{display:none;margin-top:24px;padding:14px 22px;border:0;border-radius:12px;background:linear-gradient(135deg,#4ee6ff,#a16dff);font-weight:900;cursor:pointer}
 #hud{display:none;position:fixed;inset:0;z-index:5;pointer-events:none}
-.panel{position:absolute;background:rgba(5,16,28,.86);border:1px solid rgba(74,216,255,.5);border-radius:18px;box-shadow:0 12px 40px #0005;backdrop-filter:blur(10px)}
-#brand{left:25px;top:24px;padding:17px 24px}.brand{font-size:32px;font-weight:900;color:#5ddfff;letter-spacing:2px}.tag{color:#a8bfd1;font-size:13px;margin-top:5px}
-#stats{right:25px;top:24px;padding:16px 22px;width:245px}.stat{display:flex;justify-content:space-between;margin:6px 0;color:#b9cde0}.stat b{color:white}
-#quest{left:25px;bottom:25px;width:380px;padding:18px}.qtitle{font-weight:900;color:#d29aff;font-size:18px;margin-bottom:8px}.qtext{line-height:1.45}
-#controls{right:25px;bottom:25px;padding:16px;width:300px;color:#c6d9e8}.control{margin:6px 0}.key{display:inline-flex;min-width:31px;justify-content:center;padding:4px 7px;border:1px solid #46627b;border-radius:6px;background:#101f30;font-weight:800;color:white;margin-right:6px}
-#cross{position:absolute;left:50%;top:50%;width:9px;height:9px;border:1px solid white;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 8px white}
-#interact{position:absolute;left:50%;bottom:19%;transform:translateX(-50%);padding:11px 18px;border-radius:999px;background:#06111d;border:1px solid #ffd36a;opacity:0;font-weight:800}
-#toast{position:absolute;top:15%;left:50%;transform:translateX(-50%);padding:12px 18px;background:#06111d;border:1px solid #60dcff;border-radius:12px;opacity:0}
-.overlay{display:none;position:fixed;inset:0;z-index:15;align-items:center;justify-content:center;background:#020811c9;backdrop-filter:blur(9px)}
-.modal{width:min(980px,92vw);max-height:88vh;overflow:auto;padding:25px;border-radius:23px;background:#081725;border:1px solid #54d9ff;box-shadow:0 30px 100px #000}
-.close{float:right;background:#122538;color:white;border:1px solid #49657c;border-radius:9px;padding:8px 13px;cursor:pointer}
-.modal h2{color:#ffd36a;margin-top:0}.hint{color:#a9bfd3}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.choice{padding:20px;min-height:125px;text-align:left;background:#0c2032;color:white;border:1px solid #36546b;border-radius:16px;cursor:pointer}.choice:hover{border-color:#62dcff;transform:translateY(-2px)}
-#result{display:none;margin-top:18px;padding:14px;border-radius:12px}
-#map{width:100%;height:auto;border-radius:15px;border:1px solid #34546c}
-@media(max-width:800px){#brand{left:10px;top:10px}.brand{font-size:20px}#stats{right:10px;top:10px;width:180px;font-size:13px}#controls{display:none}#quest{left:10px;bottom:10px;width:calc(100% - 20px)}.choices{grid-template-columns:1fr}}
+.box{position:absolute;background:#061522d9;border:1px solid #2c8bad;border-radius:15px;box-shadow:0 10px 35px #0008;backdrop-filter:blur(8px)}
+#brand{top:18px;left:18px;padding:12px 17px}.brand{font-size:24px;font-weight:950;color:#63e5ff}.sub{font-size:10px;color:#9ab6c7}
+#stats{top:18px;right:18px;padding:12px 17px;min-width:185px}.stat{display:flex;justify-content:space-between;gap:20px;margin:5px 0;color:#bdd1dd}
+#quest{left:18px;bottom:18px;width:330px;padding:14px}.qt{color:#ffd36b;font-weight:900}.q{color:#c9d9e3;font-size:13px;line-height:1.45;margin-top:5px}
+#controls{right:18px;bottom:18px;padding:12px 16px;line-height:1.7;color:#bcd0dc;font-size:12px}.key{padding:2px 7px;border:1px solid #456176;border-radius:5px;background:#102538;font-weight:800}
+#prompt{position:absolute;left:50%;bottom:15%;transform:translateX(-50%);padding:10px 18px;border-radius:30px;background:#061522ee;border:1px solid #ffd36b;opacity:0}
+#toast{position:absolute;top:14%;left:50%;transform:translateX(-50%);padding:10px 18px;border:1px solid #55ddff;border-radius:10px;background:#061522ee;opacity:0}
+#cross{position:absolute;left:50%;top:50%;width:7px;height:7px;border:1px solid #fff;border-radius:50%;transform:translate(-50%,-50%)}
+.modal{display:none;position:fixed;inset:0;z-index:30;place-items:center;background:#02060bdd}.window{width:min(850px,90vw);padding:24px;background:#081827;border:1px solid #4bdcff;border-radius:20px;box-shadow:0 30px 100px #000}
+.close{float:right;background:#102b3d;border:1px solid #456176;color:#fff;border-radius:8px;padding:7px 11px;cursor:pointer}
+h2{color:#ffd36b;margin-top:0}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.choice{padding:15px;min-height:120px;text-align:left;color:#fff;background:#0d2639;border:1px solid #34536a;border-radius:12px;cursor:pointer}.choice:hover{border-color:#5ee8ff}
+#result{margin-top:15px;padding:12px;border-radius:9px;min-height:20px}
+@media(max-width:800px){#controls{display:none}#quest{width:calc(100% - 36px)}#stats{font-size:12px;min-width:150px}.brand{font-size:18px}}
 </style>
 </head>
 <body>
-<div id="boot"><div class="card">
-<div class="logo">SKILLSHAREJR</div><div class="sub">MASTER LIFE SKILLS • BUILD YOUR KINGDOM</div>
-<div class="load"><i id="bar"></i></div><div id="bootmsg">Preparing Hearth Village…</div>
-<button id="start">ENTER HEARTH VILLAGE</button>
-</div></div>
+<div id="game"></div>
+
+<div id="boot">
+ <div class="card">
+  <div class="logo">SKILLSHAREJR</div>
+  <div class="small">VERSION 21 • TRUE 3D ADVENTURE REBUILD</div>
+  <div class="bar"><i id="progress"></i></div>
+  <div id="loadText" class="small">Loading 3D engine…</div>
+  <button id="start">ENTER THE ADVENTURE</button>
+ </div>
+</div>
 
 <div id="hud">
-<div id="brand" class="panel"><div class="brand">⚔ SKILLSHAREJR</div><div class="tag">MASTER LIFE SKILLS • BUILD YOUR KINGDOM</div></div>
-<div id="stats" class="panel">
-<div class="stat">⭐ EXPERIENCE <b id="xp">0 XP</b></div><div class="stat">💎 GEMS <b id="gems">15</b></div><div class="stat">🏆 LEVEL <b id="level">1</b></div>
-</div>
-<div id="quest" class="panel"><div class="qtitle">📜 CURRENT QUEST</div><div class="qtext" id="questText">Explore Hearth Village and find someone who can teach you your first life skill.</div></div>
-<div id="controls" class="panel">
-<div class="control"><span class="key">WASD</span>Move</div><div class="control"><span class="key">MOUSE</span>Look</div>
-<div class="control"><span class="key">SHIFT</span>Sprint</div><div class="control"><span class="key">E</span>Interact</div>
-<div class="control"><span class="key">M</span>World Map</div><div class="control"><span class="key">ESC</span>Release Mouse</div>
-</div>
-<div id="cross"></div><div id="interact">Press E</div><div id="toast"></div>
+ <div id="brand" class="box"><div class="brand">SKILLSHAREJR</div><div class="sub">HEARTH VALLEY • ADVENTURE MODE</div></div>
+ <div id="stats" class="box">
+  <div class="stat">⭐ XP <b id="xp">0</b></div>
+  <div class="stat">💎 Gems <b id="gems">15</b></div>
+  <div class="stat">🏆 Level <b id="level">1</b></div>
+ </div>
+ <div id="quest" class="box"><div class="qt">CURRENT QUEST</div><div id="questText" class="q">Find Elder Rowan or Master Alder and complete your first life-skill challenge.</div></div>
+ <div id="controls" class="box"><span class="key">WASD</span> move<br><span class="key">MOUSE</span> look<br><span class="key">SHIFT</span> run<br><span class="key">E</span> interact<br><span class="key">M</span> map<br><span class="key">ESC</span> close</div>
+ <div id="cross"></div><div id="prompt"></div><div id="toast"></div>
 </div>
 
-<div class="overlay" id="mapOverlay"><div class="modal"><button class="close" id="closeMap">Close</button><h2>WORLD MAP</h2><div class="hint">Hearth Village is your first region. Explore the connected kingdom and learn real-life skills.</div><canvas id="map" width="1200" height="700"></canvas></div></div>
+<div id="challenge" class="modal">
+ <div class="window">
+  <button class="close" id="closeChallenge">Close</button>
+  <h2 id="challengeTitle">Life Skill Challenge</h2>
+  <p id="challengeIntro"></p>
+  <div class="choices" id="choices"></div><div id="result"></div>
+ </div>
+</div>
 
-<div class="overlay" id="challenge"><div class="modal"><button class="close" id="closeChallenge">Close</button><h2 id="ctitle">LIFE SKILL CHALLENGE</h2><div class="hint" id="cintro"></div><div class="choices" id="choices"></div><div id="result"></div></div></div>
+<div id="map" class="modal">
+ <div class="window"><button class="close" id="closeMap">Close</button><h2>HEARTH VALLEY MAP</h2><canvas id="mapCanvas" width="900" height="520" style="width:100%;border-radius:12px"></canvas></div>
+</div>
+
+
 
 <script type="module">
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js";
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
 const $=id=>document.getElementById(id);
-const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
-let scene,camera,renderer,player,clock=new THREE.Clock(),yaw=0,pitch=-.12,nearest=null;
-const keys={},npcs=[],colliders=[];let started=false,xp=0,gems=15,level=1;
-const SIZE=150,HALF=75;
+const boot=$("boot"), progress=$("progress"), loadText=$("loadText"), start=$("start");
+const game=$("game"), hud=$("hud");
 
-function n(x,z){let s=Math.sin(x*12.9898+z*78.233)*43758.5453;return s-Math.floor(s)}
-function noise(x,z){let x0=Math.floor(x),z0=Math.floor(z),a=n(x0,z0),b=n(x0+1,z0),c=n(x0,z0+1),d=n(x0+1,z0+1),u=(x-x0)**2*(3-2*(x-x0)),v=(z-z0)**2*(3-2*(z-z0));return (a+(b-a)*u)+((c+(d-c)*u)-(a+(b-a)*u))*v}
-function H(x,z){return Math.sin(x*.075)*1.7+Math.cos(z*.06)*1.35+(noise(x*.12,z*.12)-.5)*1.5-Math.exp(-((x+12)**2+(z-5)**2)/800)*2}
-function mat(c,r=.8,m=0){return new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m})}
-function box(w,h,d,c){let o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(c));o.castShadow=o.receiveShadow=true;return o}
-function collider(x,z,w,d){colliders.push({x,z,w,d})}
-function blocked(x,z){return colliders.some(c=>Math.abs(x-c.x)<c.w+.8&&Math.abs(z-c.z)<c.d+.8)}
+let scene,camera,renderer,clock;
+let player,playerBody,playerParts=[],playerMixer=null;
+let terrain,worldGroup;
+const colliders=[];
+const npcs=[];
+const interactables=[];
+const keys={};
+let yaw=0,pitch=-0.22;
+let paused=true,challengeOpen=false;
+let xp=0,gems=15,level=1,nearby=null;
+let camTarget=new THREE.Vector3();
+const velocity=new THREE.Vector3();
 
-function terrain(){
- let g=new THREE.PlaneGeometry(SIZE,SIZE,160,160);g.rotateX(-Math.PI/2);let p=g.attributes.position,c=[];
- for(let i=0;i<p.count;i++){let x=p.getX(i),z=p.getZ(i),y=H(x,z);p.setY(i,y);let q=.25+noise(x*.08,z*.08)*.2;c.push(.16+q,.30+q,.15+q*.5)}
- g.setAttribute("color",new THREE.Float32BufferAttribute(c,3));
- let o=new THREE.Mesh(g,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1}));o.receiveShadow=true;scene.add(o);
- let pm=mat(0x8b7353,.98),p1=new THREE.Mesh(new THREE.BoxGeometry(8,.18,130),pm),p2=new THREE.Mesh(new THREE.BoxGeometry(120,.18,7),pm);
- p1.position.y=.12;p2.position.y=.13;p2.position.z=10;p1.receiveShadow=p2.receiveShadow=true;scene.add(p1,p2)
+function setLoad(n,t){progress.style.width=n+"%";loadText.textContent=t}
+
+function mat(color,rough=0.75,metal=0){
+ return new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal});
 }
-function tree(x,z,s=1){
- let g=new THREE.Group();g.position.set(x,H(x,z),z);g.scale.setScalar(s);
- let t=new THREE.Mesh(new THREE.CylinderGeometry(.32,.48,4,12),mat(0x56351f,.95));t.position.y=2;t.castShadow=true;g.add(t);
- for(let i=0;i<3;i++){let c=new THREE.Mesh(new THREE.IcosahedronGeometry(2.2-i*.25,1),mat(0x1e5936,.9));c.position.set((i-1)*.7,4.1+i*.75,(i%2)*.45);c.castShadow=true;g.add(c)}
- scene.add(g);collider(x,z,1.3*s,1.3*s)
+function box(w,h,d,m){
+ const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.castShadow=true;o.receiveShadow=true;return o;
 }
-function rock(x,z,s=1){let r=new THREE.Mesh(new THREE.DodecahedronGeometry(1.2*s,.2),mat(0x53636b,.95));r.position.set(x,H(x,z)+.5*s,z);r.rotation.set(.2,.4,.1);r.castShadow=true;scene.add(r);collider(x,z,1.5*s,1.5*s)}
-function sign(text){
- let c=document.createElement("canvas");c.width=512;c.height=128;let x=c.getContext("2d");x.fillStyle="#20170f";x.fillRect(0,0,512,128);x.strokeStyle="#e7c26a";x.lineWidth=8;x.strokeRect(5,5,502,118);x.fillStyle="#fff2c7";x.font="bold 40px Georgia";x.textAlign="center";x.textBaseline="middle";x.fillText(text,256,64);
- return new THREE.Mesh(new THREE.PlaneGeometry(5,1.25),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true}))
+function cyl(r,h,m,seg=20){
+ const o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,seg),m);o.castShadow=true;o.receiveShadow=true;return o;
 }
-function house(x,z,r=0,s=1,name=""){
- let g=new THREE.Group();g.position.set(x,H(x,z),z);g.rotation.y=r;g.scale.setScalar(s);
- let b=box(10,5.5,8,0xc9a77f);b.position.y=2.75;g.add(b);
- let roof=new THREE.Mesh(new THREE.ConeGeometry(7.2,4.2,4),mat(0x493041,.78));roof.position.y=7.6;roof.rotation.y=Math.PI/4;roof.castShadow=true;g.add(roof);
- let d=box(1.6,3,.2,0x38231a);d.position.set(0,1.5,4.08);g.add(d);
- for(let sx of [-3,3]){let w=box(2.1,1.8,.18,0x70cbe0);w.position.set(sx,3.1,4.08);g.add(w)}
- if(name){let sgn=sign(name);sgn.position.set(0,6.2,4.35);g.add(sgn)}
- scene.add(g);collider(x,z,6*s,5*s)
+function addCollider(x,z,w,d){
+ colliders.push({x,z,w,d});
 }
-function lamp(x,z){
- let g=new THREE.Group();g.position.set(x,H(x,z),z);let p=new THREE.Mesh(new THREE.CylinderGeometry(.09,.12,3.8,8),mat(0x222831,.5,.5));p.position.y=1.9;g.add(p);
- let bulb=new THREE.Mesh(new THREE.SphereGeometry(.27,16,12),new THREE.MeshBasicMaterial({color:0xffc66d}));bulb.position.y=3.45;g.add(bulb);
- let l=new THREE.PointLight(0xffb45c,2,9,2);l.position.y=3.45;g.add(l);scene.add(g)
+function blocked(x,z,r=0.7){
+ if(x<-108||x>108||z<-88||z>88)return true;
+ for(const c of colliders){
+  const cx=Math.max(c.x-c.w/2,Math.min(x,c.x+c.w/2));
+  const cz=Math.max(c.z-c.d/2,Math.min(z,c.z+c.d/2));
+  if(Math.hypot(x-cx,z-cz)<r)return true;
+ }
+ return false;
 }
 
-function playerMake(){
- let g=new THREE.Group();g.position.set(0,H(0,28)+.05,28);scene.add(g);
- let body=new THREE.Group();body.position.y=0;g.add(body),g.userData={legs:[],arms:[]};
- for(let sx of [-.38,.38]){let leg=new THREE.Group();leg.position.set(sx,1,0);let p=new THREE.Mesh(new THREE.CylinderGeometry(.27,.31,2,12),mat(0x1b2c43,.82));p.castShadow=true;leg.add(p);let boot=box(.58,.42,.95,0x291b16);boot.position.set(0,-1,.16);leg.add(boot);body.add(leg);g.userData.legs.push(leg)}
- let torso=new THREE.Mesh(new THREE.CylinderGeometry(.78,.94,2.2,16),mat(0x284765,.72,.05));torso.position.y=2.15;torso.castShadow=true;body.add(torso);
- let vest=new THREE.Mesh(new THREE.CylinderGeometry(.84,.98,1.55,16),mat(0x765334,.75));vest.position.set(0,2.18,.08);vest.scale.z=.72;vest.castShadow=true;body.add(vest);
- for(let sx of [-.96,.96]){let a=new THREE.Group();a.position.set(sx,2.65,0);a.rotation.z=sx<0?.18:-.18;let sl=new THREE.Mesh(new THREE.CylinderGeometry(.23,.28,1.45,12),mat(0x243e5d,.8));sl.position.y=-.65;sl.castShadow=true;a.add(sl);let h=new THREE.Mesh(new THREE.SphereGeometry(.27,14,10),mat(0xc98d67,.9));h.position.y=-1.42;h.castShadow=true;a.add(h);body.add(a);g.userData.arms.push(a)}
- let neck=new THREE.Mesh(new THREE.CylinderGeometry(.26,.3,.45,12),mat(0xc98d67,.9));neck.position.y=3.3;body.add(neck);
- let head=new THREE.Mesh(new THREE.SphereGeometry(.72,24,18),mat(0xc98d67,.86));head.position.y=4.05;head.castShadow=true;body.add(head);
- let hair=new THREE.Mesh(new THREE.SphereGeometry(.78,20,14,0,Math.PI*2,0,Math.PI*.58),mat(0x211914,.95));hair.position.set(0,4.27,-.03);hair.castShadow=true;body.add(hair);
- let nose=new THREE.Mesh(new THREE.ConeGeometry(.09,.28,8),mat(0xb97855,.9));nose.rotation.x=Math.PI/2;nose.position.set(0,4.03,.7);body.add(nose);
- for(let sx of [-.23,.23]){let e=new THREE.Mesh(new THREE.SphereGeometry(.075,10,8),mat(0x17202a,.3));e.position.set(sx,4.16,.67);body.add(e)}
- let pack=box(1.45,1.7,.5,0x5b3827);pack.position.set(0,2.5,-.7);body.add(pack);
- let badge=new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.08,16),new THREE.MeshStandardMaterial({color:0xffd45e,metalness:.7,roughness:.25}));badge.rotation.x=Math.PI/2;badge.position.set(0,2.4,.87);body.add(badge);
- return g
+function makeTerrain(){
+ const geo=new THREE.PlaneGeometry(220,180,80,80);
+ const pos=geo.attributes.position;
+ for(let i=0;i<pos.count;i++){
+  const x=pos.getX(i),z=pos.getY(i);
+  const h=Math.sin(x*.055)*1.2+Math.cos(z*.06)*1.0+Math.sin((x+z)*.025)*1.5;
+  pos.setZ(i,h);
+ }
+ geo.computeVertexNormals();
+ terrain=new THREE.Mesh(geo,mat(0x4e824d,1,0));
+ terrain.rotation.x=-Math.PI/2;
+ terrain.receiveShadow=true;
+ scene.add(terrain);
+
+ // roads
+ const roadMat=mat(0x80664b,1,0);
+ const r1=box(13,.12,180,roadMat);r1.position.set(0,.05,0);r1.receiveShadow=true;scene.add(r1);
+ const r2=box(220,.12,13,roadMat);r2.position.set(0,.06,0);scene.add(r2);
+ const r3=box(130,.12,8,roadMat);r3.rotation.y=-.55;r3.position.set(25,.08,25);scene.add(r3);
 }
 
-function npc(name,x,z,kind,color,route,skill){
- let g=new THREE.Group();g.position.set(x,H(x,z),z);g.userData={name,kind,route,index:0,speed:.7+Math.random()*.3,skill};let b=new THREE.Group();g.add(b);
- let torso=new THREE.Mesh(new THREE.CylinderGeometry(.58,.7,1.65,14),mat(color,.86));torso.position.y=2;torso.castShadow=true;b.add(torso);
- let head=new THREE.Mesh(new THREE.SphereGeometry(.48,18,14),mat(kind==="wizard"?0xc58b69:0xb98262,.9));head.position.y=3.25;head.castShadow=true;b.add(head);
- if(kind==="wizard"){let hat=new THREE.Mesh(new THREE.ConeGeometry(.75,1.5,18),mat(0x33265f,.72));hat.position.y=4.35;hat.castShadow=true;b.add(hat);let beard=new THREE.Mesh(new THREE.SphereGeometry(.34,16,12),mat(0xe6e1d5,1));beard.position.set(0,2.95,.38);b.add(beard);let staff=new THREE.Mesh(new THREE.CylinderGeometry(.08,.11,3.2,10),mat(0x4b2b1b));staff.position.set(.9,1.6,0);b.add(staff)}
- else if(kind==="old"){let hair=new THREE.Mesh(new THREE.SphereGeometry(.53,16,12),mat(0xd8d8d0,1));hair.position.y=3.48;b.add(hair);let beard=new THREE.Mesh(new THREE.SphereGeometry(.3,16,12),mat(0xd8d8d0,1));beard.position.set(0,2.98,.36);b.add(beard)}
- else {let hair=new THREE.Mesh(new THREE.SphereGeometry(.5,16,12),mat(0x30241d,1));hair.position.y=3.5;b.add(hair)}
- for(let sx of [-.25,.25]){let l=new THREE.Group();l.position.set(sx,1.05,0);let p=new THREE.Mesh(new THREE.CylinderGeometry(.17,.2,1.35,10),mat(0x293646,.9));l.add(p);b.add(l)}
- scene.add(g);npcs.push(g)
+function makeHouse(x,z,w,d,h,color,name,roofColor){
+ const g=new THREE.Group();g.position.set(x,0,z);
+ const body=box(w,h,d,mat(color));body.position.y=h/2;g.add(body);
+ const roof=new THREE.Mesh(new THREE.ConeGeometry(Math.max(w,d)*.72,Math.max(w,d)*.55,4),mat(roofColor||0x4e3430));
+ roof.rotation.y=Math.PI/4;roof.position.y=h+.18;roof.scale.z=d/w;g.add(roof);
+ const door=box(.9,1.8,.12,mat(0x35231b));door.position.set(0,.9,d/2+.07);g.add(door);
+ for(const sx of [-w*.28,w*.28]){
+  const win=box(1.25,1,.10,mat(0x8dd9e8,.25,0));win.position.set(sx,h*.58,d/2+.08);g.add(win);
+ }
+ const sign=box(Math.min(w*.72,4),.55,.12,mat(0x1b3040));sign.position.set(0,h+.35,d/2+.05);g.add(sign);
+ scene.add(g);addCollider(x,z,w+1,d+1);
+ const label=new THREE.Sprite(new THREE.SpriteMaterial({map:textTexture(name),transparent:true}));
+ label.scale.set(5.2,1.1,1);label.position.set(x,h+3,z);scene.add(label);
+ return g;
+}
+function textTexture(text){
+ const c=document.createElement("canvas");c.width=512;c.height=96;const x=c.getContext("2d");
+ x.fillStyle="rgba(3,12,19,.85)";x.beginPath();x.moveTo(20,4);x.lineTo(492,4);x.quadraticCurveTo(508,4,508,20);x.lineTo(508,76);x.quadraticCurveTo(508,92,492,92);x.lineTo(20,92);x.quadraticCurveTo(4,92,4,76);x.lineTo(4,20);x.quadraticCurveTo(4,4,20,4);x.closePath();x.fill();
+ x.strokeStyle="#ffd56a";x.stroke();x.fillStyle="#fff";x.font="bold 32px Arial";x.textAlign="center";x.textBaseline="middle";x.fillText(text,256,48);
+ const t=new THREE.CanvasTexture(c);return t;
 }
 
-function setup(){
- scene=new THREE.Scene();scene.background=new THREE.Color(0x8fbcd3);scene.fog=new THREE.FogExp2(0x9fc6d5,.0105);
- camera=new THREE.PerspectiveCamera(68,innerWidth/innerHeight,.1,500);
- renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;document.body.appendChild(renderer.domElement);
- scene.add(new THREE.HemisphereLight(0xcbe9ff,0x3d5039,2.1));
- let sun=new THREE.DirectionalLight(0xfff0cf,3.4);sun.position.set(-45,70,25);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-80;sun.shadow.camera.right=80;sun.shadow.camera.top=80;sun.shadow.camera.bottom=-80;scene.add(sun);
- terrain();
- house(-24,-9,.15,1.05,"OLD MAN'S TRADING POST");house(27,-5,-.18,1.05,"ARCANE WISDOM");house(3,23,0,1.2,"HEARTH INN");house(-34,27,.2,.9,"BAKER");house(34,28,-.3,.95,"GENERAL STORE");
- [[-50,-45,1.2],[-42,-33,.9],[-30,-43,1.1],[-18,-46,.9],[20,-45,1.2],[42,-39,1],[50,-20,1.2],[-50,5,1],[-45,18,.9],[47,7,1.1],[44,18,.8],[-48,40,1.2],[-32,44,.9],[23,46,1.1],[45,43,.9]].forEach(v=>tree(...v));
- [[-8,-22,1.1],[13,-27,.8],[36,-26,1.1],[-39,-5,.7],[38,4,.9],[-7,42,1]].forEach(v=>rock(...v));
- [[-15,4],[-4,10],[13,9],[24,15],[-25,17],[8,-7]].forEach(v=>lamp(...v));
- npc("Elder Rowan",-19,-2,"old",0x735238,[[-19,-2],[-16,-2],[-16,2],[-20,2]],"Money & Smart Choices");
- npc("Merlin",-28,16,"wizard",0x413c8f,[[-28,16],[-24,16],[-24,20],[-29,20]],"Critical Thinking");
- npc("Mira",-34,31,"villager",0x8c4b38,[[-34,31],[-29,30],[-29,34],[-35,34]],"Healthy Habits");
- npc("Arin",16,30,"traveller",0x496a55,[[16,30],[20,30],[20,35],[15,35]],"Planning");
- npc("Captain Vale",36,15,"guard",0x3c526a,[[36,15],[39,15],[39,19],[35,19]],"Digital Safety");
- player=playerMake()
+function makeTree(x,z,s=1){
+ const g=new THREE.Group();g.position.set(x,0,z);
+ const trunk=cyl(.35*s,4*s,mat(0x6d462c));trunk.position.y=2*s;g.add(trunk);
+ for(let i=0;i<3;i++){
+  const crown=new THREE.Mesh(new THREE.SphereGeometry((2.1-i*.18)*s,12,10),mat(i===2?0x3f773e:0x2e6338));
+  crown.scale.y=.8;crown.position.set((i-1)*.45*s,4.2*s+i*.7*s,0);crown.castShadow=true;g.add(crown);
+ }
+ scene.add(g);addCollider(x,z,2.2*s,2.2*s);
 }
 
-function update(dt){
- let f=new THREE.Vector3(Math.sin(yaw),0,Math.cos(yaw)),r=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw)),d=new THREE.Vector3();
- if(keys.w)d.add(f.clone().multiplyScalar(-1));if(keys.s)d.add(f);if(keys.a)d.add(r.clone().multiplyScalar(-1));if(keys.d)d.add(r);if(d.lengthSq())d.normalize();
- let speed=keys.shift?11:6.5,nx=player.position.x+d.x*speed*dt,nz=player.position.z+d.z*speed*dt;
- if(Math.abs(nx)<72&&!blocked(nx,player.position.z))player.position.x=nx;if(Math.abs(nz)<72&&!blocked(player.position.x,nz))player.position.z=nz;
- player.position.y=H(player.position.x,player.position.z)+.05;
- let moving=d.lengthSq()>0,s=Math.sin(performance.now()*.012*(keys.shift?1.4:1))*(moving?.55:0);player.userData.legs[0].rotation.x=s;player.userData.legs[1].rotation.x=-s;player.userData.arms[0].rotation.x=-s*.45;player.userData.arms[1].rotation.x=s*.45;if(moving)player.rotation.y=Math.atan2(d.x,d.z);
- let target=player.position.clone();target.y+=4.1;let dist=7.2,off=new THREE.Vector3(Math.sin(yaw)*dist,2.4+pitch*3,Math.cos(yaw)*dist),want=target.clone().add(off);want.y=Math.max(want.y,H(want.x,want.z)+2);camera.position.lerp(want,1-Math.pow(.001,dt));camera.lookAt(target);
- npcs.forEach(o=>{let q=o.userData.route,p=q[o.userData.index],dx=p[0]-o.position.x,dz=p[1]-o.position.z,L=Math.hypot(dx,dz);if(L<.8)o.userData.index=(o.userData.index+1)%q.length;else{o.position.x+=dx/L*o.userData.speed*dt;o.position.z+=dz/L*o.userData.speed*dt;o.position.y=H(o.position.x,o.position.z);o.rotation.y=Math.atan2(dx,dz)}});
- nearest=null;let best=5;npcs.forEach(o=>{let d=player.position.distanceTo(o.position);if(d<best){best=d;nearest=o}});$("interact").style.opacity=nearest?"1":"0";if(nearest)$("interact").textContent="Press E — Talk to "+nearest.userData.name
+function makeRock(x,z,s=1){
+ const r=new THREE.Mesh(new THREE.DodecahedronGeometry(1.1*s,.2),mat(0x707a78));
+ r.position.set(x,.7*s,z);r.scale.y=.65;r.castShadow=true;r.receiveShadow=true;scene.add(r);
+ addCollider(x,z,1.9*s,1.9*s);
 }
 
-function mapDraw(){
- let c=$("map"),x=c.getContext("2d"),w=c.width,h=c.height;x.fillStyle="#102e26";x.fillRect(0,0,w,h);
- for(let i=0;i<150;i++){x.fillStyle=i%3?"#23623d":"#33764a";x.beginPath();x.arc(Math.random()*w,Math.random()*h,3+Math.random()*7,0,7);x.fill()}
- x.strokeStyle="#9a7b55";x.lineWidth=18;x.beginPath();x.moveTo(90,590);x.quadraticCurveTo(400,320,590,400);x.quadraticCurveTo(800,470,1080,110);x.stroke();
- x.strokeStyle="#4b9ac5";x.lineWidth=34;x.beginPath();x.moveTo(970,0);x.quadraticCurveTo(850,250,920,700);x.stroke();
- [["HEARTH VILLAGE",610,350,"#d5a947"],["HONEY PLAINS",240,170,"#d5a947"],["STORMCALLER PEAKS",820,180,"#65a9d7"],["TECH HAVEN",980,480,"#65a9d7"],["FORTRESS CITADEL",260,490,"#8d66d5"],["CRYSTAL SHRINE",520,540,"#b77cff"]].forEach((v,i)=>{x.fillStyle=v[3];x.beginPath();x.arc(v[1],v[2],27,0,7);x.fill();x.fillStyle="#fff";x.font="bold 20px Arial";x.fillText((i+1),v[1]-6,v[2]+7);x.font="bold 19px Arial";x.fillText(v[0],v[1]+38,v[2]+7)});x.textAlign="center";x.font="900 34px Georgia";x.fillStyle="#fff0ba";x.fillText("SKILLSHAREJR KINGDOM",600,55);x.textAlign="left"
+function makeShop(x,z,color,name){
+ const g=new THREE.Group();g.position.set(x,0,z);
+ const base=box(7,.5,5,mat(0x40312a));base.position.y=.25;g.add(base);
+ const table=box(5,.8,2.4,mat(color));table.position.y=1;g.add(table);
+ for(let i=0;i<4;i++){const item=cyl(.22,.45,mat([0xffcf5a,0x68d6e8,0xbd7cff,0xff7f6e][i]),12);item.position.set(-1.6+i*1.05,1.6,0);g.add(item)}
+ scene.add(g);addCollider(x,z,8,6);
 }
-function challenge(n){
- $("ctitle").textContent=n.userData.name+" • "+n.userData.skill;$("cintro").textContent="Choose the smartest action. Your choice changes your kingdom progress.";
- let sets={"Money & Smart Choices":[["Spend all your coins on a flashy item.","bad"],["Separate needs from wants and save first.","good"],["Borrow coins without checking the cost.","bad"]],"Critical Thinking":[["Share a message because it sounds urgent.","bad"],["Check the source, evidence and sender first.","good"],["Trust it because it has a royal logo.","bad"]],"Healthy Habits":[["Skip meals to finish faster.","bad"],["Balance food, water, rest and activity.","good"],["Only choose whatever looks exciting.","bad"]],"Planning":[["Start without deciding what you need.","bad"],["Set a goal, list steps and prepare resources.","good"],["Wait until the last minute.","bad"]],"Digital Safety":[["Click a suspicious link because it says URGENT.","bad"],["Verify the sender and avoid unknown links.","good"],["Give your password to a stranger.","bad"]]}[n.userData.skill]||[];
- $("choices").innerHTML="";$("result").style.display="none";sets.forEach((v,i)=>{let b=document.createElement("button");b.className="choice";b.innerHTML="<b>"+String.fromCharCode(65+i)+"</b>"+v[0];b.onclick=()=>{let r=$("result");r.style.display="block";if(v[1]=="good"){xp+=100;gems+=5;level=1+Math.floor(xp/300);$("xp").textContent=xp+" XP";$("gems").textContent=gems;$("level").textContent=level;$("questText").textContent="Excellent! You learned "+n.userData.skill+". Find another NPC for your next skill.";r.style.background="#123a2a";r.textContent="✓ Excellent decision! +100 XP and +5 gems."}else{r.style.background="#3b1d22";r.textContent="Try again. Think about the safest and smartest long-term choice."}};$("choices").appendChild(b)});$("challenge").style.display="flex";document.exitPointerLock?.()
-}
-function toast(t){$("toast").textContent=t;$("toast").style.opacity=1;clearTimeout(window.tt);window.tt=setTimeout(()=>$("toast").style.opacity=0,2200)}
 
-addEventListener("keydown",e=>{let k=e.key.toLowerCase();if(["w","a","s","d","shift"].includes(k)){keys[k]=true;e.preventDefault()}if(k=="e"&&nearest&&!$("challenge").style.display)challenge(nearest);if(k=="m"){mapDraw();$("mapOverlay").style.display="flex";document.exitPointerLock?.()}});
-addEventListener("keyup",e=>keys[e.key.toLowerCase()]=false);
-addEventListener("resize",()=>{if(camera){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)}});
-function bind(){ $("start").onclick=()=>{started=true;$("boot").style.display="none";$("hud").style.display="block";toast("Welcome to Hearth Village. Find an NPC and press E.")};$("closeMap").onclick=()=>$("mapOverlay").style.display="none";$("closeChallenge").onclick=()=>$("challenge").style.display="none";renderer.domElement.addEventListener("click",()=>started&&$("challenge").style.display!="flex"&&$("mapOverlay").style.display!="flex"&&renderer.domElement.requestPointerLock());document.addEventListener("mousemove",e=>{if(document.pointerLockElement===renderer.domElement){yaw-=e.movementX*.0025;pitch=clamp(pitch-e.movementY*.0015,-.45,.35)}})}
-async function boot(){for(let i=0;i<=100;i+=20){$("bar").style.width=i+"%";$("bootmsg").textContent=["Loading renderer…","Building terrain…","Creating village…","Creating realistic characters…","Preparing NPC routes…","Hearth Village is ready."][i/20];await new Promise(r=>setTimeout(r,80))}setup();bind();mapDraw();$("start").style.display="inline-block"}
-boot();function loop(){requestAnimationFrame(loop);let dt=Math.min(clock.getDelta(),.05);if(started)update(dt);if(renderer)renderer.render(scene,camera)}loop();
+function makeNPC(name,role,x,z,skin,cloth){
+ const g=new THREE.Group();g.position.set(x,0,z);
+ const root=new THREE.Group();g.add(root);
+ const parts={};
+ const legs=new THREE.Group();root.add(legs);
+ const lm=mat(0x222a35),cm=mat(cloth),sm=mat(skin),hair=mat(0x2b2522);
+ const l1=box(.38,1.35,.42,lm),l2=box(.38,1.35,.42,lm);l1.position.set(-.3,.68,0);l2.position.set(.3,.68,0);legs.add(l1,l2);
+ const torso=box(1.35,1.65,.72,cm);torso.position.y=1.75;root.add(torso);
+ const arm1=box(.35,1.3,.38,cm),arm2=box(.35,1.3,.38,cm);arm1.position.set(-.9,1.7,0);arm2.position.set(.9,1.7,0);arm1.rotation.z=-.08;arm2.rotation.z=.08;root.add(arm1,arm2);
+ const neck=cyl(.18,.3,sm);neck.position.y=2.72;root.add(neck);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.62,24,18),sm);head.position.y=3.3;head.scale.set(1,.96,.92);head.castShadow=true;root.add(head);
+ const haircap=new THREE.Mesh(new THREE.SphereGeometry(.64,20,12,0,Math.PI*2,0,Math.PI*.48),hair);haircap.position.y=3.42;root.add(haircap);
+ // visible face
+ const eyeMat=mat(0xffffff,0.4),pupil=mat(0x16191c);
+ for(const ex of [-.2,.2]){
+  const e=new THREE.Mesh(new THREE.SphereGeometry(.075,10,8),eyeMat);e.position.set(ex,3.34,.56);root.add(e);
+  const p=new THREE.Mesh(new THREE.SphereGeometry(.035,8,8),pupil);p.position.set(ex,3.34,.62);root.add(p);
+ }
+ const nose=new THREE.Mesh(new THREE.ConeGeometry(.08,.22,8),sm);nose.rotation.x=Math.PI/2;nose.position.set(0,3.18,.59);root.add(nose);
+ if(role==="wizard"){
+  const hat=new THREE.Mesh(new THREE.ConeGeometry(.85,1.5,32),mat(0x443b78));hat.position.y=4.35;root.add(hat);
+ }else if(role==="oldman"){
+  const beard=new THREE.Mesh(new THREE.SphereGeometry(.43,16,12),mat(0xd9d7ce));beard.scale.set(1,.75,.55);beard.position.set(0,3.03,.45);root.add(beard);
+ }
+ const label=new THREE.Sprite(new THREE.SpriteMaterial({map:textTexture(name+" • "+role.toUpperCase()),transparent:true}));
+ label.scale.set(5.2,1,1);label.position.y=5.25;g.add(label);
+ scene.add(g);
+ const npc={group:g,root,legs,parts:{l1,l2,arm1,arm2},name,role,x,z,homeX:x,homeZ:z,target:null,walk:Math.random()*5,speed:role==="oldman"||role==="wizard"?1.2:2.0,talkRange:role==="oldman"||role==="wizard"?5:3};
+ npcs.push(npc);return npc;
+}
+
+function makePlayer(){
+ const g=new THREE.Group();g.position.set(0,0,8);
+ const root=new THREE.Group();g.add(root);
+ const coat=mat(0x234566),pants=mat(0x202936),boot=mat(0x3a261c),skin=mat(0xc98f6d),pack=mat(0x67452d);
+ const backpack=new THREE.Mesh(new THREE.BoxGeometry(1.35,1.8,.55),mat(0x62432d));backpack.position.set(0,1.75,-.55);root.add(backpack);
+ const torso=box(1.35,1.65,.8,coat);torso.position.y=1.75;root.add(torso);
+ const legL=box(.4,1.4,.45,pants),legR=box(.4,1.4,.45,pants);legL.position.set(-.3,.7,0);legR.position.set(.3,.7,0);root.add(legL,legR);
+ const bootL=box(.5,.35,.8,boot),bootR=box(.5,.35,.8,boot);bootL.position.set(-.3,.18,.12);bootR.position.set(.3,.18,.12);root.add(bootL,bootR);
+ const armL=box(.38,1.35,.4,coat),armR=box(.38,1.35,.4,coat);armL.position.set(-.9,1.75,0);armR.position.set(.9,1.75,0);root.add(armL,armR);
+ const neck=cyl(.18,.3,skin);neck.position.y=2.72;root.add(neck);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.63,28,20),skin);head.position.y=3.35;head.castShadow=true;root.add(head);
+ const hair=new THREE.Mesh(new THREE.SphereGeometry(.65,24,12,0,Math.PI*2,0,Math.PI*.5),mat(0x29221f));hair.position.y=3.48;root.add(hair);
+ const eyeWhite=mat(0xffffff,.3),eyeDark=mat(0x111820);
+ for(const ex of [-.21,.21]){
+  const e=new THREE.Mesh(new THREE.SphereGeometry(.08,10,8),eyeWhite);e.position.set(ex,3.4,.57);root.add(e);
+  const p=new THREE.Mesh(new THREE.SphereGeometry(.038,8,8),eyeDark);p.position.set(ex,3.4,.64);root.add(p);
+ }
+ const nose=new THREE.Mesh(new THREE.ConeGeometry(.08,.22,8),skin);nose.rotation.x=Math.PI/2;nose.position.set(0,3.23,.6);root.add(nose);
+ const scarf=box(.3,1.15,.08,mat(0xd2a44d));scarf.position.set(0,2.35,.43);root.add(scarf);
+ scene.add(g);player=g;playerBody=root;playerParts=[legL,legR,armL,armR];
+}
+
+function init3D(){
+ scene=new THREE.Scene();
+ scene.background=new THREE.Color(0x8ec8e6);
+ scene.fog=new THREE.Fog(0x8ec8e6,55,185);
+ camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,300);
+ camera.position.set(0,5,10);
+ renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
+ renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+ renderer.setSize(innerWidth,innerHeight);
+ renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+ renderer.outputColorSpace=THREE.SRGBColorSpace;
+ renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;
+ game.appendChild(renderer.domElement);
+
+ clock=new THREE.Clock();
+ const hemi=new THREE.HemisphereLight(0xcfeeff,0x29452c,2.1);scene.add(hemi);
+ const sun=new THREE.DirectionalLight(0xffe3b0,4.2);sun.position.set(-35,55,25);sun.castShadow=true;
+ sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-75;sun.shadow.camera.right=75;sun.shadow.camera.top=75;sun.shadow.camera.bottom=-75;scene.add(sun);
+ const fill=new THREE.DirectionalLight(0x78bfff,1.0);fill.position.set(40,20,-30);scene.add(fill);
+
+ worldGroup=new THREE.Group();scene.add(worldGroup);
+ makeTerrain();
+ makeHouse(-23,-18,15,10,6.5,0x9b6c4d,"OLD MAN SHOP",0x56372e);
+ makeHouse(30,-25,16,11,7,0x514b7f,"WIZARD STUDY",0x302c54);
+ makeHouse(2,30,21,12,8,0x7c8793,"HEARTH HALL",0x4f5d6d);
+ makeHouse(30,27,17,10,6.2,0x8e684b,"VILLAGE MARKET",0x5a3c33);
+ makeHouse(-34,27,14,10,6,0x7d5c4a,"TRAVELLER INN",0x4d3630);
+ makeShop(-23,-11,0xd69a5c,"Old Man's Stall");
+ makeShop(30,-18,0x8b72d6,"Wizard's Stall");
+
+ for(let i=0;i<34;i++){
+  let x=(Math.random()*190-95),z=(Math.random()*145-72);
+  if(Math.abs(x)<10||Math.abs(z)<10||Math.hypot(x+23,z+18)<14||Math.hypot(x-30,z+(-25))<14) {i--;continue}
+  makeTree(x,z,.75+Math.random()*.55);
+ }
+ for(let i=0;i<24;i++)makeRock(Math.random()*190-95,Math.random()*145-72,.5+Math.random()*.7);
+
+ makeNPC("Elder Rowan","oldman",-23,-5,0xc98f6d,0x765038);
+ makeNPC("Master Alder","wizard",30,-12,0xc88e6b,0x4e477c);
+ makeNPC("Mira","traveller",-8,-25,0xd09a76,0x9c4650);
+ makeNPC("Tarin","merchant",22,9,0xb87858,0x4b7d63);
+ makeNPC("Nia","villager",-12,19,0xd7a078,0x557a9e);
+ makeNPC("Arun","villager",47,18,0x9e684c,0xa4783e);
+ makeNPC("Kai","villager",9,-2,0xb67c5a,0x754a88);
+ makeNPC("Sena","villager",-4,43,0xc38b68,0x3d7b72);
+
+ makePlayer();
+ window.addEventListener("resize",resize);
+}
+
+function resize(){
+ if(!renderer)return;
+ camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);
+}
+function terrainHeight(x,z){return Math.sin(x*.055)*1.2+Math.cos(z*.06)*1.0+Math.sin((x+z)*.025)*1.5}
+function updatePlayer(dt){
+ let ix=0,iz=0;
+ if(keys.w||keys.arrowup)iz-=1;if(keys.s||keys.arrowdown)iz+=1;if(keys.a||keys.arrowleft)ix-=1;if(keys.d||keys.arrowright)ix+=1;
+ const moving=ix||iz;
+ const len=Math.hypot(ix,iz)||1;ix/=len;iz/=len;
+ if(moving){
+  const speed=(keys.shift?7.4:4.2);
+  const dx=ix*speed*dt,dz=iz*speed*dt;
+  // movement is relative to camera yaw
+  const c=Math.cos(yaw),s=Math.sin(yaw);
+  const wx=dx*c+dz*s,wz=-dx*s+dz*c;
+  const nx=player.position.x+wx,nz=player.position.z+wz;
+  if(!blocked(nx,player.position.z,.72))player.position.x=nx;
+  if(!blocked(player.position.x,nz,.72))player.position.z=nz;
+  const face=Math.atan2(wx,wz);
+  player.rotation.y=THREE.MathUtils.lerp(player.rotation.y,face,.22);
+  const step=performance.now()*.012*(keys.shift?1.45:1);
+  playerParts[0].rotation.x=Math.sin(step)*.62;
+  playerParts[1].rotation.x=-Math.sin(step)*.62;
+  playerParts[2].rotation.x=-Math.sin(step)*.38;
+  playerParts[3].rotation.x=Math.sin(step)*.38;
+ }else{
+  playerParts.forEach(p=>p.rotation.x=THREE.MathUtils.lerp(p.rotation.x,0,.18));
+ }
+ player.position.y=terrainHeight(player.position.x,player.position.z);
+}
+
+function updateNPCs(dt){
+ for(const n of npcs){
+  if(!n.target||Math.random()<.003){
+   const a=Math.random()*Math.PI*2,r=n.role==="oldman"||n.role==="wizard"?3.5:12;
+   n.target={x:n.homeX+Math.cos(a)*r,z:n.homeZ+Math.sin(a)*r};
+  }
+  let dx=n.target.x-n.group.position.x,dz=n.target.z-n.group.position.z;
+  const d=Math.hypot(dx,dz);
+  if(d<.7){n.target=null;continue}
+  dx/=d;dz/=d;
+  const nx=n.group.position.x+dx*n.speed*dt,nz=n.group.position.z+dz*n.speed*dt;
+  if(!blocked(nx,nz,.55)){n.group.position.x=nx;n.group.position.z=nz;n.group.rotation.y=Math.atan2(dx,dz)}
+  else n.target=null;
+  n.group.position.y=terrainHeight(n.group.position.x,n.group.position.z);
+  n.walk+=dt*n.speed*4;
+  n.parts.l1?.rotation.x;
+  n.legs.children[0].rotation.x=Math.sin(n.walk)*.5;
+  n.legs.children[1].rotation.x=-Math.sin(n.walk)*.5;
+  n.parts.arm1.rotation.x=-Math.sin(n.walk)*.3;
+  n.parts.arm2.rotation.x=Math.sin(n.walk)*.3;
+ }
+}
+
+function updateCamera(){
+ const target=player.position.clone();target.y+=2.25;
+ camTarget.lerp(target,.14);
+ const distance=8.5;
+ const cp=Math.cos(pitch),sp=Math.sin(pitch);
+ const sy=Math.sin(yaw),cy=Math.cos(yaw);
+ const desired=new THREE.Vector3(
+  target.x+sy*cp*distance,
+  target.y-sp*distance,
+  target.z+cy*cp*distance
+ );
+ camera.position.lerp(desired,.12);
+ camera.lookAt(camTarget);
+}
+
+function updateInteraction(){
+ let best=null,bd=999;
+ for(const n of npcs){
+  const d=player.position.distanceTo(n.group.position);
+  if(d<n.talkRange&&d<bd){best=n;bd=d}
+ }
+ nearby=best;
+ $("prompt").style.opacity=best?"1":"0";
+ if(best)$("prompt").textContent="Press E to talk to "+best.name;
+}
+
+function updateHUD(){
+ $("xp").textContent=xp;$("gems").textContent=gems;$("level").textContent=level;
+ if(xp>=600)level=3;else if(xp>=300)level=2;
+ if(xp>=600)$("questText").textContent="Excellent! Explore Hearth Valley and discover more life-skill challenges.";
+ else if(xp>=100)$("questText").textContent="Good work. Find the other special NPC and complete another challenge.";
+}
+
+function openChallenge(n){
+ paused=true;challengeOpen=true;$("challenge").style.display="grid";
+ const title=$("challengeTitle"),intro=$("challengeIntro"),choices=$("choices"),result=$("result");choices.innerHTML="";result.textContent="";
+ let data;
+ if(n.role==="oldman")data={
+  title:"🧺 Elder Rowan — Organisation Challenge",
+  intro:"You are preparing for a trip with limited space. What should you do first?",
+  options:[["Pack everything immediately",false],["Sort essentials first",true],["Take only snacks",false]]
+ };
+ else if(n.role==="wizard")data={
+  title:"🧙 Master Alder — Smart Digital Choices",
+  intro:"A message promises a prize and asks for private information. What is the safest smart choice?",
+  options:[["Share the information quickly",false],["Verify the source independently first",true],["Forward it to friends",false]]
+ };
+ else data={title:n.name+" — Responsibility Challenge",intro:"Which action shows good planning and responsibility?",options:[["Ignore the task",false],["Plan carefully and complete it",true],["Rush without checking",false]]};
+ title.textContent=data.title;intro.textContent=data.intro;
+ data.options.forEach((o,i)=>{
+  const b=document.createElement("button");b.className="choice";b.innerHTML="<b>"+String.fromCharCode(65+i)+" — "+o[0]+"</b>";
+  b.onclick=()=>{
+   if(o[1]){
+    xp+=100;gems+=5;updateHUD();
+    result.style.background="#174d38";result.textContent="✓ Excellent choice! +100 XP and +5 gems.";
+   }else{result.style.background="#552f35";result.textContent="Not quite. Think about planning, safety and responsibility."}
+  };choices.appendChild(b);
+ });
+}
+function closeChallenge(){challengeOpen=false;paused=false;$("challenge").style.display="none"}
+function interact(){if(nearby)openChallenge(nearby)}
+function showToast(t){const e=$("toast");e.textContent=t;e.style.opacity=1;clearTimeout(showToast.t);showToast.t=setTimeout(()=>e.style.opacity=0,2500)}
+
+function drawMap(){
+ const c=$("mapCanvas"),x=c.getContext("2d"),w=c.width,h=c.height;x.clearRect(0,0,w,h);
+ x.fillStyle="#326b4a";x.fillRect(0,0,w,h);x.fillStyle="#19536a";x.fillRect(0,0,w,70);
+ x.strokeStyle="#a78359";x.lineWidth=28;x.beginPath();x.moveTo(40,h/2);x.lineTo(w-40,h/2);x.moveTo(w/2,40);x.lineTo(w/2,h-40);x.stroke();
+ function pin(px,py,col,t){x.fillStyle=col;x.beginPath();x.arc(px,py,16,0,Math.PI*2);x.fill();x.fillStyle="#fff";x.font="bold 15px Arial";x.textAlign="center";x.fillText(t,px,py+42)}
+ pin(450,230,"#ffd36b","HEARTH HALL");pin(330,300,"#ff9e5d","OLD MAN");pin(600,300,"#a986ff","WIZARD");pin(650,390,"#63e5ff","MARKET");
+ x.fillStyle="#fff";x.beginPath();x.arc(450+(player.position.x/220)*w/2,260+(player.position.z/180)*h/2,9,0,Math.PI*2);x.fill();
+}
+
+function loop(){
+ requestAnimationFrame(loop);
+ const dt=Math.min(clock.getDelta(),.05);
+ if(!paused){updatePlayer(dt);updateNPCs(dt);updateCamera();updateInteraction()}
+ renderer.render(scene,camera);
+}
+
+$("closeChallenge").onclick=closeChallenge;$("closeMap").onclick=()=>{$("map").style.display="none";paused=false};
+window.addEventListener("keydown",e=>{
+ keys[e.key.toLowerCase()]=true;
+ if(e.key.toLowerCase()==="e"&&!e.repeat&&!challengeOpen)interact();
+ if(e.key.toLowerCase()==="m"&&!e.repeat&&!challengeOpen){paused=true;$("map").style.display="grid";drawMap()}
+ if(e.key==="Escape"){if(challengeOpen)closeChallenge();else{$("map").style.display="none";paused=false}}
+});
+window.addEventListener("keyup",e=>keys[e.key.toLowerCase()]=false);
+
+try{
+ setLoad(10,"Starting WebGL renderer…");
+ init3D();
+ setLoad(38,"Building 3D terrain…");
+ setLoad(58,"Constructing houses and shops…");
+ setLoad(76,"Creating NPCs and adventure character…");
+ setLoad(90,"Preparing lighting, shadows and collisions…");
+ setLoad(100,"3D world ready.");
+ setTimeout(()=>{$("start").style.display="inline-block";loadText.textContent="Ready — 3D adventure loaded.";},400);
+ start.onclick=()=>{
+  boot.style.opacity=0;setTimeout(()=>boot.style.display="none",500);
+  hud.style.display="block";paused=false;showToast("Welcome! Explore the village and find Elder Rowan or Master Alder.");
+ };
+ loop();
+}catch(err){
+ console.error(err);
+ loadText.innerHTML="<b style='color:#ff8e8e'>3D engine failed to start.</b><br><small>"+String(err.message||err)+"</small><br><br>Refresh the GitHub Pages URL. This version loads Three.js directly from jsDelivr.";start.style.display="inline-block";start.textContent="RETRY 3D ENGINE";start.onclick=()=>location.reload();
+}
 </script>
 </body>
 </html>
